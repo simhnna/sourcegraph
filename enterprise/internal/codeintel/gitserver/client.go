@@ -595,3 +595,18 @@ func (c *Client) repositoryIDToRepo(ctx context.Context, repositoryID int) (api.
 
 	return api.RepoName(repoName), nil
 }
+
+// Hack returns the set of files changed between this commit and its merge-base with the default branch.
+func (c *Client) Hack(ctx context.Context, repositoryID int, commit string) ([]string, error) {
+	mergeBase, err := c.execGitCommand(ctx, repositoryID, "merge-base", commit, "HEAD")
+	if err != nil {
+		return nil, err
+	}
+
+	out, err := c.execGitCommand(ctx, repositoryID, "diff", "--name-only", commit, mergeBase)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.Split(out, "\n"), nil
+}

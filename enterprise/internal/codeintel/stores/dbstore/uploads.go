@@ -280,6 +280,7 @@ SELECT count(*) FROM deleted
 
 type GetUploadsOptions struct {
 	RepositoryID            int
+	Commit                  string
 	State                   string
 	Term                    string
 	VisibleAtTip            bool
@@ -298,6 +299,7 @@ type GetUploadsOptions struct {
 func (s *Store) GetUploads(ctx context.Context, opts GetUploadsOptions) (_ []Upload, _ int, err error) {
 	ctx, traceLog, endObservation := s.operations.getUploads.WithAndLogger(ctx, &err, observation.Args{LogFields: []log.Field{
 		log.Int("repositoryID", opts.RepositoryID),
+		log.String("commit", opts.Commit),
 		log.String("state", opts.State),
 		log.String("term", opts.Term),
 		log.Bool("visibleAtTip", opts.VisibleAtTip),
@@ -319,9 +321,12 @@ func (s *Store) GetUploads(ctx context.Context, opts GetUploadsOptions) (_ []Upl
 	}
 	defer func() { err = tx.Done(err) }()
 
-	conds := make([]*sqlf.Query, 0, 11)
+	conds := make([]*sqlf.Query, 0, 12)
 	if opts.RepositoryID != 0 {
 		conds = append(conds, sqlf.Sprintf("u.repository_id = %s", opts.RepositoryID))
+	}
+	if opts.Commit != "" {
+		conds = append(conds, sqlf.Sprintf("u.commit = %s", opts.Commit))
 	}
 	if opts.Term != "" {
 		conds = append(conds, makeSearchCondition(opts.Term))

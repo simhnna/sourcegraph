@@ -354,3 +354,7 @@ func (r *GitCommitResolver) canonicalRepoRevURL() *url.URL {
 	url.Path += "@" + string(r.oid)
 	return &url
 }
+
+func (r *GitCommitResolver) Hack(ctx context.Context) ([]HackResolver, error) {
+	return EnterpriseResolvers.codeIntelResolver.Hack(ctx, int(r.Repository().IDInt32()), string(r.oid))
+}

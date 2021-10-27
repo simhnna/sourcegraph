@@ -16,6 +16,7 @@ import (
 type GitserverClient interface {
 	CommitExists(ctx context.Context, repositoryID int, commit string) (bool, error)
 	CommitGraph(ctx context.Context, repositoryID int, options gitserver.CommitGraphOptions) (*gitserver.CommitGraph, error)
+	Hack(ctx context.Context, repositoryID int, commit string) ([]string, error)
 }
 
 type DBStore interface {
@@ -62,6 +63,7 @@ type LSIFStore interface {
 	DocumentationPathInfo(ctx context.Context, bundleID int, pathID string) (*precise.DocumentationPathInfoData, error)
 	DocumentationDefinitions(ctx context.Context, bundleID int, pathID string, limit, offset int) ([]lsifstore.Location, int, error)
 	DocumentationAtPosition(ctx context.Context, bundleID int, path string, line, character int) ([]string, error)
+	Hack(ctx context.Context, changedPathsByBundles map[int][]string) (referencesByPath map[string][]string, err error)
 }
 
 type IndexEnqueuer interface {

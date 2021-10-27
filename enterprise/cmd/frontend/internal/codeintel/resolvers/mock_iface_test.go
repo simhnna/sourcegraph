@@ -5369,6 +5369,9 @@ type MockLSIFStore struct {
 	// ExistsFunc is an instance of a mock function object controlling the
 	// behavior of the method Exists.
 	ExistsFunc *LSIFStoreExistsFunc
+	// HackFunc is an instance of a mock function object controlling the
+	// behavior of the method Hack.
+	HackFunc *LSIFStoreHackFunc
 	// HoverFunc is an instance of a mock function object controlling the
 	// behavior of the method Hover.
 	HoverFunc *LSIFStoreHoverFunc
@@ -5433,6 +5436,11 @@ func NewMockLSIFStore() *MockLSIFStore {
 				return false, nil
 			},
 		},
+		HackFunc: &LSIFStoreHackFunc{
+			defaultHook: func(context.Context, map[int][]string) (map[string][]string, error) {
+				return nil, nil
+			},
+		},
 		HoverFunc: &LSIFStoreHoverFunc{
 			defaultHook: func(context.Context, int, string, int, int) (string, lsifstore.Range, bool, error) {
 				return "", lsifstore.Range{}, false, nil
@@ -5493,6 +5501,9 @@ func NewMockLSIFStoreFrom(i LSIFStore) *MockLSIFStore {
 		},
 		ExistsFunc: &LSIFStoreExistsFunc{
 			defaultHook: i.Exists,
+		},
+		HackFunc: &LSIFStoreHackFunc{
+			defaultHook: i.Hack,
 		},
 		HoverFunc: &LSIFStoreHoverFunc{
 			defaultHook: i.Hover,
@@ -6467,6 +6478,114 @@ func (c LSIFStoreExistsFuncCall) Args() []interface{} {
 // Results returns an interface slice containing the results of this
 // invocation.
 func (c LSIFStoreExistsFuncCall) Results() []interface{} {
+	return []interface{}{c.Result0, c.Result1}
+}
+
+// LSIFStoreHackFunc describes the behavior when the Hack method of the
+// parent MockLSIFStore instance is invoked.
+type LSIFStoreHackFunc struct {
+	defaultHook func(context.Context, map[int][]string) (map[string][]string, error)
+	hooks       []func(context.Context, map[int][]string) (map[string][]string, error)
+	history     []LSIFStoreHackFuncCall
+	mutex       sync.Mutex
+}
+
+// Hack delegates to the next hook function in the queue and stores the
+// parameter and result values of this invocation.
+func (m *MockLSIFStore) Hack(v0 context.Context, v1 map[int][]string) (map[string][]string, error) {
+	r0, r1 := m.HackFunc.nextHook()(v0, v1)
+	m.HackFunc.appendCall(LSIFStoreHackFuncCall{v0, v1, r0, r1})
+	return r0, r1
+}
+
+// SetDefaultHook sets function that is called when the Hack method of the
+// parent MockLSIFStore instance is invoked and the hook queue is empty.
+func (f *LSIFStoreHackFunc) SetDefaultHook(hook func(context.Context, map[int][]string) (map[string][]string, error)) {
+	f.defaultHook = hook
+}
+
+// PushHook adds a function to the end of hook queue. Each invocation of the
+// Hack method of the parent MockLSIFStore instance invokes the hook at the
+// front of the queue and discards it. After the queue is empty, the default
+// hook function is invoked for any future action.
+func (f *LSIFStoreHackFunc) PushHook(hook func(context.Context, map[int][]string) (map[string][]string, error)) {
+	f.mutex.Lock()
+	f.hooks = append(f.hooks, hook)
+	f.mutex.Unlock()
+}
+
+// SetDefaultReturn calls SetDefaultDefaultHook with a function that returns
+// the given values.
+func (f *LSIFStoreHackFunc) SetDefaultReturn(r0 map[string][]string, r1 error) {
+	f.SetDefaultHook(func(context.Context, map[int][]string) (map[string][]string, error) {
+		return r0, r1
+	})
+}
+
+// PushReturn calls PushDefaultHook with a function that returns the given
+// values.
+func (f *LSIFStoreHackFunc) PushReturn(r0 map[string][]string, r1 error) {
+	f.PushHook(func(context.Context, map[int][]string) (map[string][]string, error) {
+		return r0, r1
+	})
+}
+
+func (f *LSIFStoreHackFunc) nextHook() func(context.Context, map[int][]string) (map[string][]string, error) {
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
+
+	if len(f.hooks) == 0 {
+		return f.defaultHook
+	}
+
+	hook := f.hooks[0]
+	f.hooks = f.hooks[1:]
+	return hook
+}
+
+func (f *LSIFStoreHackFunc) appendCall(r0 LSIFStoreHackFuncCall) {
+	f.mutex.Lock()
+	f.history = append(f.history, r0)
+	f.mutex.Unlock()
+}
+
+// History returns a sequence of LSIFStoreHackFuncCall objects describing
+// the invocations of this function.
+func (f *LSIFStoreHackFunc) History() []LSIFStoreHackFuncCall {
+	f.mutex.Lock()
+	history := make([]LSIFStoreHackFuncCall, len(f.history))
+	copy(history, f.history)
+	f.mutex.Unlock()
+
+	return history
+}
+
+// LSIFStoreHackFuncCall is an object that describes an invocation of method
+// Hack on an instance of MockLSIFStore.
+type LSIFStoreHackFuncCall struct {
+	// Arg0 is the value of the 1st argument passed to this method
+	// invocation.
+	Arg0 context.Context
+	// Arg1 is the value of the 2nd argument passed to this method
+	// invocation.
+	Arg1 map[int][]string
+	// Result0 is the value of the 1st result returned from this method
+	// invocation.
+	Result0 map[string][]string
+	// Result1 is the value of the 2nd result returned from this method
+	// invocation.
+	Result1 error
+}
+
+// Args returns an interface slice containing the arguments of this
+// invocation.
+func (c LSIFStoreHackFuncCall) Args() []interface{} {
+	return []interface{}{c.Arg0, c.Arg1}
+}
+
+// Results returns an interface slice containing the results of this
+// invocation.
+func (c LSIFStoreHackFuncCall) Results() []interface{} {
 	return []interface{}{c.Result0, c.Result1}
 }
 

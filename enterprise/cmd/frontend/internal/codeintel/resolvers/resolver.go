@@ -2,6 +2,7 @@ package resolvers
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/opentracing/opentracing-go/log"
@@ -41,6 +42,7 @@ type Resolver interface {
 	InferredIndexConfiguration(ctx context.Context, repositoryID int) (*config.IndexConfiguration, bool, error)
 	UpdateIndexConfigurationByRepositoryID(ctx context.Context, repositoryID int, configuration string) error
 	PreviewGitObjectFilter(ctx context.Context, repositoryID int, gitObjectType dbstore.GitObjectType, pattern string) (map[string][]string, error)
+	Hack(ctx context.Context, repositoryID int, commit string) (map[string][]string, error)
 }
 
 type resolver struct {
@@ -245,4 +247,56 @@ func (r *resolver) PreviewGitObjectFilter(ctx context.Context, repositoryID int,
 	}
 
 	return namesByCommit, nil
+}
+
+func (r *resolver) Hack(ctx context.Context, repositoryID int, commit string) (map[string][]string, error) {
+	uploads, _, err := r.dbStore.GetUploads(ctx, dbstore.GetUploadsOptions{
+		RepositoryID: repositoryID,
+		Commit:       commit,
+		Limit:        100,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	paths, err := r.gitserverClient.Hack(ctx, repositoryID, commit)
+	if err != nil {
+		return nil, err
+	}
+
+	changedPathsByBundles := make(map[int][]string, len(uploads))
+	for _, upload := range uploads {
+		for _, path := range paths {
+			if strings.HasPrefix(path, upload.Root) {
+				changedPathsByBundles[upload.ID] = append(changedPathsByBundles[upload.ID], strings.TrimPrefix(path, upload.Root))
+			}
+		}
+	}
+
+	referencesByPath, err := r.lsifStore.Hack(ctx, changedPathsByBundles)
+	if err != nil {
+		return nil, err
+	}
+
+	for path, references := range referencesByPath {
+		filtered := references[:0]
+		for _, reference := range references {
+			if reference != path {
+				filtered = append(filtered, reference)
+			}
+		}
+
+		referencesByPath[path] = filtered
+	}
+
+	// Rok: Maybe you can start using this for a POC and I can help you enhance
+	// it once I have a bit more capacity. This currently only works for the same
+	// upload. If we wanted to  keep doing this for cross-uploads, I think what
+	// we'd need to do is:
+	//
+	//   (1) Extract imported monikers from the files we called Hack over
+	//   (2) Do a BulkMonikerSearch for those monikers over the same uploads
+	//   (3) Filter out any locations not in one of the files from gitserver diff
+
+	return referencesByPath, nil
 }

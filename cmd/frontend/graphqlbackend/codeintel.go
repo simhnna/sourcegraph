@@ -30,6 +30,10 @@ type CodeIntelResolver interface {
 	UpdateRepositoryIndexConfiguration(ctx context.Context, args *UpdateRepositoryIndexConfigurationArgs) (*EmptyResponse, error)
 	PreviewGitObjectFilter(ctx context.Context, id graphql.ID, args *PreviewGitObjectFilterArgs) ([]GitObjectFilterPreviewResolver, error)
 	NodeResolvers() map[string]NodeByIDFunc
+
+	// Hack returns file-level dependency subgraph induced by the files changed between the
+	// given commit and its merge-base with the default branch.
+	Hack(ctx context.Context, repositoryID int, commit string) ([]HackResolver, error)
 }
 
 type LSIFUploadsQueryArgs struct {
@@ -282,6 +286,11 @@ type PreviewGitObjectFilterArgs struct {
 type GitObjectFilterPreviewResolver interface {
 	Name() string
 	Rev() string
+}
+
+type HackResolver interface {
+	Key() string      // The dependent file
+	Values() []string // The dependency files
 }
 
 type CodeIntelligenceConfigurationPolicyResolver interface {

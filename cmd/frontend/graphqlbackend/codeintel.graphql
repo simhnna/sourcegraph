@@ -324,6 +324,15 @@ extend type Repository {
     ): [GitObjectFilterPreview!]!
 }
 
+extend type GitCommit {
+    hack: [Hack!]!
+}
+
+type Hack {
+    key: String!
+    values: [String!]!
+}
+
 extend interface TreeEntry {
     """
     LSIF data for this tree entry.

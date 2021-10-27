@@ -440,6 +440,31 @@ func (r *Resolver) PreviewGitObjectFilter(ctx context.Context, id graphql.ID, ar
 	return previews, nil
 }
 
+func (r *Resolver) Hack(ctx context.Context, repositoryID int, commit string) ([]gql.HackResolver, error) {
+	m, err := r.resolver.Hack(ctx, repositoryID, commit)
+	if err != nil {
+		return nil, err
+	}
+
+	resolvers := make([]gql.HackResolver, 0, len(m))
+	for key, values := range m {
+		resolvers = append(resolvers, HackResolver{key, values})
+	}
+	sort.Slice(resolvers, func(i, j int) bool {
+		return resolvers[i].Key() < resolvers[j].Key()
+	})
+
+	return resolvers, nil
+}
+
+type HackResolver struct {
+	key    string
+	values []string
+}
+
+func (h HackResolver) Key() string      { return h.key }
+func (h HackResolver) Values() []string { return h.values }
+
 // makeGetUploadsOptions translates the given GraphQL arguments into options defined by the
 // store.GetUploads operations.
 func makeGetUploadsOptions(ctx context.Context, args *gql.LSIFRepositoryUploadsQueryArgs) (store.GetUploadsOptions, error) {
