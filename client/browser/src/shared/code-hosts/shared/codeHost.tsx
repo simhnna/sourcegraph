@@ -103,6 +103,7 @@ import { phabricatorCodeHost } from '../phabricator/codeHost'
 
 import { CodeView, trackCodeViews, fetchFileContentForDiffOrFileInfo } from './codeViews'
 import { ContentView, handleContentViews } from './contentViews'
+import { DependencyGraph } from './DependencyGraph'
 import { RepoURLParseError } from './errors'
 import { applyDecorations, initializeExtensions, renderCommandPalette, renderGlobalDebug } from './extensions'
 import { createPrivateCodeHoverAlert, getActiveHoverAlerts, onHoverAlertDismissed } from './hoverAlerts'
@@ -982,6 +983,26 @@ export function handleCodeHost({
     }
 
     subscriptions.add(
+        codeViews.pipe(take(1)).subscribe(codeViewEvent => {
+            if (!('head' in codeViewEvent.diffOrBlobInfo) || !codeViewEvent.diffOrBlobInfo.head) {
+                return
+            }
+            const { rawRepoName, revision } = codeViewEvent.diffOrBlobInfo.head
+            const filesElement = document.querySelector('#files')
+            if (filesElement && revision) {
+                const element = document.createElement('div')
+                element.className = 'file'
+                element.style.padding = '1rem'
+                filesElement.prepend(element)
+                render(
+                    <DependencyGraph repo={rawRepoName} revision={revision} requestGraphQL={requestGraphQL} />,
+                    element
+                )
+            }
+        })
+    )
+
+    subscriptions.add(
         codeViews.subscribe(codeViewEvent => {
             console.log('Code view added')
             // This code view could have left the DOM between the time that
@@ -1328,6 +1349,7 @@ export function injectCodeIntelligenceToCodeHost(
     isExtension: boolean,
     showGlobalDebug = SHOW_DEBUG()
 ): Subscription {
+    console.log('injectCodeIntelligenceToCodeHost')
     const subscriptions = new Subscription()
     const { platformContext, extensionsController } = initializeExtensions(
         codeHost,

@@ -10,10 +10,10 @@ import (
 
 type stringSet map[string]struct{}
 
-// Hack returns a map from paths to set of paths such that all keys contain references to each of their values.
-// References to paths not present in the given map are ignored. This method does not link results between the
+// Hack returns a map from paths to set of paths such that all keys contain definitions to each of their values.
+// Definitions to paths not present in the given map are ignored. This method does not link results between the
 // given bundles and moniker search paths must be called explicitly.
-func (s *Store) Hack(ctx context.Context, changedPathsByBundles map[int][]string) (referencesByPath map[string][]string, err error) {
+func (s *Store) Hack(ctx context.Context, changedPathsByBundles map[int][]string) (definitionsByPath map[string][]string, err error) {
 	pathSet := stringSet{}
 	for _, paths := range changedPathsByBundles {
 		for _, path := range paths {
@@ -21,12 +21,13 @@ func (s *Store) Hack(ctx context.Context, changedPathsByBundles map[int][]string
 		}
 	}
 
-	referenceSetByPath := map[string]stringSet{}
+	definitionSetByPath := map[string]stringSet{}
 	for bundleID, paths := range changedPathsByBundles {
 		for _, path := range paths {
 			documentData, exists, err := s.scanFirstDocumentData(s.Store.Query(ctx, sqlf.Sprintf(rangesDocumentQuery, bundleID, path)))
 			if err != nil || !exists {
-				return nil, err
+				// TODO: Why does this happen?
+				continue
 			}
 
 			ranges := make([]precise.RangeData, 0, len(documentData.Document.Ranges))
@@ -34,35 +35,35 @@ func (s *Store) Hack(ctx context.Context, changedPathsByBundles map[int][]string
 				ranges = append(ranges, rs)
 			}
 
-			referenceResultIDs := extractResultIDs(ranges, func(r precise.RangeData) precise.ID { return r.ReferenceResultID })
-			referenceLocations, _, err := s.locations(ctx, bundleID, referenceResultIDs, 100000, 0)
+			definitionResultIDs := extractResultIDs(ranges, func(r precise.RangeData) precise.ID { return r.DefinitionResultID })
+			definitionLocations, _, err := s.locations(ctx, bundleID, definitionResultIDs, 100000, 0)
 			if err != nil {
 				return nil, err
 			}
 
-			for _, locations := range referenceLocations {
+			for _, locations := range definitionLocations {
 				for _, location := range locations {
 					if _, ok := pathSet[location.Path]; ok {
-						if _, ok := referenceSetByPath[path]; !ok {
-							referenceSetByPath[path] = stringSet{}
+						if _, ok := definitionSetByPath[path]; !ok {
+							definitionSetByPath[path] = stringSet{}
 						}
 
-						referenceSetByPath[path][location.Path] = struct{}{}
+						definitionSetByPath[path][location.Path] = struct{}{}
 					}
 				}
 			}
 		}
 	}
 
-	referencesByPath = make(map[string][]string, len(referenceSetByPath))
-	for from, set := range referenceSetByPath {
+	definitionsByPath = make(map[string][]string, len(definitionSetByPath))
+	for from, set := range definitionSetByPath {
 		to := make([]string, 0, len(set))
 		for v := range set {
 			to = append(to, v)
 		}
 
-		referencesByPath[from] = to
+		definitionsByPath[from] = to
 	}
 
-	return referencesByPath, nil
+	return definitionsByPath, nil
 }

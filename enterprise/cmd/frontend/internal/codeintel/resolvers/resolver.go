@@ -273,12 +273,12 @@ func (r *resolver) Hack(ctx context.Context, repositoryID int, commit string) (m
 		}
 	}
 
-	referencesByPath, err := r.lsifStore.Hack(ctx, changedPathsByBundles)
+	definitionsByPath, err := r.lsifStore.Hack(ctx, changedPathsByBundles)
 	if err != nil {
 		return nil, err
 	}
 
-	for path, references := range referencesByPath {
+	for path, references := range definitionsByPath {
 		filtered := references[:0]
 		for _, reference := range references {
 			if reference != path {
@@ -286,7 +286,7 @@ func (r *resolver) Hack(ctx context.Context, repositoryID int, commit string) (m
 			}
 		}
 
-		referencesByPath[path] = filtered
+		definitionsByPath[path] = filtered
 	}
 
 	// Rok: Maybe you can start using this for a POC and I can help you enhance
@@ -298,5 +298,5 @@ func (r *resolver) Hack(ctx context.Context, repositoryID int, commit string) (m
 	//   (2) Do a BulkMonikerSearch for those monikers over the same uploads
 	//   (3) Filter out any locations not in one of the files from gitserver diff
 
-	return referencesByPath, nil
+	return definitionsByPath, nil
 }
