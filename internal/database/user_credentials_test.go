@@ -637,10 +637,6 @@ func createUserCredentialAuths(t *testing.T) map[string]auth.Authenticator {
 }
 
 func setUpUserCredentialTest(t *testing.T, db *sql.DB) (context.Context, encryption.Key, *types.User) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Helper()
 	ctx := context.Background()
 

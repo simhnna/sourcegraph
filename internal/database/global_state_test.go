@@ -8,11 +8,7 @@ import (
 )
 
 func TestGlobalState_Get(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
-	db := NewDB(dbtest.NewDB(t))
+	db := NewDB(dbtest.NewFastTx(t))
 	ctx := context.Background()
 	config, err := db.GlobalState().Get(ctx)
 	if err != nil {

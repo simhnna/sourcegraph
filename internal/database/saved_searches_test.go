@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"reflect"
+	"strconv"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -13,14 +14,10 @@ import (
 )
 
 func TestSavedSearchesIsEmpty(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	isEmpty, err := SavedSearches(db).IsEmpty(ctx)
+	isEmpty, err := SavedSearches(tx).IsEmpty(ctx)
 	if err != nil {
 		t.Fatal()
 	}
@@ -29,23 +26,22 @@ func TestSavedSearchesIsEmpty(t *testing.T) {
 		t.Errorf("want %v, got %v", want, isEmpty)
 	}
 
-	_, err = Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	_, err = SavedSearches(db).Create(ctx, fake)
+	_, err = SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	isEmpty, err = SavedSearches(db).IsEmpty(ctx)
+	isEmpty, err = SavedSearches(tx).IsEmpty(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -56,25 +52,20 @@ func TestSavedSearchesIsEmpty(t *testing.T) {
 }
 
 func TestSavedSearchesCreate(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	ss, err := SavedSearches(db).Create(ctx, fake)
+	ss, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,10 +74,10 @@ func TestSavedSearchesCreate(t *testing.T) {
 	}
 
 	want := &types.SavedSearch{
-		ID:          1,
+		ID:          ss.ID,
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
 	if !reflect.DeepEqual(ss, want) {
@@ -95,38 +86,33 @@ func TestSavedSearchesCreate(t *testing.T) {
 }
 
 func TestSavedSearchesUpdate(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	_, err = SavedSearches(db).Create(ctx, fake)
+	ss1, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	updated := &types.SavedSearch{
-		ID:          1,
+		ID:          ss1.ID,
 		Query:       "test2",
 		Description: "test2",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
 
-	updatedSearch, err := SavedSearches(db).Update(ctx, updated)
+	updatedSearch, err := SavedSearches(tx).Update(ctx, updated)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -137,35 +123,30 @@ func TestSavedSearchesUpdate(t *testing.T) {
 }
 
 func TestSavedSearchesDelete(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	_, err = SavedSearches(db).Create(ctx, fake)
+	ss, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = SavedSearches(db).Delete(ctx, 1)
+	err = SavedSearches(tx).Delete(ctx, ss.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	allQueries, err := SavedSearches(db).ListAll(ctx)
+	allQueries, err := SavedSearches(tx).ListAll(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -176,25 +157,20 @@ func TestSavedSearchesDelete(t *testing.T) {
 }
 
 func TestSavedSearchesGetByUserID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	ss, err := SavedSearches(db).Create(ctx, fake)
+	ss, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -202,15 +178,15 @@ func TestSavedSearchesGetByUserID(t *testing.T) {
 	if ss == nil {
 		t.Fatalf("no saved search returned, create failed")
 	}
-	savedSearch, err := SavedSearches(db).ListSavedSearchesByUserID(ctx, 1)
+	savedSearch, err := SavedSearches(tx).ListSavedSearchesByUserID(ctx, user.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 	want := []*types.SavedSearch{{
-		ID:          1,
+		ID:          ss.ID,
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}}
 	if !reflect.DeepEqual(savedSearch, want) {
@@ -219,25 +195,20 @@ func TestSavedSearchesGetByUserID(t *testing.T) {
 }
 
 func TestSavedSearchesGetByID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	ss, err := SavedSearches(db).Create(ctx, fake)
+	ss, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -245,17 +216,23 @@ func TestSavedSearchesGetByID(t *testing.T) {
 	if ss == nil {
 		t.Fatalf("no saved search returned, create failed")
 	}
-	savedSearch, err := SavedSearches(db).GetByID(ctx, ss.ID)
+	savedSearch, err := SavedSearches(tx).GetByID(ctx, ss.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := &api.SavedQuerySpecAndConfig{Spec: api.SavedQueryIDSpec{Subject: api.SettingsSubject{User: &userID}, Key: "1"}, Config: api.ConfigSavedQuery{
-		Key:         "1",
-		Query:       "test",
-		Description: "test",
-		UserID:      &userID,
-		OrgID:       nil,
-	}}
+	want := &api.SavedQuerySpecAndConfig{
+		Spec: api.SavedQueryIDSpec{
+			Subject: api.SettingsSubject{User: &user.ID},
+			Key:     strconv.Itoa(int(ss.ID)),
+		},
+		Config: api.ConfigSavedQuery{
+			Key:         strconv.Itoa(int(ss.ID)),
+			Query:       "test",
+			Description: "test",
+			UserID:      &user.ID,
+			OrgID:       nil,
+		},
+	}
 
 	if diff := cmp.Diff(want, savedSearch); diff != "" {
 		t.Fatalf("Mismatch (-want +got):\n%s", diff)
@@ -263,25 +240,20 @@ func TestSavedSearchesGetByID(t *testing.T) {
 }
 
 func TestListSavedSearchesByUserID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	_, err := Users(db).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
+	user, err := Users(tx).Create(ctx, NewUser{DisplayName: "test", Email: "test@test.com", Username: "test", Password: "test", EmailVerificationCode: "c2"})
 	if err != nil {
 		t.Fatal("can't create user", err)
 	}
-	userID := int32(1)
 	fake := &types.SavedSearch{
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}
-	ss, err := SavedSearches(db).Create(ctx, fake)
+	ss, err := SavedSearches(tx).Create(ctx, fake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -290,11 +262,11 @@ func TestListSavedSearchesByUserID(t *testing.T) {
 		t.Fatalf("no saved search returned, create failed")
 	}
 
-	org1, err := Orgs(db).Create(ctx, "org1", nil)
+	org1, err := Orgs(tx).Create(ctx, "org1", nil)
 	if err != nil {
 		t.Fatal("can't create org1", err)
 	}
-	org2, err := Orgs(db).Create(ctx, "org2", nil)
+	org2, err := Orgs(tx).Create(ctx, "org2", nil)
 	if err != nil {
 		t.Fatal("can't create org2", err)
 	}
@@ -305,7 +277,7 @@ func TestListSavedSearchesByUserID(t *testing.T) {
 		UserID:      nil,
 		OrgID:       &org1.ID,
 	}
-	orgSearch, err := SavedSearches(db).Create(ctx, orgFake)
+	orgSearch, err := SavedSearches(tx).Create(ctx, orgFake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -319,7 +291,7 @@ func TestListSavedSearchesByUserID(t *testing.T) {
 		UserID:      nil,
 		OrgID:       &org2.ID,
 	}
-	org2Search, err := SavedSearches(db).Create(ctx, org2Fake)
+	org2Search, err := SavedSearches(tx).Create(ctx, org2Fake)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -327,34 +299,34 @@ func TestListSavedSearchesByUserID(t *testing.T) {
 		t.Fatalf("no saved search returned, org2 saved search create failed")
 	}
 
-	_, err = OrgMembers(db).Create(ctx, org1.ID, userID)
+	_, err = OrgMembers(tx).Create(ctx, org1.ID, user.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = OrgMembers(db).Create(ctx, org2.ID, userID)
+	_, err = OrgMembers(tx).Create(ctx, org2.ID, user.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	savedSearches, err := SavedSearches(db).ListSavedSearchesByUserID(ctx, userID)
+	savedSearches, err := SavedSearches(tx).ListSavedSearchesByUserID(ctx, user.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	want := []*types.SavedSearch{{
-		ID:          1,
+		ID:          ss.ID,
 		Query:       "test",
 		Description: "test",
-		UserID:      &userID,
+		UserID:      &user.ID,
 		OrgID:       nil,
 	}, {
-		ID:          2,
+		ID:          orgSearch.ID,
 		Query:       "test",
 		Description: "test",
 		UserID:      nil,
 		OrgID:       &org1.ID,
 	}, {
-		ID:          3,
+		ID:          org2Search.ID,
 		Query:       "test",
 		Description: "test",
 		UserID:      nil,

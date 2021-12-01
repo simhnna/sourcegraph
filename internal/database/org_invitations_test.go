@@ -13,9 +13,6 @@ import (
 // 🚨 SECURITY: This tests the routine that creates org invitations and returns the invitation secret value
 // to the user.
 func TestOrgInvitations(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := context.Background()

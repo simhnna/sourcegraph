@@ -12,10 +12,6 @@ import (
 )
 
 func TestOrgMembers_CreateMembershipInOrgsForAllUsers(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := context.Background()

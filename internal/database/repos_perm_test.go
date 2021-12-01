@@ -52,7 +52,7 @@ func (p *fakeProvider) FetchRepoPerms(context.Context, *extsvc.Repository, authz
 // 🚨 SECURITY: Tests are necessary to ensure security.
 func TestAuthzQueryConds(t *testing.T) {
 	cmpOpts := cmp.AllowUnexported(sqlf.Query{})
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 
 	t.Run("Conflict with permissions user mapping", func(t *testing.T) {
 		before := globals.PermissionsUserMapping()
@@ -62,7 +62,7 @@ func TestAuthzQueryConds(t *testing.T) {
 		authz.SetProviders(false, []authz.Provider{&fakeProvider{}})
 		defer authz.SetProviders(true, nil)
 
-		_, err := AuthzQueryConds(context.Background(), db)
+		_, err := AuthzQueryConds(context.Background(), tx)
 		gotErr := fmt.Sprintf("%v", err)
 		if diff := cmp.Diff(errPermissionsUserMappingConflict.Error(), gotErr); diff != "" {
 			t.Fatalf("Mismatch (-want +got):\n%s", diff)
@@ -74,7 +74,7 @@ func TestAuthzQueryConds(t *testing.T) {
 		globals.SetPermissionsUserMapping(&schema.PermissionsUserMapping{Enabled: true})
 		defer globals.SetPermissionsUserMapping(before)
 
-		got, err := AuthzQueryConds(context.Background(), db)
+		got, err := AuthzQueryConds(context.Background(), tx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -163,7 +163,7 @@ func TestAuthzQueryConds(t *testing.T) {
 			authz.SetProviders(test.authzAllowByDefault, nil)
 			defer authz.SetProviders(true, nil)
 
-			q, err := AuthzQueryConds(test.setup(t), db)
+			q, err := AuthzQueryConds(test.setup(t), tx)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -176,10 +176,6 @@ func TestAuthzQueryConds(t *testing.T) {
 }
 
 func TestRepoStore_nonSiteAdminCanViewOwnPrivateCode(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 
@@ -404,10 +400,6 @@ func createGitHubExternalService(t *testing.T, db dbutil.DB, userID int32) *type
 
 // 🚨 SECURITY: Tests are necessary to ensure security.
 func TestRepoStore_List_checkPermissions(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 

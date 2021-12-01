@@ -291,16 +291,13 @@ func TestExternalServicesStore_ValidateConfig(t *testing.T) {
 }
 
 func TestExternalServicesStore_Create(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	envvar.MockSourcegraphDotComMode(true)
 	defer envvar.MockSourcegraphDotComMode(false)
 
-	user, err := Users(db).Create(ctx,
+	user, err := Users(tx).Create(ctx,
 		NewUser{
 			Email:           "alice@example.com",
 			Username:        "alice",
@@ -313,7 +310,7 @@ func TestExternalServicesStore_Create(t *testing.T) {
 	}
 
 	displayName := "Acme org"
-	org, err := Orgs(db).Create(ctx, "acme", &displayName)
+	org, err := Orgs(tx).Create(ctx, "acme", &displayName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -426,13 +423,13 @@ func TestExternalServicesStore_Create(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			err := ExternalServices(db).Create(ctx, confGet, test.externalService)
+			err := ExternalServices(tx).Create(ctx, confGet, test.externalService)
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			// Should get back the same one
-			got, err := ExternalServices(db).GetByID(ctx, test.externalService.ID)
+			got, err := ExternalServices(tx).GetByID(ctx, test.externalService.ID)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -451,7 +448,7 @@ func TestExternalServicesStore_Create(t *testing.T) {
 				t.Fatalf("Wanted has_webhooks = %v, but got %v", test.wantHasWebhooks, *got.HasWebhooks)
 			}
 
-			err = ExternalServices(db).Delete(ctx, test.externalService.ID)
+			err = ExternalServices(tx).Delete(ctx, test.externalService.ID)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -460,10 +457,7 @@ func TestExternalServicesStore_Create(t *testing.T) {
 }
 
 func TestExternalServicesStore_CreateWithTierEnforcement(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 
 	ctx := context.Background()
 	confGet := func() *conf.Unified { return &conf.Unified{} }
@@ -472,7 +466,7 @@ func TestExternalServicesStore_CreateWithTierEnforcement(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
-	store := ExternalServices(db)
+	store := ExternalServices(tx)
 	BeforeCreateExternalService = func(ctx context.Context, db dbutil.DB) error {
 		return errcode.NewPresentationError("test plan limit exceeded")
 	}
@@ -483,10 +477,7 @@ func TestExternalServicesStore_CreateWithTierEnforcement(t *testing.T) {
 }
 
 func TestExternalServicesStore_Update(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	envvar.MockSourcegraphDotComMode(true)
@@ -501,7 +492,7 @@ func TestExternalServicesStore_Update(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc", "authorization": {}}`,
 	}
-	err := ExternalServices(db).Create(ctx, confGet, es)
+	err := ExternalServices(tx).Create(ctx, confGet, es)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -571,13 +562,13 @@ func TestExternalServicesStore_Update(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			err = ExternalServices(db).Update(ctx, nil, es.ID, test.update)
+			err = ExternalServices(tx).Update(ctx, nil, es.ID, test.update)
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			// Get and verify update
-			got, err := ExternalServices(db).GetByID(ctx, es.ID)
+			got, err := ExternalServices(tx).GetByID(ctx, es.ID)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -719,10 +710,7 @@ func TestUpsertAuthorizationToExternalService(t *testing.T) {
 // `Upsert` and `Update` has the "authorization" field presented in the external
 // service config automatically.
 func TestExternalServicesStore_upsertAuthorizationToExternalService(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	envvar.MockSourcegraphDotComMode(true)
@@ -731,7 +719,7 @@ func TestExternalServicesStore_upsertAuthorizationToExternalService(t *testing.T
 	confGet := func() *conf.Unified {
 		return &conf.Unified{}
 	}
-	externalServices := ExternalServices(db)
+	externalServices := ExternalServices(tx)
 
 	// Test Create method
 	es := &types.ExternalService{
@@ -775,11 +763,8 @@ func TestExternalServicesStore_upsertAuthorizationToExternalService(t *testing.T
 }
 
 func TestCountRepoCount(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
 
 	// Create a new external service
@@ -791,12 +776,12 @@ func TestCountRepoCount(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
-	err := ExternalServices(db).Create(ctx, confGet, es1)
+	err := ExternalServices(tx).Create(ctx, confGet, es1)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, err = db.ExecContext(ctx, `
+	_, err = tx.ExecContext(ctx, `
 INSERT INTO repo (id, name, description, fork)
 VALUES (1, 'github.com/user/repo', '', FALSE);
 `)
@@ -809,12 +794,12 @@ VALUES (1, 'github.com/user/repo', '', FALSE);
 INSERT INTO external_service_repos (external_service_id, repo_id, clone_url)
 VALUES (%d, 1, '')
 `, es1.ID)
-	_, err = db.ExecContext(ctx, q.Query(sqlf.PostgresBindVar), q.Args()...)
+	_, err = tx.ExecContext(ctx, q.Query(sqlf.PostgresBindVar), q.Args()...)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err := ExternalServices(db).RepoCount(ctx, es1.ID)
+	count, err := ExternalServices(tx).RepoCount(ctx, es1.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -825,9 +810,6 @@ VALUES (%d, 1, '')
 }
 
 func TestExternalServicesStore_Delete(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := actor.WithInternalActor(context.Background())
@@ -918,11 +900,8 @@ VALUES (%d, 1, ''), (%d, 2, '')
 }
 
 func TestExternalServicesStore_GetByID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// Create a new external service
@@ -934,25 +913,25 @@ func TestExternalServicesStore_GetByID(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
-	err := ExternalServices(db).Create(ctx, confGet, es)
+	err := ExternalServices(tx).Create(ctx, confGet, es)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Should be able to get back by its ID
-	_, err = ExternalServices(db).GetByID(ctx, es.ID)
+	_, err = ExternalServices(tx).GetByID(ctx, es.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Delete this external service
-	err = ExternalServices(db).Delete(ctx, es.ID)
+	err = ExternalServices(tx).Delete(ctx, es.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// Should now get externalServiceNotFoundError
-	_, err = ExternalServices(db).GetByID(ctx, es.ID)
+	_, err = ExternalServices(tx).GetByID(ctx, es.ID)
 	gotErr := fmt.Sprintf("%v", err)
 	wantErr := fmt.Sprintf("external service not found: %v", es.ID)
 	if gotErr != wantErr {
@@ -961,11 +940,8 @@ func TestExternalServicesStore_GetByID(t *testing.T) {
 }
 
 func TestExternalServicesStore_GetByID_Encrypted(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// Create a new external service
@@ -978,7 +954,7 @@ func TestExternalServicesStore_GetByID_Encrypted(t *testing.T) {
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
 
-	store := ExternalServices(db).WithEncryptionKey(et.TestKey{})
+	store := ExternalServices(tx).WithEncryptionKey(et.TestKey{})
 
 	err := store.Create(ctx, confGet, es)
 	if err != nil {
@@ -986,7 +962,7 @@ func TestExternalServicesStore_GetByID_Encrypted(t *testing.T) {
 	}
 
 	// create a store with a NoopKey to read the raw encrypted value
-	noopStore := ExternalServices(db).WithEncryptionKey(&encryption.NoopKey{})
+	noopStore := ExternalServices(tx).WithEncryptionKey(&encryption.NoopKey{})
 	encrypted, err := noopStore.GetByID(ctx, es.ID)
 	if err != nil {
 		t.Fatal(err)
@@ -1018,9 +994,6 @@ func TestExternalServicesStore_GetByID_Encrypted(t *testing.T) {
 }
 
 func TestGetAffiliatedSyncErrors(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
@@ -1191,9 +1164,6 @@ VALUES ($1,'errored', now(), $2)
 }
 
 func TestGetLastSyncError(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
@@ -1265,15 +1235,12 @@ VALUES ($1,$2,'errored', now())
 }
 
 func TestExternalServicesStore_List(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// Create test user
-	user, err := Users(db).Create(ctx, NewUser{
+	user, err := Users(tx).Create(ctx, NewUser{
 		Email:           "alice@example.com",
 		Username:        "alice",
 		Password:        "password",
@@ -1285,7 +1252,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 
 	// Create test org
 	displayName := "Acme Org"
-	org, err := Orgs(db).Create(ctx, "acme", &displayName)
+	org, err := Orgs(tx).Create(ctx, "acme", &displayName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1314,14 +1281,14 @@ func TestExternalServicesStore_List(t *testing.T) {
 		},
 	}
 	for _, es := range ess {
-		err := ExternalServices(db).Create(ctx, confGet, es)
+		err := ExternalServices(tx).Create(ctx, confGet, es)
 		if err != nil {
 			t.Fatal(err)
 		}
 	}
 
 	t.Run("list all external services", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{})
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1333,7 +1300,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list all external services in ascending order", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{OrderByDirection: "ASC"})
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{OrderByDirection: "ASC"})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1346,7 +1313,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list all external services in descending order", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{})
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1359,7 +1326,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list external services with certain IDs", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			IDs: []int64{ess[1].ID},
 		})
 		if err != nil {
@@ -1373,7 +1340,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list external services with no namespace", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			NoNamespace: true,
 		})
 		if err != nil {
@@ -1388,7 +1355,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list only test user's external services", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			NamespaceUserID: user.ID,
 		})
 		if err != nil {
@@ -1403,7 +1370,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list non-exist user's external services", func(t *testing.T) {
-		ess, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		ess, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			NamespaceUserID: 404,
 		})
 		if err != nil {
@@ -1416,7 +1383,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list only test org's external services", func(t *testing.T) {
-		got, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		got, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			NamespaceOrgID: org.ID,
 		})
 		if err != nil {
@@ -1431,7 +1398,7 @@ func TestExternalServicesStore_List(t *testing.T) {
 	})
 
 	t.Run("list non-existing org external services", func(t *testing.T) {
-		ess, err := ExternalServices(db).List(ctx, ExternalServicesListOptions{
+		ess, err := ExternalServices(tx).List(ctx, ExternalServicesListOptions{
 			NamespaceOrgID: 404,
 		})
 		if err != nil {
@@ -1445,15 +1412,12 @@ func TestExternalServicesStore_List(t *testing.T) {
 }
 
 func TestExternalServicesStore_DistinctKinds(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	t.Run("no external service won't blow up", func(t *testing.T) {
-		kinds, err := ExternalServices(db).DistinctKinds(ctx)
+		kinds, err := ExternalServices(tx).DistinctKinds(ctx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1489,19 +1453,19 @@ func TestExternalServicesStore_DistinctKinds(t *testing.T) {
 		},
 	}
 	for _, es := range ess {
-		err := ExternalServices(db).Create(ctx, confGet, es)
+		err := ExternalServices(tx).Create(ctx, confGet, es)
 		if err != nil {
 			t.Fatal(err)
 		}
 	}
 
 	// Delete the last external service which should be excluded from the result
-	err := ExternalServices(db).Delete(ctx, ess[3].ID)
+	err := ExternalServices(tx).Delete(ctx, ess[3].ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	kinds, err := ExternalServices(db).DistinctKinds(ctx)
+	kinds, err := ExternalServices(tx).DistinctKinds(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1513,11 +1477,8 @@ func TestExternalServicesStore_DistinctKinds(t *testing.T) {
 }
 
 func TestExternalServicesStore_Count(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// Create a new external service
@@ -1529,12 +1490,12 @@ func TestExternalServicesStore_Count(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
-	err := ExternalServices(db).Create(ctx, confGet, es)
+	err := ExternalServices(tx).Create(ctx, confGet, es)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	count, err := ExternalServices(db).Count(ctx, ExternalServicesListOptions{})
+	count, err := ExternalServices(tx).Count(ctx, ExternalServicesListOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1545,11 +1506,8 @@ func TestExternalServicesStore_Count(t *testing.T) {
 }
 
 func TestExternalServicesStore_Upsert(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	clock := timeutil.NewFakeClock(time.Now(), 0)
@@ -1557,13 +1515,13 @@ func TestExternalServicesStore_Upsert(t *testing.T) {
 	svcs := typestest.MakeExternalServices()
 
 	t.Run("no external services", func(t *testing.T) {
-		if err := ExternalServices(db).Upsert(ctx); err != nil {
+		if err := ExternalServices(tx).Upsert(ctx); err != nil {
 			t.Fatalf("Upsert error: %s", err)
 		}
 	})
 
 	t.Run("one external service", func(t *testing.T) {
-		tx, err := ExternalServices(db).Transact(ctx)
+		tx, err := ExternalServices(tx).Transact(ctx)
 		if err != nil {
 			t.Fatalf("Transact error: %s", err)
 		}
@@ -1597,7 +1555,7 @@ func TestExternalServicesStore_Upsert(t *testing.T) {
 	})
 
 	t.Run("many external services", func(t *testing.T) {
-		tx, err := ExternalServices(db).Transact(ctx)
+		tx, err := ExternalServices(tx).Transact(ctx)
 		if err != nil {
 			t.Fatalf("Transact error: %s", err)
 		}
@@ -1681,7 +1639,7 @@ func TestExternalServicesStore_Upsert(t *testing.T) {
 	})
 
 	t.Run("with encryption key", func(t *testing.T) {
-		tx, err := ExternalServices(db).WithEncryptionKey(et.TestKey{}).Transact(ctx)
+		tx, err := ExternalServices(tx).WithEncryptionKey(et.TestKey{}).Transact(ctx)
 		if err != nil {
 			t.Fatalf("Transact error: %s", err)
 		}
@@ -1777,11 +1735,8 @@ func TestExternalServicesStore_Upsert(t *testing.T) {
 }
 
 func TestExternalServiceStore_GetExternalServiceSyncJobs(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// Create a new external service
@@ -1793,17 +1748,17 @@ func TestExternalServiceStore_GetExternalServiceSyncJobs(t *testing.T) {
 		DisplayName: "GITHUB #1",
 		Config:      `{"url": "https://github.com", "repositoryQuery": ["none"], "token": "abc"}`,
 	}
-	err := ExternalServices(db).Create(ctx, confGet, es)
+	err := ExternalServices(tx).Create(ctx, confGet, es)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, err = db.ExecContext(ctx, "INSERT INTO external_service_sync_jobs (external_service_id) VALUES ($1)", es.ID)
+	_, err = tx.ExecContext(ctx, "INSERT INTO external_service_sync_jobs (external_service_id) VALUES ($1)", es.ID)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	have, err := ExternalServices(db).GetSyncJobs(ctx)
+	have, err := ExternalServices(tx).GetSyncJobs(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1812,7 +1767,7 @@ func TestExternalServiceStore_GetExternalServiceSyncJobs(t *testing.T) {
 	}
 
 	want := &types.ExternalServiceSyncJob{
-		ID:                1,
+		ID:                have[0].ID, // Ignore ID
 		State:             "queued",
 		ExternalServiceID: es.ID,
 	}
@@ -1822,11 +1777,8 @@ func TestExternalServiceStore_GetExternalServiceSyncJobs(t *testing.T) {
 }
 
 func TestExternalServicesStore_OneCloudDefaultPerKind(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	now := time.Now()
@@ -1846,30 +1798,27 @@ func TestExternalServicesStore_OneCloudDefaultPerKind(t *testing.T) {
 
 	t.Run("non default", func(t *testing.T) {
 		gh := makeService(false)
-		if err := ExternalServices(db).Upsert(ctx, gh); err != nil {
+		if err := ExternalServices(tx).Upsert(ctx, gh); err != nil {
 			t.Fatalf("Upsert error: %s", err)
 		}
 	})
 
 	t.Run("first default", func(t *testing.T) {
 		gh := makeService(true)
-		if err := ExternalServices(db).Upsert(ctx, gh); err != nil {
+		if err := ExternalServices(tx).Upsert(ctx, gh); err != nil {
 			t.Fatalf("Upsert error: %s", err)
 		}
 	})
 
 	t.Run("second default", func(t *testing.T) {
 		gh := makeService(true)
-		if err := ExternalServices(db).Upsert(ctx, gh); err == nil {
+		if err := ExternalServices(tx).Upsert(ctx, gh); err == nil {
 			t.Fatal("Expected an error")
 		}
 	})
 }
 
 func TestExternalServiceStore_SyncDue(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 	db := dbtest.NewDB(t)
 	ctx := context.Background()

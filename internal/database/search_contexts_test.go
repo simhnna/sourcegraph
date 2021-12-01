@@ -28,12 +28,12 @@ func createSearchContexts(ctx context.Context, store SearchContextsStore, search
 }
 
 func TestSearchContexts_Get(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	o := Orgs(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	o := Orgs(tx)
+	sc := SearchContexts(tx)
 
 	user, err := u.Create(ctx, NewUser{Username: "u", Password: "p"})
 	if err != nil {
@@ -80,12 +80,12 @@ func TestSearchContexts_Get(t *testing.T) {
 }
 
 func TestSearchContexts_Update(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	o := Orgs(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	o := Orgs(tx)
+	sc := SearchContexts(tx)
 
 	user, err := u.Create(ctx, NewUser{Username: "u", Password: "p"})
 	if err != nil {
@@ -152,11 +152,11 @@ func TestSearchContexts_Update(t *testing.T) {
 }
 
 func TestSearchContexts_List(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	sc := SearchContexts(tx)
 
 	user, err := u.Create(ctx, NewUser{Username: "u", Password: "p"})
 	if err != nil {
@@ -199,12 +199,12 @@ func TestSearchContexts_List(t *testing.T) {
 }
 
 func TestSearchContexts_PaginationAndCount(t *testing.T) {
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	t.Parallel()
 	ctx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	o := Orgs(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	o := Orgs(tx)
+	sc := SearchContexts(tx)
 
 	user, err := u.Create(ctx, NewUser{Username: "u", Password: "p"})
 	if err != nil {
@@ -297,12 +297,12 @@ func TestSearchContexts_PaginationAndCount(t *testing.T) {
 }
 
 func TestSearchContexts_CaseInsensitiveNames(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	o := Orgs(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	o := Orgs(tx)
+	sc := SearchContexts(tx)
 
 	user, err := u.Create(ctx, NewUser{Username: "u", Password: "p"})
 	if err != nil {
@@ -358,11 +358,11 @@ func TestSearchContexts_CaseInsensitiveNames(t *testing.T) {
 }
 
 func TestSearchContexts_CreateAndSetRepositoryRevisions(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := actor.WithInternalActor(context.Background())
-	sc := SearchContexts(db)
-	r := Repos(db)
+	sc := SearchContexts(tx)
+	r := Repos(tx)
 
 	err := r.Create(ctx, &types.Repo{Name: "testA", URI: "https://example.com/a"}, &types.Repo{Name: "testB", URI: "https://example.com/b"})
 	if err != nil {
@@ -420,13 +420,13 @@ func TestSearchContexts_CreateAndSetRepositoryRevisions(t *testing.T) {
 }
 
 func TestSearchContexts_Permissions(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	internalCtx := actor.WithInternalActor(context.Background())
-	u := Users(db)
-	o := Orgs(db)
-	om := OrgMembers(db)
-	sc := SearchContexts(db)
+	u := Users(tx)
+	o := Orgs(tx)
+	om := OrgMembers(tx)
+	sc := SearchContexts(tx)
 
 	user1, err := u.Create(internalCtx, NewUser{Username: "u1", Password: "p"})
 	if err != nil {
@@ -623,10 +623,10 @@ func TestSearchContexts_Permissions(t *testing.T) {
 }
 
 func TestSearchContexts_Delete(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
-	sc := SearchContexts(db)
+	sc := SearchContexts(tx)
 
 	initialSearchContexts, err := createSearchContexts(ctx, sc, []*types.SearchContext{
 		{Name: "ctx", Public: true},
@@ -673,8 +673,8 @@ func getSearchContextNames(s []*types.SearchContext) []string {
 }
 
 func TestSearchContexts_OrderBy(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	db := dbtest.NewDB(t)
 	internalCtx := actor.WithInternalActor(context.Background())
 	u := Users(db)
 	o := Orgs(db)
@@ -785,12 +785,12 @@ func TestSearchContexts_OrderBy(t *testing.T) {
 }
 
 func TestSearchContexts_GetAllRevisionsForRepos(t *testing.T) {
-	db := dbtest.NewDB(t)
 	t.Parallel()
+	tx := dbtest.NewFastTx(t)
 	// Required for this DB query.
 	internalCtx := actor.WithInternalActor(context.Background())
-	sc := SearchContexts(db)
-	r := Repos(db)
+	sc := SearchContexts(tx)
+	r := Repos(tx)
 
 	repos := []*types.Repo{
 		{Name: "testA", URI: "https://example.com/a"},

@@ -14,10 +14,6 @@ import (
 )
 
 func TestIterateRepoGitserverStatus(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 
@@ -98,10 +94,6 @@ func TestIterateRepoGitserverStatus(t *testing.T) {
 }
 
 func TestGitserverReposGetByID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 
@@ -147,10 +139,6 @@ func TestGitserverReposGetByID(t *testing.T) {
 }
 
 func TestSetCloneStatus(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 	const shardID = "test"
@@ -247,10 +235,6 @@ func TestSetCloneStatus(t *testing.T) {
 }
 
 func TestSetLastError(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 	const shardID = "test"
@@ -341,10 +325,6 @@ func TestSetLastError(t *testing.T) {
 }
 
 func TestGitserverRepoUpsertNullShard(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 
@@ -375,10 +355,6 @@ func TestGitserverRepoUpsertNullShard(t *testing.T) {
 }
 
 func TestGitserverRepoUpsert(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
-
 	db := dbtest.NewDB(t)
 	ctx := context.Background()
 

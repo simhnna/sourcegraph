@@ -9,11 +9,8 @@ import (
 )
 
 func TestSecurityEventLogs_ValidInfo(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewDB(t)
 	ctx := context.Background()
 
 	var testCases = []struct {
@@ -59,7 +56,7 @@ func TestSecurityEventLogs_ValidInfo(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := SecurityEventLogs(db).Insert(ctx, tc.event)
+			err := SecurityEventLogs(tx).Insert(ctx, tc.event)
 
 			if have, want := fmt.Sprint(err), tc.err; have != want {
 				t.Errorf("have %+v, want %+v", have, want)

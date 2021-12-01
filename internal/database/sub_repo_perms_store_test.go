@@ -13,9 +13,6 @@ import (
 )
 
 func TestSubRepoPermsInsert(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 
 	db := dbtest.NewDB(t)
@@ -45,9 +42,6 @@ func TestSubRepoPermsInsert(t *testing.T) {
 }
 
 func TestSubRepoPermsUpsert(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 
 	db := dbtest.NewDB(t)
@@ -87,9 +81,6 @@ func TestSubRepoPermsUpsert(t *testing.T) {
 }
 
 func TestSubRepoPermsUpsertWithSpec(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 
 	db := dbtest.NewDB(t)
@@ -134,9 +125,6 @@ func TestSubRepoPermsUpsertWithSpec(t *testing.T) {
 }
 
 func TestSubRepoPermsGetByUser(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
 
 	db := dbtest.NewDB(t)
