@@ -12,7 +12,7 @@ import (
 // to the user.
 func TestAccessTokens_Create(t *testing.T) {
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	db := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	subject, err := Users(db).Create(ctx, NewUser{
@@ -84,11 +84,8 @@ func TestAccessTokens_Create(t *testing.T) {
 }
 
 func TestAccessTokens_List(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	db := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	subject1, err := Users(db).Create(ctx, NewUser{
@@ -163,11 +160,8 @@ func TestAccessTokens_List(t *testing.T) {
 // 🚨 SECURITY: This tests the routine that verifies access tokens, which the security of the entire
 // system depends on.
 func TestAccessTokens_Lookup(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	db := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	subject, err := Users(db).Create(ctx, NewUser{
@@ -232,11 +226,8 @@ func TestAccessTokens_Lookup(t *testing.T) {
 // 🚨 SECURITY: This tests that deleting the subject or creator user of an access token invalidates
 // the token, and that no new access tokens may be created for deleted users.
 func TestAccessTokens_Lookup_deletedUser(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	db := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	t.Run("subject", func(t *testing.T) {

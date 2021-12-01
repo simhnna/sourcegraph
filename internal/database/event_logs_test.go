@@ -22,12 +22,7 @@ import (
 )
 
 func TestEventLogs_ValidInfo(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
-	ctx := context.Background()
 
 	var testCases = []struct {
 		name  string
@@ -57,7 +52,9 @@ func TestEventLogs_ValidInfo(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := EventLogs(db).Insert(ctx, tc.event)
+			tx := dbtest.NewFastTx(t)
+			ctx := context.Background()
+			err := EventLogs(tx).Insert(ctx, tc.event)
 
 			if have, want := fmt.Sprint(errors.Unwrap(err)), tc.err; have != want {
 				t.Errorf("have %+v, want %+v", have, want)
@@ -67,11 +64,8 @@ func TestEventLogs_ValidInfo(t *testing.T) {
 }
 
 func TestEventLogs_CountUniqueUsersPerPeriod(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	now := time.Now()
@@ -97,12 +91,12 @@ func TestEventLogs_CountUniqueUsersPerPeriod(t *testing.T) {
 	}
 
 	for _, e := range events {
-		if err := EventLogs(db).Insert(ctx, e); err != nil {
+		if err := EventLogs(tx).Insert(ctx, e); err != nil {
 			t.Fatal(err)
 		}
 	}
 
-	values, err := EventLogs(db).CountUniqueUsersPerPeriod(ctx, Daily, now, 3, nil)
+	values, err := EventLogs(tx).CountUniqueUsersPerPeriod(ctx, Daily, now, 3, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -113,11 +107,8 @@ func TestEventLogs_CountUniqueUsersPerPeriod(t *testing.T) {
 }
 
 func TestEventLogs_UsersUsageCounts(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	now := time.Now()
@@ -142,7 +133,7 @@ func TestEventLogs_UsersUsageCounts(t *testing.T) {
 						Timestamp: day.Add(time.Minute * time.Duration(rand.Intn(60*12))),
 					}
 
-					if err := EventLogs(db).Insert(ctx, e); err != nil {
+					if err := EventLogs(tx).Insert(ctx, e); err != nil {
 						t.Fatal(err)
 					}
 				}
@@ -150,7 +141,7 @@ func TestEventLogs_UsersUsageCounts(t *testing.T) {
 		}
 	}
 
-	have, err := EventLogs(db).UsersUsageCounts(ctx)
+	have, err := EventLogs(tx).UsersUsageCounts(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,11 +161,8 @@ func TestEventLogs_UsersUsageCounts(t *testing.T) {
 }
 
 func TestEventLogs_SiteUsage(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// This unix timestamp is equivalent to `Friday, May 15, 2020 10:30:00 PM GMT` and is set to
@@ -243,7 +231,7 @@ func TestEventLogs_SiteUsage(t *testing.T) {
 							e.AnonymousUserID = "deadbeef"
 						}
 
-						if err := EventLogs(db).Insert(ctx, e); err != nil {
+						if err := EventLogs(tx).Insert(ctx, e); err != nil {
 							t.Fatal(err)
 						}
 					}
@@ -252,7 +240,7 @@ func TestEventLogs_SiteUsage(t *testing.T) {
 		}
 	}
 
-	el := &eventLogStore{Store: basestore.NewWithDB(db, sql.TxOptions{})}
+	el := &eventLogStore{Store: basestore.NewWithDB(tx, sql.TxOptions{})}
 	summary, err := el.siteUsage(ctx, now)
 	if err != nil {
 		t.Fatal(err)
@@ -286,11 +274,8 @@ func TestEventLogs_SiteUsage(t *testing.T) {
 }
 
 func TestEventLogs_codeIntelligenceWeeklyUsersCount(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	names := []string{"codeintel.lsifHover", "codeintel.searchReferences", "unknown event"}
@@ -312,7 +297,7 @@ func TestEventLogs_codeIntelligenceWeeklyUsersCount(t *testing.T) {
 				Timestamp: now.Add(-time.Hour * 24 * 3).Add(time.Minute * time.Duration(rand.Intn(60)-30)),
 			}
 
-			if err := EventLogs(db).Insert(ctx, e); err != nil {
+			if err := EventLogs(tx).Insert(ctx, e); err != nil {
 				t.Fatal(err)
 			}
 		}
@@ -326,7 +311,7 @@ func TestEventLogs_codeIntelligenceWeeklyUsersCount(t *testing.T) {
 				Timestamp: now.Add(-time.Hour * 24 * 12).Add(time.Minute * time.Duration(rand.Intn(60)-30)),
 			}
 
-			if err := EventLogs(db).Insert(ctx, e); err != nil {
+			if err := EventLogs(tx).Insert(ctx, e); err != nil {
 				t.Fatal(err)
 			}
 		}
@@ -337,7 +322,7 @@ func TestEventLogs_codeIntelligenceWeeklyUsersCount(t *testing.T) {
 		"codeintel.searchReferences",
 	}
 
-	el := &eventLogStore{Store: basestore.NewWithDB(db, sql.TxOptions{})}
+	el := &eventLogStore{Store: basestore.NewWithDB(tx, sql.TxOptions{})}
 	count, err := el.codeIntelligenceWeeklyUsersCount(ctx, eventNames, now)
 	if err != nil {
 		t.Fatal(err)
@@ -349,11 +334,8 @@ func TestEventLogs_codeIntelligenceWeeklyUsersCount(t *testing.T) {
 }
 
 func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 	now := time.Now()
 
@@ -375,7 +357,7 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 			repo.name,
 			repo.deletedAt,
 		)
-		if _, err := db.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
+		if _, err := tx.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
 			t.Fatalf("unexpected error preparing database: %s", err.Error())
 		}
 	}
@@ -404,7 +386,7 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 			fmt.Sprintf("%040d", i),
 			uploadedAt,
 		)
-		if _, err := db.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
+		if _, err := tx.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
 			t.Fatalf("unexpected error preparing database: %s", err.Error())
 		}
 
@@ -414,7 +396,7 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 	query := sqlf.Sprintf(
 		"INSERT INTO lsif_index_configuration (repository_id, data, autoindex_enabled) VALUES (1, '', true)",
 	)
-	if _, err := db.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
+	if _, err := tx.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
 		t.Fatalf("unexpected error preparing database: %s", err.Error())
 	}
 
@@ -429,12 +411,12 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 		fmt.Sprintf("%040d", 2), time.Now().UTC().Add(-time.Hour*24*5), // 5 days
 		fmt.Sprintf("%040d", 3),
 	)
-	if _, err := db.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
+	if _, err := tx.Exec(query.Query(sqlf.PostgresBindVar), query.Args()...); err != nil {
 		t.Fatalf("unexpected error preparing database: %s", err.Error())
 	}
 
 	t.Run("All", func(t *testing.T) {
-		counts, err := EventLogs(db).CodeIntelligenceRepositoryCounts(ctx)
+		counts, err := EventLogs(tx).CodeIntelligenceRepositoryCounts(ctx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -460,7 +442,7 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 	})
 
 	t.Run("ByLanguage", func(t *testing.T) {
-		counts, err := EventLogs(db).CodeIntelligenceRepositoryCountsByLanguage(ctx)
+		counts, err := EventLogs(tx).CodeIntelligenceRepositoryCountsByLanguage(ctx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -491,11 +473,8 @@ func TestEventLogs_TestCodeIntelligenceRepositoryCounts(t *testing.T) {
 }
 
 func TestEventLogs_CodeIntelligenceSettingsPageViewCounts(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	names := []string{
@@ -537,7 +516,7 @@ func TestEventLogs_CodeIntelligenceSettingsPageViewCounts(t *testing.T) {
 				}
 
 				g.Go(func() error {
-					return EventLogs(db).Insert(gctx, e)
+					return EventLogs(tx).Insert(gctx, e)
 				})
 			}
 		}
@@ -547,7 +526,7 @@ func TestEventLogs_CodeIntelligenceSettingsPageViewCounts(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	el := &eventLogStore{Store: basestore.NewWithDB(db, sql.TxOptions{})}
+	el := &eventLogStore{Store: basestore.NewWithDB(tx, sql.TxOptions{})}
 	count, err := el.codeIntelligenceSettingsPageViewCount(ctx, now)
 	if err != nil {
 		t.Fatal(err)
@@ -559,11 +538,8 @@ func TestEventLogs_CodeIntelligenceSettingsPageViewCounts(t *testing.T) {
 }
 
 func TestEventLogs_AggregatedCodeIntelEvents(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	names := []string{"codeintel.lsifHover", "codeintel.searchReferences.xrepo", "unknown event"}
@@ -600,7 +576,7 @@ func TestEventLogs_AggregatedCodeIntelEvents(t *testing.T) {
 					}
 
 					g.Go(func() error {
-						return EventLogs(db).Insert(gctx, e)
+						return EventLogs(tx).Insert(gctx, e)
 					})
 				}
 			}
@@ -611,7 +587,7 @@ func TestEventLogs_AggregatedCodeIntelEvents(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	el := &eventLogStore{Store: basestore.NewWithDB(db, sql.TxOptions{})}
+	el := &eventLogStore{Store: basestore.NewWithDB(tx, sql.TxOptions{})}
 	events, err := el.aggregatedCodeIntelEvents(ctx, now)
 	if err != nil {
 		t.Fatal(err)
@@ -638,11 +614,8 @@ func TestEventLogs_AggregatedCodeIntelEvents(t *testing.T) {
 }
 
 func TestEventLogs_AggregatedSparseCodeIntelEvents(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// This unix timestamp is equivalent to `Friday, May 15, 2020 10:30:00 PM GMT` and is set to
@@ -660,12 +633,12 @@ func TestEventLogs_AggregatedSparseCodeIntelEvents(t *testing.T) {
 			Timestamp: now.Add(-time.Hour * 24 * 3), // This week
 		}
 
-		if err := EventLogs(db).Insert(ctx, e); err != nil {
+		if err := EventLogs(tx).Insert(ctx, e); err != nil {
 			t.Fatal(err)
 		}
 	}
 
-	el := &eventLogStore{Store: basestore.NewWithDB(db, sql.TxOptions{})}
+	el := &eventLogStore{Store: basestore.NewWithDB(tx, sql.TxOptions{})}
 	events, err := el.aggregatedCodeIntelEvents(ctx, now)
 	if err != nil {
 		t.Fatal(err)
@@ -689,11 +662,8 @@ func TestEventLogs_AggregatedSparseCodeIntelEvents(t *testing.T) {
 }
 
 func TestEventLogs_AggregatedSparseSearchEvents(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	// This unix timestamp is equivalent to `Friday, May 15, 2020 10:30:00 PM GMT` and is set to
@@ -715,12 +685,12 @@ func TestEventLogs_AggregatedSparseSearchEvents(t *testing.T) {
 			Timestamp: now.Add(-time.Hour * 24 * 6), // This month
 		}
 
-		if err := EventLogs(db).Insert(ctx, e); err != nil {
+		if err := EventLogs(tx).Insert(ctx, e); err != nil {
 			t.Fatal(err)
 		}
 	}
 
-	events, err := EventLogs(db).AggregatedSearchEvents(ctx, now)
+	events, err := EventLogs(tx).AggregatedSearchEvents(ctx, now)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -748,11 +718,8 @@ func TestEventLogs_AggregatedSparseSearchEvents(t *testing.T) {
 }
 
 func TestEventLogs_AggregatedSearchEvents(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	names := []string{"search.latencies.literal", "search.latencies.structural", "unknown event"}
@@ -799,7 +766,7 @@ func TestEventLogs_AggregatedSearchEvents(t *testing.T) {
 						}
 
 						g.Go(func() error {
-							return EventLogs(db).Insert(gctx, e)
+							return EventLogs(tx).Insert(gctx, e)
 						})
 					}
 				}
@@ -829,7 +796,7 @@ func TestEventLogs_AggregatedSearchEvents(t *testing.T) {
 		Timestamp: now.Add(-time.Hour * 24 * 3).Add(time.Minute * time.Duration(rand.Intn(60)-30)),
 	}
 
-	if err := EventLogs(db).Insert(gctx, e); err != nil {
+	if err := EventLogs(tx).Insert(gctx, e); err != nil {
 		t.Fatal(err)
 	}
 
@@ -837,7 +804,7 @@ func TestEventLogs_AggregatedSearchEvents(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	events, err := EventLogs(db).AggregatedSearchEvents(ctx, now)
+	events, err := EventLogs(tx).AggregatedSearchEvents(ctx, now)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -902,11 +869,8 @@ func TestEventLogs_AggregatedSearchEvents(t *testing.T) {
 }
 
 func TestEventLogs_ListAll(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 	ctx := context.Background()
 
 	now := time.Now()
@@ -943,13 +907,13 @@ func TestEventLogs_ListAll(t *testing.T) {
 		}}
 
 	for _, event := range events {
-		if err := EventLogs(db).Insert(ctx, event); err != nil {
+		if err := EventLogs(tx).Insert(ctx, event); err != nil {
 			t.Fatal(err)
 		}
 	}
 
 	searchResultQueriedEvent := "SearchResultsQueried"
-	have, err := EventLogs(db).ListAll(ctx, EventLogsListOptions{EventName: &searchResultQueriedEvent})
+	have, err := EventLogs(tx).ListAll(ctx, EventLogsListOptions{EventName: &searchResultQueriedEvent})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -962,15 +926,12 @@ func TestEventLogs_ListAll(t *testing.T) {
 }
 
 func TestEventLogs_LatestPing(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-	db := dbtest.NewDB(t)
+	tx := dbtest.NewFastTx(t)
 
 	t.Run("with no pings in database", func(t *testing.T) {
 		ctx := context.Background()
-		ping, err := EventLogs(db).LatestPing(ctx)
+		ping, err := EventLogs(tx).LatestPing(ctx)
 		if ping != nil {
 			t.Fatalf("have ping %+v, expected nil", ping)
 		}
@@ -1004,17 +965,17 @@ func TestEventLogs_LatestPing(t *testing.T) {
 			},
 		}
 		for _, event := range events {
-			if err := EventLogs(db).Insert(ctx, event); err != nil {
+			if err := EventLogs(tx).Insert(ctx, event); err != nil {
 				t.Fatal(err)
 			}
 		}
 
-		gotPing, err := EventLogs(db).LatestPing(ctx)
+		gotPing, err := EventLogs(tx).LatestPing(ctx)
 		if err != nil || gotPing == nil {
 			t.Fatal(err)
 		}
 		expectedPing := &types.Event{
-			ID:              2,
+			ID:              gotPing.ID, // ignore different ID
 			Name:            events[1].Name,
 			URL:             events[1].URL,
 			UserID:          &userID,

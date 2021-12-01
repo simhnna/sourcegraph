@@ -9,12 +9,8 @@ import (
 )
 
 func TestSiteGetLatestDefault(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-
-	db := NewDB(dbtest.NewDB(t))
+	db := NewDB(dbtest.NewFastTx(t))
 
 	ctx := context.Background()
 	latest, err := db.Conf().SiteGetLatest(ctx)
@@ -28,12 +24,8 @@ func TestSiteGetLatestDefault(t *testing.T) {
 }
 
 func TestSiteCreate_RejectInvalidJSON(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	t.Parallel()
-
-	db := NewDB(dbtest.NewDB(t))
+	db := NewDB(dbtest.NewFastTx(t))
 	ctx := context.Background()
 
 	malformedJSON := "[This is malformed.}"

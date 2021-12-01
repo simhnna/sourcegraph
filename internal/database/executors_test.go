@@ -15,9 +15,6 @@ import (
 )
 
 func TestExecutorsList(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	db := dbtesting.GetDB(t)
 	store := executors(db)
 	ctx := context.Background()
@@ -130,9 +127,6 @@ func TestExecutorsList(t *testing.T) {
 }
 
 func TestExecutorsGetByID(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	db := dbtesting.GetDB(t)
 	store := executors(db)
 	ctx := context.Background()
