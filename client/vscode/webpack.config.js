@@ -28,6 +28,13 @@ const extensionConfig = {
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    fallback: {
+      // path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      // assert: require.resolve('assert'),
+      // url: require.resolve('url'),
+      util: require.resolve('util'),
+    },
   },
   module: {
     rules: [
