@@ -19,15 +19,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:sourcegraph.openInBrowser",
     "onCommand:sourcegraph.search",
-    "onCommand:sourcegraph.copyFileLink",
     "onCommand:extension.openFile",
     "onView:sourcegraph.extensionHost",
     "onView:sourcegraph.searchSidebar"
   ],
   "main": "./dist/extension.js",
-  "browser": "./dist/browser/extension.js",
+  "browser": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -38,18 +36,7 @@
       {
         "command": "extension.openFile",
         "category": "Sourcegraph",
-        "title": "Open File"
-      },
-      {
-        "command": "sourcegraph.copyFileLink",
-        "category": "Sourcegraph",
-        "title": "Copy Sourcegraph link to file",
-        "when": "!virtualWorkspace && shellExecutionSupported"
-      },
-      {
-        "command": "sourcegraph.openInBrowser",
-        "category": "Sourcegraph",
-        "title": "Open file in browser",
+        "title": "Open File",
         "when": "!virtualWorkspace && shellExecutionSupported"
       }
     ],

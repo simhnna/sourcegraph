@@ -12,7 +12,6 @@ import { toSourcegraphLanguage } from './code-intel/languages'
 import { SourcegraphDefinitionProvider } from './code-intel/SourcegraphDefinitionProvider'
 import { SourcegraphHoverProvider } from './code-intel/SourcegraphHoverProvider'
 import { SourcegraphReferenceProvider } from './code-intel/SourcegraphReferenceProvider'
-import { inBrowserActions } from './commands.ts/inBrowserActions'
 import { openSourcegraphUriCommand } from './commands.ts/openSourcegraphUriCommand'
 import { FilesTreeDataProvider } from './file-system/FilesTreeDataProvider'
 import { SourcegraphFileSystemProvider } from './file-system/SourcegraphFileSystemProvider'
@@ -113,11 +112,11 @@ export function activate(context: vscode.ExtensionContext): void {
     // )
 
     // Open local file or remote Sourcegraph file in browser
-    context.subscriptions.push(
-        vscode.commands.registerCommand('sourcegraph.openInBrowser', async () => {
-            await inBrowserActions('open')
-        })
-    )
+    // context.subscriptions.push(
+    //     vscode.commands.registerCommand('sourcegraph.openInBrowser', async () => {
+    //         await inBrowserActions('open')
+    //     })
+    // )
 
     context.subscriptions.push(
         vscode.commands.registerCommand('sourcegraph.openFile', async () => {
@@ -126,11 +125,11 @@ export function activate(context: vscode.ExtensionContext): void {
     )
 
     // Copy Sourcegraph link to file
-    context.subscriptions.push(
-        vscode.commands.registerCommand('sourcegraph.copyFileLink', async () => {
-            await inBrowserActions('copy')
-        })
-    )
+    // context.subscriptions.push(
+    //     vscode.commands.registerCommand('sourcegraph.copyFileLink', async () => {
+    //         await inBrowserActions('copy')
+    //     })
+    // )
 
     const sourcegraphSettings = initializeSourcegraphSettings(context.subscriptions)
 
