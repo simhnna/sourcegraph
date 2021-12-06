@@ -1,16 +1,14 @@
 // @ts-check
 
 'use strict'
-
 const path = require('path')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 /** @type {import('webpack').Configuration}*/
 const extensionConfig = {
-  target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
-
-  entry: './src/extension.ts', // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+  target: 'webworker', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
+  entry: './src/extension-web.ts', // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: path.resolve(__dirname, 'dist'),
@@ -27,7 +25,19 @@ const extensionConfig = {
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', 'json'],
+    alias: {
+      path: require.resolve('path-browserify'),
+    },
+    fallback: {
+      process: require.resolve('process/browser'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      assert: require.resolve('assert'),
+      os: require.resolve('os-browserify/browser'),
+      util: require.resolve('util'),
+      child_process: false,
+    },
   },
   module: {
     rules: [
@@ -85,11 +95,22 @@ const webviewConfig = {
     filename: '[name].js',
   },
   plugins: [new MiniCssExtractPlugin()],
+  externals: {
+    vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+  },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+    },
+    fallback: {
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      assert: require.resolve('assert'),
+      os: require.resolve('os-browserify/browser'),
+      util: require.resolve('util'),
     },
   },
   module: {
