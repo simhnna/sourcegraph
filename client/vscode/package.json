@@ -23,10 +23,12 @@
     "onCommand:sourcegraph.search",
     "onCommand:sourcegraph.copyFileLink",
     "onCommand:extension.openFile",
+    "onCommand:extension.openInBrowser",
     "onView:sourcegraph.extensionHost",
     "onView:sourcegraph.searchSidebar"
   ],
   "main": "./dist/extension.js",
+  "browser": "./dist/browser/extension.js",
   "contributes": {
     "commands": [
       {
@@ -42,12 +44,14 @@
       {
         "command": "sourcegraph.copyFileLink",
         "category": "Sourcegraph",
-        "title": "Copy Sourcegraph link to file"
+        "title": "Copy Sourcegraph link to file",
+        "when": "!virtualworkspace"
       },
       {
         "command": "sourcegraph.openInBrowser",
         "category": "Sourcegraph",
-        "title": "Open file in browser"
+        "title": "Open file in browser",
+        "when": "!virtualworkspace"
       }
     ],
     "viewsContainers": {

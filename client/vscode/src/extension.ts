@@ -17,7 +17,6 @@ import { openSourcegraphUriCommand } from './commands.ts/openSourcegraphUriComma
 import { FilesTreeDataProvider } from './file-system/FilesTreeDataProvider'
 import { SourcegraphFileSystemProvider } from './file-system/SourcegraphFileSystemProvider'
 import { SourcegraphUri } from './file-system/SourcegraphUri'
-import { log } from './log'
 import { endpointHostnameSetting, endpointSetting } from './settings/endpointSetting'
 import { SourcegraphVSCodeExtensionAPI } from './webview/contract'
 import {
@@ -81,26 +80,48 @@ export function activate(context: vscode.ExtensionContext): void {
     )
 
     // Open remote Sourcegraph file in VS Code
-    context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openFile', async () => {
-            const editor = vscode.window.activeTextEditor
-            if (!editor) {
-                throw new Error('No active editor')
-            }
-            const uri = editor.document.uri
-            if (typeof uri === 'string') {
-                await openSourcegraphUriCommand(fs, SourcegraphUri.parse(uri))
-            } else {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                log.error(`extension.openRemoteFile(${uri}) argument is not a string`)
-            }
-        })
-    )
+    // context.subscriptions.push(
+    //     vscode.commands.registerCommand('extension.openFile', async () => {
+    //         const editor = vscode.window.activeTextEditor
+    //         if (!editor) {
+    //             throw new Error('No active editor')
+    //         }
+    //         const uri = editor.document.uri
+    //         if (typeof uri === 'string') {
+    //             await openSourcegraphUriCommand(fs, SourcegraphUri.parse(uri))
+    //         } else {
+    //             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    //             log.error(`extension.openRemoteFile(${uri}) argument is not a string`)
+    //         }
+    //     })
+    // )
+    // context.subscriptions.push(
+    //     vscode.commands.registerCommand('test.openFile', async () => {
+    //         const editor = vscode.window.activeTextEditor
+    //         if (!editor) {
+    //             throw new Error('No active editor')
+    //         }
+    //         const uri = editor.document.uri
+    //         if (uri) {
+    //             const sourcegraphUrl = `${uri.toString().replace(uri.scheme, 'https')}`
+    //             await vscode.env.openExternal(vscode.Uri.parse(sourcegraphUrl))
+    //         } else {
+    //             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    //             await vscode.window.showInformationMessage(`extension.openRemoteFile(${uri}) argument is not a string`)
+    //         }
+    //     })
+    // )
 
     // Open local file or remote Sourcegraph file in browser
     context.subscriptions.push(
         vscode.commands.registerCommand('sourcegraph.openInBrowser', async () => {
             await inBrowserActions('open')
+        })
+    )
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('sourcegraph.openFile', async () => {
+            await vscode.window.showInformationMessage('hi!')
         })
     )
 
