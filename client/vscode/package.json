@@ -18,6 +18,9 @@
   "categories": [
     "Other"
   ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "activationEvents": [
     "onCommand:sourcegraph.search",
     "onCommand:extension.openFile",
@@ -36,8 +39,7 @@
       {
         "command": "extension.openFile",
         "category": "Sourcegraph",
-        "title": "Open File",
-        "when": "!virtualWorkspace && shellExecutionSupported"
+        "title": "Open File"
       }
     ],
     "viewsContainers": {
@@ -106,6 +108,7 @@
     "build": "webpack",
     "dev": "NODE_ENV=development webpack",
     "watch": "webpack --watch",
-    "test": "echo \"No tests exist yet\" && exit 1"
+    "test": "echo \"No tests exist yet\" && exit 1",
+    "open-in-browser": "vscode-test-web --extensionDevelopmentPath=. ."
   }
 }

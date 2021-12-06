@@ -31,7 +31,6 @@ const extensionConfig = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       path: require.resolve('path-browserify'),
-      process: 'process/browser',
     },
     fallback: {
       path: require.resolve('path-browserify'),
@@ -39,6 +38,7 @@ const extensionConfig = {
       assert: require.resolve('assert'),
       os: require.resolve('os-browserify/browser'),
       util: require.resolve('util'),
+      process: require.resolve('process/browser'),
       child_process: false,
     },
   },
@@ -97,12 +97,7 @@ const webviewConfig = {
     path: path.join(vscodeWorkspacePath, 'dist/webview'),
     filename: '[name].js',
   },
-  plugins: [
-    new MiniCssExtractPlugin(),
-    new webpack.ProvidePlugin({
-      process: 'process/browser', // provide a shim for the global `process` variable
-    }),
-  ],
+  plugins: [new MiniCssExtractPlugin()],
   externals: {
     vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },
@@ -111,7 +106,8 @@ const webviewConfig = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       path: require.resolve('path-browserify'),
-      process: 'process/browser',
+      process: require.resolve('process/browser'),
+      stream: require.resolve('stream-browserify'),
     },
     fallback: {
       path: require.resolve('path-browserify'),

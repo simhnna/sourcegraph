@@ -2,8 +2,6 @@ import vscode, { env } from 'vscode'
 
 import { SourcegraphUri } from '../file-system/SourcegraphUri'
 
-import { getSourcegraphFileUrl, repoInfo } from './helpers'
-
 /**
  * Open active file in the browser on the configured Sourcegraph instance.
  *
@@ -25,18 +23,19 @@ export async function inBrowserActions(action: string): Promise<void> {
         )}:${encodeURIComponent(String(editor.selection.start.character))}-${encodeURIComponent(
             String(editor.selection.end.line)
         )}:${encodeURIComponent(String(editor.selection.end.character))}`
-    } else {
-        const repositoryInfo = await repoInfo(editor.document.uri.fsPath)
-        if (!repositoryInfo) {
-            return
-        }
-        const { remoteURL, branch, fileRelative } = repositoryInfo
-        const instanceUrl = vscode.workspace.getConfiguration('sourcegraph').get('url')
-        if (typeof instanceUrl === 'string') {
-            // construct sourcegraph url for current file
-            sourcegraphUrl = getSourcegraphFileUrl(instanceUrl, remoteURL, branch, fileRelative, editor)
-        }
     }
+    // else {
+    //     const repositoryInfo = await repoInfo(editor.document.uri.fsPath)
+    //     if (!repositoryInfo) {
+    //         return
+    //     }
+    //     const { remoteURL, branch, fileRelative } = repositoryInfo
+    //     const instanceUrl = vscode.workspace.getConfiguration('sourcegraph').get('url')
+    //     if (typeof instanceUrl === 'string') {
+    //         // construct sourcegraph url for current file
+    //         sourcegraphUrl = getSourcegraphFileUrl(instanceUrl, remoteURL, branch, fileRelative, editor)
+    //     }
+    // }
 
     // Open in browser or Copy file link
     if (action === 'open' && sourcegraphUrl) {
