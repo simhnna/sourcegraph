@@ -23,7 +23,6 @@
     "onCommand:sourcegraph.search",
     "onCommand:sourcegraph.copyFileLink",
     "onCommand:extension.openFile",
-    "onCommand:extension.openInBrowser",
     "onView:sourcegraph.extensionHost",
     "onView:sourcegraph.searchSidebar"
   ],
@@ -45,13 +44,13 @@
         "command": "sourcegraph.copyFileLink",
         "category": "Sourcegraph",
         "title": "Copy Sourcegraph link to file",
-        "when": "!virtualworkspace"
+        "when": "!virtualWorkspace && shellExecutionSupported"
       },
       {
         "command": "sourcegraph.openInBrowser",
         "category": "Sourcegraph",
         "title": "Open file in browser",
-        "when": "!virtualworkspace"
+        "when": "!virtualWorkspace && shellExecutionSupported"
       }
     ],
     "viewsContainers": {
