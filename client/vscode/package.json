@@ -107,5 +107,13 @@
     "watch": "webpack --watch",
     "test": "echo \"No tests exist yet\" && exit 1",
     "open-in-browser": "vscode-test-web --extensionDevelopmentPath=. ."
+  },
+  "devDependencies": {
+    "process": "^0.11.10",
+    "@types/vscode": "^1.59.0",
+    "ts-loader": "^9.2.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0",
+    "@types/webpack-env": "^1.16.0"
   }
 }
