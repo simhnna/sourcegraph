@@ -24,11 +24,6 @@ const extensionConfig = {
   externals: {
     vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      process: path.join(__dirname, 'node_modules', 'process', 'browser.js'), // provide a shim for the global `process` variable
-    }),
-  ],
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -36,6 +31,7 @@ const extensionConfig = {
       path: require.resolve('path-browserify'),
     },
     fallback: {
+      process: require.resolve('process/browser'),
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
       assert: require.resolve('assert'),
@@ -99,12 +95,7 @@ const webviewConfig = {
     path: path.join(vscodeWorkspacePath, 'dist/webview'),
     filename: '[name].js',
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      process: path.join(__dirname, 'node_modules', 'process', 'browser.js'), // provide a shim for the global `process` variable
-    }),
-    new MiniCssExtractPlugin(),
-  ],
+  plugins: [new MiniCssExtractPlugin()],
   externals: {
     vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },
