@@ -35,10 +35,10 @@ export const requestGraphQLFromVSCode = async <R, V = object>(
     if (accessToken) {
         headers.push(['Authorization', `token ${accessToken}`])
     }
-
     try {
         const response = checkOk(
-            await fetch(new URL(apiURL, sourcegraphURL).href, {
+            // await fetch(new URL(apiURL, sourcegraphURL).href, {
+            await fetch(`https://cors-anywhere.herokuapp.com/${sourcegraphURL}${apiURL}`, {
                 body: JSON.stringify({
                     query: request,
                     variables,

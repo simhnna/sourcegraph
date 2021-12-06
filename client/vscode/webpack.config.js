@@ -36,7 +36,6 @@ const extensionConfig = {
       assert: require.resolve('assert'),
       os: require.resolve('os-browserify/browser'),
       util: require.resolve('util'),
-      child_process: false,
     },
   },
   module: {
@@ -83,7 +82,7 @@ const extensionHostWorker = /main\.worker\.ts$/
 
 /** @type {import('webpack').Configuration}*/
 const webviewConfig = {
-  target: 'web',
+  target: 'webworker',
   entry: {
     searchPanel: [path.resolve(searchPanelWebviewPath, 'index.tsx')],
     searchSidebar: [path.resolve(searchSidebarWebviewPath, 'index.tsx')],
@@ -104,13 +103,7 @@ const webviewConfig = {
     alias: {
       path: require.resolve('path-browserify'),
       stream: require.resolve('stream-browserify'),
-    },
-    fallback: {
-      path: require.resolve('path-browserify'),
-      stream: require.resolve('stream-browserify'),
-      assert: require.resolve('assert'),
-      os: require.resolve('os-browserify/browser'),
-      util: require.resolve('util'),
+      process: require.resolve('process/browser'),
     },
   },
   module: {
