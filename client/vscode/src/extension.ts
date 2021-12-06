@@ -16,7 +16,6 @@ import { openSourcegraphUriCommand } from './commands.ts/openSourcegraphUriComma
 import { FilesTreeDataProvider } from './file-system/FilesTreeDataProvider'
 import { SourcegraphFileSystemProvider } from './file-system/SourcegraphFileSystemProvider'
 import { SourcegraphUri } from './file-system/SourcegraphUri'
-import { GitExtension } from './git'
 import { endpointHostnameSetting, endpointSetting } from './settings/endpointSetting'
 import { SourcegraphVSCodeExtensionAPI } from './webview/contract'
 import {
@@ -121,17 +120,18 @@ export function activate(context: vscode.ExtensionContext): void {
 
     context.subscriptions.push(
         vscode.commands.registerCommand('sourcegraph.openFile', async () => {
-            const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')
-            if (gitExtension) {
-                const git = gitExtension.exports.getAPI(1)
+            await vscode.window.showInformationMessage('hi!')
+            // const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')
+            // if (gitExtension) {
+            //     const git = gitExtension.exports.getAPI(1)
 
-                if (git) {
-                    console.log(git)
-                    await vscode.window.showInformationMessage('done')
-                }
+            //     if (git) {
+            //         console.log(git)
+            //         await vscode.window.showInformationMessage('done')
+            //     }
 
-                await vscode.window.showInformationMessage('hi!')
-            }
+            //     await vscode.window.showInformationMessage('hi!')
+            // }
         })
     )
 

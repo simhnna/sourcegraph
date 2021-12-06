@@ -31,6 +31,7 @@ const extensionConfig = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       path: require.resolve('path-browserify'),
+      process: require.resolve('process/browser'),
     },
     fallback: {
       path: require.resolve('path-browserify'),
@@ -114,6 +115,7 @@ const webviewConfig = {
       stream: require.resolve('stream-browserify'),
       assert: require.resolve('assert'),
       os: require.resolve('os-browserify/browser'),
+      process: require.resolve('process/browser'),
       util: require.resolve('util'),
     },
   },

@@ -18,9 +18,6 @@
   "categories": [
     "Other"
   ],
-  "extensionDependencies": [
-    "vscode.git"
-  ],
   "activationEvents": [
     "onCommand:sourcegraph.search",
     "onCommand:extension.openFile",
