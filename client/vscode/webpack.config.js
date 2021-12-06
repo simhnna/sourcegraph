@@ -4,7 +4,6 @@
 const path = require('path')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const webpack = require('webpack')
 
 /** @type {import('webpack').Configuration}*/
 const extensionConfig = {
