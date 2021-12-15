@@ -138,7 +138,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#frontend-page-load
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=100020` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2049,7 +2049,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#frontend-internala
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101502` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2209,7 +2209,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101700` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2228,7 +2228,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101701` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2247,7 +2247,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101710` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2266,7 +2266,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101711` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2285,7 +2285,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#frontend-mean-bloc
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101720` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2304,7 +2304,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101730` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2323,7 +2323,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101731` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -2342,7 +2342,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/frontend/frontend?viewPanel=101732` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3402,7 +3402,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100400` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3421,7 +3421,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100401` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3440,7 +3440,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100410` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3459,7 +3459,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100411` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3478,7 +3478,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#gitserver-mean-blo
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100420` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3497,7 +3497,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100430` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3516,7 +3516,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100431` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -3535,7 +3535,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/gitserver/gitserver?viewPanel=100432` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4055,7 +4055,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-connectio
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100000` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4074,7 +4074,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-transacti
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100001` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4097,7 +4097,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-postgres-
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100100` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4118,7 +4118,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-invalid-i
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100101` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4139,7 +4139,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-pg-export
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100110` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4160,7 +4160,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-migration
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100111` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4183,7 +4183,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100200` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4204,7 +4204,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100201` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4225,7 +4225,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100210` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4246,7 +4246,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100211` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4267,7 +4267,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-provision
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100300` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4286,7 +4286,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-provision
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100301` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4305,7 +4305,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-provision
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100310` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4324,7 +4324,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-provision
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100311` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -4345,7 +4345,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#postgres-pods-avai
 
 To see this panel, visit `/-/debug/grafana/d/postgres/postgres?viewPanel=100400` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5230,7 +5230,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100800` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5249,7 +5249,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100801` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5268,7 +5268,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100810` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5287,7 +5287,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100811` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5306,7 +5306,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#precise-code-intel
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100820` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5325,7 +5325,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100830` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5344,7 +5344,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100831` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -5363,7 +5363,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/precise-code-intel-worker/precise-code-intel-worker?viewPanel=100832` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8451,7 +8451,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102500` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8470,7 +8470,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102501` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8489,7 +8489,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102510` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8508,7 +8508,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102511` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8527,7 +8527,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#worker-mean-blocke
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102520` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8546,7 +8546,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102530` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8565,7 +8565,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102531` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -8584,7 +8584,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/worker/worker?viewPanel=102532` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10052,7 +10052,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100700` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10071,7 +10071,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100701` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10090,7 +10090,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100710` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10109,7 +10109,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100711` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10128,7 +10128,7 @@ Refer to the [alert solutions reference](./alert_solutions.md#repo-updater-mean-
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100720` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10147,7 +10147,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100730` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10166,7 +10166,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100731` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
@@ -10185,7 +10185,7 @@ This panel has no related alerts.
 
 To see this panel, visit `/-/debug/grafana/d/repo-updater/repo-updater?viewPanel=100732` on your Sourcegraph instance.
 
-<sub>*Managed by the [Sourcegraph Cloud Saas Team team](https://handbook.sourcegraph.com/engineering/Cloud-Saas-Team).*</sub>
+<sub>*Managed by the [Sourcegraph Cloud SaaS team](https://handbook.sourcegraph.com/engineering/cloud/saas).*</sub>
 
 <details>
 <summary>Technical details</summary>
