@@ -18,7 +18,7 @@ import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 import { Page } from '@sourcegraph/web/src/components/Page'
 import { PageTitle } from '@sourcegraph/web/src/components/PageTitle'
 import { Timestamp } from '@sourcegraph/web/src/components/time/Timestamp'
-import { Badge, Container, PageHeader } from '@sourcegraph/wildcard'
+import { Badge, Container, PageHeader, Button } from '@sourcegraph/wildcard'
 
 import { SearchContextProps } from '../../search'
 
@@ -186,13 +186,14 @@ export const SearchContextPage: React.FunctionComponent<SearchContextPageProps> 
                                 ]}
                                 actions={
                                     searchContextOrError.viewerCanManage && (
-                                        <Link
+                                        <Button
                                             to={`/contexts/${searchContextOrError.spec}/edit`}
-                                            className="btn btn-secondary"
                                             data-testid="edit-search-context-link"
+                                            variant="secondary"
+                                            as={Link}
                                         >
                                             Edit
-                                        </Link>
+                                        </Button>
                                     )
                                 }
                             />

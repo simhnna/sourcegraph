@@ -1,6 +1,8 @@
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 
+import { Button } from '@sourcegraph/wildcard'
+
 import { LoaderButton } from './LoaderButton'
 import { WebStory } from './WebStory'
 
@@ -14,7 +16,7 @@ add('Inline', () => (
     <WebStory>
         {() => (
             <p>
-                <LoaderButton loading={true} label="loader button" className="btn btn-primary" />
+                <Button loading={true} label="loader button" variant="primary" as={LoaderButton} />
             </p>
         )}
     </WebStory>
@@ -22,18 +24,22 @@ add('Inline', () => (
 
 add('Block', () => (
     <WebStory>
-        {() => <LoaderButton loading={true} label="loader button" className="btn btn-block btn-primary" />}
+        {() => (
+            <Button loading={true} label="loader button" className="btn-block" variant="primary" as={LoaderButton} />
+        )}
     </WebStory>
 ))
 
 add('With label', () => (
     <WebStory>
         {() => (
-            <LoaderButton
+            <Button
                 alwaysShowLabel={true}
                 loading={true}
                 label="loader button"
-                className="btn btn-block btn-primary"
+                className="btn-block"
+                variant="primary"
+                as={LoaderButton}
             />
         )}
     </WebStory>

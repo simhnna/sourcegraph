@@ -19,7 +19,7 @@ import {
 } from '@sourcegraph/web/src/components/FilteredConnection'
 import { PageTitle } from '@sourcegraph/web/src/components/PageTitle'
 import { SelfHostedCtaLink } from '@sourcegraph/web/src/components/SelfHostedCtaLink'
-import { Container, PageHeader, ProductStatusBadge } from '@sourcegraph/wildcard'
+import { Container, PageHeader, ProductStatusBadge, Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../../auth'
 import { requestGraphQL } from '../../../backend/graphql'
@@ -344,37 +344,41 @@ export const SettingsRepositoriesPage: React.FunctionComponent<Props> = ({
                 actions={
                     <span>
                         {hasRepos ? (
-                            <Link
-                                className="btn btn-primary"
+                            <Button
                                 to={`${routingPrefix}/repositories/manage`}
                                 onClick={logManageRepositoriesClick}
+                                variant="primary"
+                                as={Link}
                             >
                                 Manage repositories
-                            </Link>
+                            </Button>
                         ) : isUserOwner ? (
-                            <Link
-                                className="btn btn-primary"
+                            <Button
                                 to={`${routingPrefix}/repositories/manage`}
                                 onClick={logManageRepositoriesClick}
+                                variant="primary"
+                                as={Link}
                             >
                                 <AddIcon className="icon-inline" /> Add repositories
-                            </Link>
+                            </Button>
                         ) : externalServices && externalServices.length !== 0 ? (
-                            <Link
-                                className="btn btn-primary"
+                            <Button
                                 to={`${routingPrefix}/repositories/manage`}
                                 onClick={logManageRepositoriesClick}
+                                variant="primary"
+                                as={Link}
                             >
                                 <AddIcon className="icon-inline" /> Add repositories
-                            </Link>
+                            </Button>
                         ) : (
-                            <Link
-                                className="btn btn-primary"
+                            <Button
                                 to={`${routingPrefix}/code-hosts`}
                                 onClick={logManageRepositoriesClick}
+                                variant="primary"
+                                as={Link}
                             >
                                 <AddIcon className="icon-inline" /> Connect code hosts
-                            </Link>
+                            </Button>
                         )}
                     </span>
                 }

@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { ErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { LoaderButton } from '../../../components/LoaderButton'
 import { AuthProvider } from '../../../jscontext'
@@ -62,16 +63,17 @@ export const ExternalAccount: React.FunctionComponent<Props> = ({ account, authP
             </div>
             <div className="align-self-center">
                 {account.external ? (
-                    <button type="button" className="btn btn-link text-danger px-0" onClick={toggleRemoveAccountModal}>
+                    <Button className="text-danger px-0" onClick={toggleRemoveAccountModal} variant="link">
                         Remove
-                    </button>
+                    </Button>
                 ) : (
-                    <LoaderButton
+                    <Button
                         loading={isLoading}
                         label="Add"
-                        type="button"
-                        className="btn btn-block btn-success"
+                        className="btn-block"
                         onClick={navigateToAuthProvider}
+                        variant="success"
+                        as={LoaderButton}
                     />
                 )}
             </div>

@@ -137,14 +137,16 @@ export const EditDashboardPage: React.FunctionComponent<EditDashboardPageProps> 
                                 Cancel
                             </Button>
 
-                            <LoaderButton
+                            <Button
                                 alwaysShowLabel={true}
                                 data-testid="insight-save-button"
                                 loading={formAPI.submitting}
                                 label={formAPI.submitting ? 'Saving' : 'Save changes'}
                                 type="submit"
                                 disabled={formAPI.submitting}
-                                className="btn btn-primary ml-2 mb-2"
+                                className="ml-2 mb-2"
+                                variant="primary"
+                                as={LoaderButton}
                             />
                         </>
                     )}

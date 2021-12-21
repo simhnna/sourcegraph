@@ -1,6 +1,5 @@
 import Dialog from '@reach/dialog'
 import { VisuallyHidden } from '@reach/visually-hidden'
-import classNames from 'classnames'
 import CloseIcon from 'mdi-react/CloseIcon'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
@@ -44,10 +43,10 @@ export const DeleteDashboardModal: React.FunctionComponent<DeleteDashboardModalP
 
     return (
         <Dialog className={styles.modal} onDismiss={onClose} aria-label="Delete code insight dashboard modal">
-            <button type="button" className={classNames('btn btn-icon', styles.closeButton)} onClick={onClose}>
+            <Button className={styles.closeButton} onClick={onClose} variant="icon">
                 <VisuallyHidden>Close</VisuallyHidden>
                 <CloseIcon />
-            </button>
+            </Button>
 
             <h2 className="text-danger">Delete ”{dashboard.title}”</h2>
 
@@ -62,14 +61,14 @@ export const DeleteDashboardModal: React.FunctionComponent<DeleteDashboardModalP
                     Cancel
                 </Button>
 
-                <LoaderButton
-                    type="button"
+                <Button
                     alwaysShowLabel={true}
                     loading={isDeleting}
                     label={isDeleting ? 'Deleting' : 'Delete forever'}
                     disabled={isDeleting}
-                    className="btn btn-danger"
                     onClick={handler}
+                    variant="danger"
+                    as={LoaderButton}
                 />
             </div>
         </Dialog>

@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ResolvedRevisionSpec, RevisionSpec } from '@sourcegraph/shared/src/util/url'
+import { Button } from '@sourcegraph/wildcard'
 
 import { RepositoryFields } from '../../graphql-operations'
 import { toDocumentationURL } from '../../util/url'
@@ -169,14 +170,14 @@ export const DocumentationIndexNode: React.FunctionComponent<Props> = React.memo
                         />
                     )}
                     {styleAsExpandable && (
-                        <button
-                            type="button"
+                        <Button
                             className={classNames(
-                                'd-flex flex-shrink-0 mr-1 btn btn-icon',
+                                'd-flex flex-shrink-0 mr-1',
                                 styles.documentationIndexNodeExpandButton
                             )}
                             aria-label={expanded ? 'Collapse section' : 'Expand section'}
                             onClick={toggleExpanded}
+                            variant="icon"
                         >
                             {expanded ? (
                                 <ChevronDownIcon className="icon-inline" aria-label="Close section" />
@@ -184,7 +185,7 @@ export const DocumentationIndexNode: React.FunctionComponent<Props> = React.memo
                                 <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                             )}
                             {node.detail.value === '' && <strong id={'index-' + hash}>{node.label.value}</strong>}
-                        </button>
+                        </Button>
                     )}
                     {node.detail.value !== '' && (
                         <Link id={'index-' + hash} to={thisPage} onClick={scrollToFast} className="pr-3">

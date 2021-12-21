@@ -10,6 +10,7 @@ import { Hoverifier } from '@sourcegraph/shared/src/codeintellify'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { RepoSpec, RevisionSpec, FileSpec, ResolvedRevisionSpec } from '@sourcegraph/shared/src/util/url'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ErrorAlert } from '../../../components/alerts'
 import { DiffStatStack } from '../../../components/diff/DiffStat'
@@ -57,18 +58,18 @@ export const ExternalChangesetCloseNode: React.FunctionComponent<ExternalChanges
 
     return (
         <>
-            <button
-                type="button"
-                className="btn btn-icon test-batches-expand-changeset d-none d-sm-block"
+            <Button
+                className="test-batches-expand-changeset d-none d-sm-block"
                 aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                 onClick={toggleIsExpanded}
+                variant="icon"
             >
                 {isExpanded ? (
                     <ChevronDownIcon className="icon-inline" aria-label="Close section" />
                 ) : (
                     <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                 )}
-            </button>
+            </Button>
             {willClose ? (
                 <ChangesetCloseActionClose className={styles.externalChangesetCloseNodeAction} />
             ) : (
@@ -99,13 +100,12 @@ export const ExternalChangesetCloseNode: React.FunctionComponent<ExternalChanges
                 {node.diffStat && <DiffStatStack {...node.diffStat} />}
             </div>
             {/* The button for expanding the information used on xs devices. */}
-            <button
-                type="button"
+            <Button
                 aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                 onClick={toggleIsExpanded}
                 className={classNames(
                     styles.externalChangesetCloseNodeShowDetails,
-                    'btn btn-outline-secondary d-block d-sm-none test-batches-expand-changeset'
+                    'btn-outline-secondary d-block d-sm-none test-batches-expand-changeset'
                 )}
             >
                 {isExpanded ? (
@@ -114,7 +114,7 @@ export const ExternalChangesetCloseNode: React.FunctionComponent<ExternalChanges
                     <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                 )}{' '}
                 {isExpanded ? 'Hide' : 'Show'} details
-            </button>
+            </Button>
             {isExpanded && (
                 <div className={classNames(styles.externalChangesetCloseNodeExpandedSection, 'p-2')}>
                     {node.error && <ErrorAlert error={node.error} />}

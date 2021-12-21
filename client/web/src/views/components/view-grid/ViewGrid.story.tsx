@@ -6,6 +6,7 @@ import FilterOutlineIcon from 'mdi-react/FilterOutlineIcon'
 import React from 'react'
 
 import { NOOP_TELEMETRY_SERVICE } from '@sourcegraph/shared/src/telemetry/telemetryService'
+import { Button } from '@sourcegraph/wildcard'
 
 import { WebStory } from '../../../components/WebStory'
 import { LINE_CHART_CONTENT_MOCK } from '../../mocks/charts-content'
@@ -32,9 +33,9 @@ export const SimpleViewGrid: Story = () => (
             subtitle="Subtitle chart description"
             actions={
                 <>
-                    <button className="btn btn-icon p-1">
+                    <Button className="p-1" variant="icon">
                         <FilterOutlineIcon size="1rem" />
-                    </button>
+                    </Button>
                     <ContextMenu />
                 </>
             }
@@ -47,9 +48,9 @@ export const SimpleViewGrid: Story = () => (
 function ContextMenu() {
     return (
         <Menu>
-            <MenuButton className="btn btn-icon p-1">
+            <Button className="p-1" variant="icon" as={MenuButton}>
                 <DotsVerticalIcon size={16} />
-            </MenuButton>
+            </Button>
             <MenuPopover>
                 <MenuItems className="d-block position-static dropdown-menu">
                     <MenuItem onSelect={noop}>Create</MenuItem>

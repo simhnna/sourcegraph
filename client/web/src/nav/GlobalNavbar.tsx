@@ -24,7 +24,7 @@ import { NavGroup, NavItem, NavBar, NavLink, NavActions, NavAction } from '@sour
 import { FeedbackPrompt } from '@sourcegraph/web/src/nav/Feedback/FeedbackPrompt'
 import { NavDropdown } from '@sourcegraph/web/src/nav/NavBar/NavDropdown'
 import { StatusMessagesNavItem } from '@sourcegraph/web/src/nav/StatusMessagesNavItem'
-import { ProductStatusBadge } from '@sourcegraph/wildcard'
+import { ProductStatusBadge, Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../auth'
 import { BatchChangesProps } from '../batches'
@@ -298,12 +298,12 @@ export const GlobalNavbar: React.FunctionComponent<Props> = ({
                         <>
                             <NavAction>
                                 <div>
-                                    <Link className="btn btn-sm btn-outline-secondary mr-1" to="/sign-in">
+                                    <Button className="btn-outline-secondary mr-1" to="/sign-in" size="sm" as={Link}>
                                         Log in
-                                    </Link>
-                                    <Link className={classNames('btn btn-sm', styles.signUp)} to="/sign-up">
+                                    </Button>
+                                    <Button className={styles.signUp} to="/sign-up" size="sm" as={Link}>
                                         Sign up
-                                    </Link>
+                                    </Button>
                                 </div>
                             </NavAction>
                         </>

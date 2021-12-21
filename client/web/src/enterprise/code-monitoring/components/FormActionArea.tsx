@@ -6,6 +6,7 @@ import { delay, startWith, tap, mergeMap, catchError } from 'rxjs/operators'
 import { Toggle } from '@sourcegraph/branded/src/components/Toggle'
 import { asError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { useEventObservable } from '@sourcegraph/shared/src/util/useObservable'
+import { Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../../auth'
 import { CodeMonitorFields, MonitorEmailPriority } from '../../../graphql-operations'
@@ -158,25 +159,21 @@ export const FormActionArea: React.FunctionComponent<ActionAreaProps> = ({
                         </small>
                     </div>
                     <div className="flex mt-1">
-                        <button
-                            type="button"
+                        <Button
                             className={classNames(
-                                'btn btn-sm mr-2',
+                                'mr-2',
                                 isSendTestEmailButtonDisabled ? 'btn-secondary' : 'btn-outline-secondary'
                             )}
                             disabled={isSendTestEmailButtonDisabled}
                             onClick={triggerTestEmailActionRequest}
+                            size="sm"
                         >
                             {sendTestEmailButtonText}
-                        </button>
+                        </Button>
                         {isTestEmailSent && triggerTestEmailResult !== LOADING && (
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-link p-0"
-                                onClick={triggerTestEmailActionRequest}
-                            >
+                            <Button className="p-0" onClick={triggerTestEmailActionRequest} variant="link" size="sm">
                                 Send again
-                            </button>
+                            </Button>
                         )}
                         {!description && (
                             <div className={classNames('mt-2', styles.testActionError)}>
@@ -204,40 +201,42 @@ export const FormActionArea: React.FunctionComponent<ActionAreaProps> = ({
                         </span>
                     </div>
                     <div>
-                        <button
+                        <Button
                             type="submit"
                             data-testid="submit-action"
-                            className="btn btn-secondary mr-1 test-submit-action"
+                            className="mr-1 test-submit-action"
                             onClick={completeForm}
                             onSubmit={completeForm}
+                            variant="secondary"
                         >
                             Continue
-                        </button>
-                        <button type="button" className="btn btn-outline-secondary" onClick={cancelForm}>
+                        </Button>
+                        <Button className="btn-outline-secondary" onClick={cancelForm}>
                             Cancel
-                        </button>
+                        </Button>
                     </div>
                 </div>
             )}
             {!showEmailNotificationForm && (
-                <button
-                    type="button"
+                <Button
                     data-testid="form-action-toggle-email-notification"
-                    className={classNames('btn card test-action-button', cardBtnClassName)}
+                    className={classNames('card test-action-button', cardBtnClassName)}
                     aria-label="Edit action: Send email notifications"
                     disabled={disabled}
                     onClick={toggleEmailNotificationForm}
                 >
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <div>
-                            <div
+                            <Button
                                 className={classNames(
                                     'font-weight-bold',
-                                    !actionsCompleted && classNames(cardLinkClassName, 'btn-link')
+                                    !actionsCompleted && classNames(cardLinkClassName)
                                 )}
+                                variant="link"
+                                as="div"
                             >
                                 Send email notifications
-                            </div>
+                            </Button>
                             {actionsCompleted ? (
                                 <span className="text-muted" data-testid="existing-action-email">
                                     {authenticatedUser.email}
@@ -256,11 +255,13 @@ export const FormActionArea: React.FunctionComponent<ActionAreaProps> = ({
                                         className="mr-3"
                                     />
                                 </div>
-                                <div className="btn-link">Edit</div>
+                                <Button variant="link" as="div">
+                                    Edit
+                                </Button>
                             </div>
                         )}
                     </div>
-                </button>
+                </Button>
             )}
             <small className="text-muted">
                 What other actions would you like to take?{' '}

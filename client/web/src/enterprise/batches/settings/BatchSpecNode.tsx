@@ -13,6 +13,7 @@ import { CodeSnippet } from '@sourcegraph/branded/src/components/CodeSnippet'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { BatchSpecState } from '@sourcegraph/shared/src/graphql-operations'
 import { Timestamp } from '@sourcegraph/web/src/components/time/Timestamp'
+import { Button } from '@sourcegraph/wildcard'
 
 import { BatchSpecListFields } from '../../../graphql-operations'
 
@@ -33,18 +34,17 @@ export const BatchSpecNode: React.FunctionComponent<BatchSpecNodeProps> = ({ nod
     return (
         <>
             <span className={styles.nodeSeparator} />
-            <button
-                type="button"
-                className="btn btn-icon"
+            <Button
                 aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                 onClick={toggleIsExpanded}
+                variant="icon"
             >
                 {isExpanded ? (
                     <ChevronDownIcon className="icon-inline" aria-label="Close section" />
                 ) : (
                     <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                 )}
-            </button>
+            </Button>
             <div className="d-flex flex-column justify-content-center align-items-center px-2 pb-1">
                 <StateIcon state={node.state} />
                 <span className="text-muted">{upperFirst(node.state.toLowerCase())}</span>

@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react'
 
 import { Form } from '@sourcegraph/branded/src/components/Form'
 import { asError, ErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { deleteExternalService } from '../../../components/externalServices/backend'
 import { LoaderButton } from '../../../components/LoaderButton'
@@ -81,21 +82,17 @@ export const RemoveCodeHostConnectionModal: React.FunctionComponent<{
                     {getWarningMessage(serviceName, orgName, repoCount)}
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        className="btn btn-outline-secondary mr-2"
-                        onClick={onDidCancel}
-                    >
+                    <Button disabled={isLoading} className="btn-outline-secondary mr-2" onClick={onDidCancel}>
                         Cancel
-                    </button>
-                    <LoaderButton
+                    </Button>
+                    <Button
                         type="submit"
-                        className="btn btn-danger"
                         loading={isLoading}
                         disabled={isLoading}
                         label="Yes, remove connection"
                         alwaysShowLabel={true}
+                        variant="danger"
+                        as={LoaderButton}
                     />
                 </div>
             </Form>

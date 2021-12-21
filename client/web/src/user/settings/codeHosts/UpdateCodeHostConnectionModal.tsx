@@ -2,6 +2,7 @@ import Dialog from '@reach/dialog'
 import React, { useState, useCallback } from 'react'
 
 import { Link } from '@sourcegraph/shared/src/components/Link'
+import { Button } from '@sourcegraph/wildcard'
 
 import { Form } from '../../../../../branded/src/components/Form'
 import { asError, ErrorLike } from '../../../../../shared/src/util/errors'
@@ -121,27 +122,27 @@ export const UpdateCodeHostConnectionModal: React.FunctionComponent<{
                         )}
                     </div>
                     <div className="d-flex justify-content-end">
-                        <button type="button" className="btn btn-outline-secondary mr-2" onClick={onDidCancel}>
+                        <Button className="btn-outline-secondary mr-2" onClick={onDidCancel}>
                             Cancel
-                        </button>
+                        </Button>
 
                         {didAckMachineUserHint ? (
-                            <LoaderButton
+                            <Button
                                 type="submit"
-                                className="btn btn-primary"
                                 loading={isLoading}
                                 disabled={!token || isLoading}
                                 label="Update code host connection"
                                 alwaysShowLabel={true}
+                                variant="primary"
+                                as={LoaderButton}
                             />
                         ) : (
-                            <button
-                                type="button"
-                                className="btn btn-secondary"
+                            <Button
                                 onClick={() => setAckMachineUserHint(previousAckStatus => !previousAckStatus)}
+                                variant="secondary"
                             >
                                 I understand, continue
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </Form>

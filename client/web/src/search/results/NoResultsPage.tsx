@@ -8,6 +8,7 @@ import { SearchPatternType } from '@sourcegraph/shared/src/graphql-operations'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { buildSearchURLQuery } from '@sourcegraph/shared/src/util/url'
+import { Button } from '@sourcegraph/wildcard'
 
 import { SearchContextProps } from '..'
 import { SyntaxHighlightedSearchQuery } from '../../components/SyntaxHighlightedSearchQuery'
@@ -57,18 +58,20 @@ const SearchInputExample: React.FunctionComponent<SearchInputExampleProps> = ({
                 {showSearchContext && (
                     <>
                         <div className={classNames(searchBoxStyle.searchBoxContextDropdown, styles.fakeSearchContext)}>
-                            <div
+                            <Button
                                 className={classNames(
                                     styles.fakeSearchContextButton,
                                     searchContextDropDownStyles.button,
-                                    'btn btn-link text-monospace dropdown-toggle'
+                                    'text-monospace dropdown-toggle'
                                 )}
+                                variant="link"
+                                as="div"
                             >
                                 <code className={searchContextDropDownStyles.buttonContent}>
                                     <span className="search-filter-keyword">context:</span>
                                     global
                                 </code>
-                            </div>
+                            </Button>
                         </div>
                         <div className={classNames(searchBoxStyle.searchBoxSeparator, styles.fakeSearchboxSeparator)} />
                     </>
@@ -139,14 +142,9 @@ const Container: React.FunctionComponent<ContainerProps> = ({
         <h3 className={styles.title}>
             <span className="flex-1">{title}</span>
             {sectionID && (
-                <button
-                    type="button"
-                    className="btn btn-icon"
-                    aria-label="Hide Section"
-                    onClick={() => onClose?.(sectionID)}
-                >
+                <Button aria-label="Hide Section" onClick={() => onClose?.(sectionID)} variant="icon">
                     <CloseIcon className="icon-inline" />
-                </button>
+                </Button>
             )}
         </h3>
         <div className={styles.content}>{children}</div>
@@ -365,16 +363,16 @@ export const NoResultsPage: React.FunctionComponent<NoResultsPageProps> = ({
                     {hiddenSectionIDs && hiddenSectionIDs.length > 0 && (
                         <p>
                             Some help panels are hidden.{' '}
-                            <button
-                                type="button"
-                                className="btn btn-link p-0 border-0 align-baseline"
+                            <Button
+                                className="p-0 border-0 align-baseline"
                                 onClick={() => {
                                     telemetryService.log('NoResultsPanel', { action: 'showAll' })
                                     setHiddenSectionIds([])
                                 }}
+                                variant="link"
                             >
                                 Show all panels.
-                            </button>
+                            </Button>
                         </p>
                     )}
                 </div>

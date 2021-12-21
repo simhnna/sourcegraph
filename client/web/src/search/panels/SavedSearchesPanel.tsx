@@ -9,6 +9,7 @@ import { ISavedSearch, SearchPatternType } from '@sourcegraph/shared/src/graphql
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { buildSearchURLQuery } from '@sourcegraph/shared/src/util/url'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
+import { Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../auth'
 
@@ -56,14 +57,16 @@ export const SavedSearchesPanel: React.FunctionComponent<Props> = ({
                 Use saved searches to alert you to uses of a favorite API, or changes to code you need to monitor.
             </small>
             {authenticatedUser && (
-                <Link
+                <Button
                     to={`/users/${authenticatedUser.username}/searches/add`}
                     onClick={logEvent('SavedSearchesPanelCreateButtonClicked', { source: 'empty view' })}
-                    className="btn btn-secondary mt-2 align-self-center"
+                    className="mt-2 align-self-center"
+                    variant="secondary"
+                    as={Link}
                 >
                     <PlusIcon className="icon-inline" />
                     Create a saved search
-                </Link>
+                </Button>
             )}
         </EmptyPanelContainer>
     )
@@ -130,34 +133,33 @@ export const SavedSearchesPanel: React.FunctionComponent<Props> = ({
         <ActionButtonGroup>
             <div className="btn-group btn-group-sm">
                 {authenticatedUser && (
-                    <Link
+                    <Button
                         to={`/users/${authenticatedUser.username}/searches/add`}
-                        className="btn btn-outline-secondary mr-2"
+                        className="btn-outline-secondary mr-2"
                         onClick={logEvent('SavedSearchesPanelCreateButtonClicked', { source: 'toolbar' })}
+                        as={Link}
                     >
                         +
-                    </Link>
+                    </Button>
                 )}
             </div>
             <div className="btn-group btn-group-sm">
-                <button
-                    type="button"
+                <Button
                     onClick={() => setShowAllSearches(false)}
-                    className={classNames('btn btn-outline-secondary test-saved-search-panel-my-searches', {
+                    className={classNames('btn-outline-secondary test-saved-search-panel-my-searches', {
                         active: !showAllSearches,
                     })}
                 >
                     My searches
-                </button>
-                <button
-                    type="button"
+                </Button>
+                <Button
                     onClick={() => setShowAllSearches(true)}
-                    className={classNames('btn btn-outline-secondary test-saved-search-panel-all-searches', {
+                    className={classNames('btn-outline-secondary test-saved-search-panel-all-searches', {
                         active: showAllSearches,
                     })}
                 >
                     All searches
-                </button>
+                </Button>
             </div>
         </ActionButtonGroup>
     )

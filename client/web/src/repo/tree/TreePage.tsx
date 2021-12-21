@@ -35,7 +35,7 @@ import { memoizeObservable } from '@sourcegraph/shared/src/util/memoizeObservabl
 import { pluralize } from '@sourcegraph/shared/src/util/strings'
 import { encodeURIPathComponent, toPrettyBlobURL, toURIWithPath } from '@sourcegraph/shared/src/util/url'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
-import { Container, PageHeader } from '@sourcegraph/wildcard'
+import { Container, PageHeader, Button } from '@sourcegraph/wildcard'
 
 import { getFileDecorations } from '../../backend/features'
 import { queryGraphQL } from '../../backend/graphql'
@@ -294,13 +294,14 @@ export const TreePage: React.FunctionComponent<Props> = ({
     ) : (
         <div className="test-tree-page-no-recent-commits">
             <p className="mb-2">No commits in this tree in the past year.</p>
-            <button
-                type="button"
-                className="btn btn-secondary btn-sm test-tree-page-show-all-commits"
+            <Button
+                className="test-tree-page-show-all-commits"
                 onClick={onShowOlderCommitsClicked}
+                variant="secondary"
+                size="sm"
             >
                 Show all commits
-            </button>
+            </Button>
         </div>
     )
 
@@ -315,9 +316,9 @@ export const TreePage: React.FunctionComponent<Props> = ({
                     <p className="mb-2">
                         {totalCount} {pluralize('commit', totalCount)} in this tree in the past year.
                     </p>
-                    <button type="button" className="btn btn-secondary btn-sm" onClick={onShowOlderCommitsClicked}>
+                    <Button onClick={onShowOlderCommitsClicked} variant="secondary" size="sm">
                         Show all commits
-                    </button>
+                    </Button>
                 </>
             )}
         </div>
@@ -351,30 +352,37 @@ export const TreePage: React.FunctionComponent<Props> = ({
                                     {repo.description && <p>{repo.description}</p>}
                                     <div className="btn-group">
                                         {enableAPIDocs && (
-                                            <Link
-                                                className="btn btn-outline-secondary"
+                                            <Button
+                                                className="btn-outline-secondary"
                                                 to={`${treeOrError.url}/-/docs`}
+                                                as={Link}
                                             >
                                                 <BookOpenBlankVariantIcon className="icon-inline" /> API docs
-                                            </Link>
+                                            </Button>
                                         )}
-                                        <Link className="btn btn-outline-secondary" to={`${treeOrError.url}/-/commits`}>
+                                        <Button
+                                            className="btn-outline-secondary"
+                                            to={`${treeOrError.url}/-/commits`}
+                                            as={Link}
+                                        >
                                             <SourceCommitIcon className="icon-inline" /> Commits
-                                        </Link>
-                                        <Link
-                                            className="btn btn-outline-secondary"
+                                        </Button>
+                                        <Button
+                                            className="btn-outline-secondary"
                                             to={`/${encodeURIPathComponent(repo.name)}/-/branches`}
+                                            as={Link}
                                         >
                                             <SourceBranchIcon className="icon-inline" /> Branches
-                                        </Link>
-                                        <Link
-                                            className="btn btn-outline-secondary"
+                                        </Button>
+                                        <Button
+                                            className="btn-outline-secondary"
                                             to={`/${encodeURIPathComponent(repo.name)}/-/tags`}
+                                            as={Link}
                                         >
                                             <TagIcon className="icon-inline" /> Tags
-                                        </Link>
-                                        <Link
-                                            className="btn btn-outline-secondary"
+                                        </Button>
+                                        <Button
+                                            className="btn-outline-secondary"
                                             to={
                                                 revision
                                                     ? `/${encodeURIPathComponent(
@@ -382,31 +390,35 @@ export const TreePage: React.FunctionComponent<Props> = ({
                                                       )}/-/compare/...${encodeURIComponent(revision)}`
                                                     : `/${encodeURIPathComponent(repo.name)}/-/compare`
                                             }
+                                            as={Link}
                                         >
                                             <HistoryIcon className="icon-inline" /> Compare
-                                        </Link>
-                                        <Link
-                                            className="btn btn-outline-secondary"
+                                        </Button>
+                                        <Button
+                                            className="btn-outline-secondary"
                                             to={`/${encodeURIPathComponent(repo.name)}/-/stats/contributors`}
+                                            as={Link}
                                         >
                                             <AccountIcon className="icon-inline" /> Contributors
-                                        </Link>
+                                        </Button>
                                         {codeIntelligenceEnabled && (
-                                            <Link
-                                                className="btn btn-outline-secondary"
+                                            <Button
+                                                className="btn-outline-secondary"
                                                 to={`/${encodeURIPathComponent(repo.name)}/-/code-intelligence`}
+                                                as={Link}
                                             >
                                                 <BrainIcon className="icon-inline" /> Code Intelligence
-                                            </Link>
+                                            </Button>
                                         )}
                                         {batchChangesEnabled && <RepoBatchChangesButton repoName={repo.name} />}
                                         {repo.viewerCanAdminister && (
-                                            <Link
-                                                className="btn btn-outline-secondary"
+                                            <Button
+                                                className="btn-outline-secondary"
                                                 to={`/${encodeURIPathComponent(repo.name)}/-/settings`}
+                                                as={Link}
                                             >
                                                 <SettingsIcon className="icon-inline" /> Settings
-                                            </Link>
+                                            </Button>
                                         )}
                                     </div>
                                 </>

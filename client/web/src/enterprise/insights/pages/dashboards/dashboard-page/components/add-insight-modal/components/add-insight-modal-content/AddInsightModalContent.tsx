@@ -97,13 +97,14 @@ export const AddInsightModalContent: React.FunctionComponent<AddInsightModalCont
                     Cancel
                 </Button>
 
-                <LoaderButton
+                <Button
                     alwaysShowLabel={true}
                     loading={formAPI.submitting}
                     label={formAPI.submitting ? 'Saving' : 'Save'}
                     type="submit"
                     disabled={formAPI.submitting}
-                    className="btn btn-primary"
+                    variant="primary"
+                    as={LoaderButton}
                 />
             </div>
         </form>

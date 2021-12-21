@@ -156,7 +156,7 @@ export const DrillDownFiltersForm: React.FunctionComponent<DrillDownFiltersFormP
                     <ErrorAlert className="w-100 mb-3" error={formAPI.submitErrors[FORM_ERROR]} />
                 )}
 
-                <LoaderButton
+                <Button
                     alwaysShowLabel={true}
                     loading={formAPI.submitting}
                     label={
@@ -170,7 +170,8 @@ export const DrillDownFiltersForm: React.FunctionComponent<DrillDownFiltersFormP
                     }
                     type="submit"
                     disabled={formAPI.submitting || !hasFiltersChanged}
-                    className="btn btn-outline-secondary ml-auto mr-2"
+                    className="btn-outline-secondary ml-auto mr-2"
+                    as={LoaderButton}
                 />
 
                 <Button

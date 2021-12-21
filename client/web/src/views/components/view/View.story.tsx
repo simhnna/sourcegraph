@@ -7,6 +7,7 @@ import React from 'react'
 import { LineChartContent } from 'sourcegraph'
 
 import { NOOP_TELEMETRY_SERVICE } from '@sourcegraph/shared/src/telemetry/telemetryService'
+import { Button } from '@sourcegraph/wildcard'
 
 import { WebStory } from '../../../components/WebStory'
 
@@ -92,9 +93,9 @@ export const ViewWithErrorLikeContent: Story = () => (
 function ContextMenu() {
     return (
         <Menu>
-            <MenuButton className="btn btn-icon p-1">
+            <Button className="p-1" variant="icon" as={MenuButton}>
                 <DotsVerticalIcon size={16} />
-            </MenuButton>
+            </Button>
             <MenuPopover>
                 <MenuItems className="d-block position-static dropdown-menu">
                     <MenuItem onSelect={noop}>Create</MenuItem>
@@ -115,9 +116,9 @@ export const ViewWithContextMenu: Story = () => (
         subtitle="Subtitle chart description"
         actions={
             <>
-                <button className="btn btn-icon p-1">
+                <Button className="p-1" variant="icon">
                     <FilterOutlineIcon size="1rem" />
-                </button>
+                </Button>
                 <ContextMenu />
             </>
         }

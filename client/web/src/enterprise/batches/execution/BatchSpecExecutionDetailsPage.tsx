@@ -12,7 +12,7 @@ import { useQuery } from '@sourcegraph/shared/src/graphql/apollo'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { asError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
-import { LoadingSpinner, PageHeader } from '@sourcegraph/wildcard'
+import { LoadingSpinner, PageHeader, Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../../auth'
 import { BatchChangesIcon } from '../../../batches/icons'
@@ -252,9 +252,8 @@ const BatchSpecActions: React.FunctionComponent<BatchSpecActionsProps> = ({ batc
             <span>
                 <div className="btn-group-vertical ml-2">
                     {(batchSpec.state === BatchSpecState.QUEUED || batchSpec.state === BatchSpecState.PROCESSING) && (
-                        <button
-                            type="button"
-                            className="btn btn-outline-secondary"
+                        <Button
+                            className="btn-outline-secondary"
                             onClick={cancelExecution}
                             disabled={isCanceling === true}
                         >
@@ -264,21 +263,20 @@ const BatchSpecActions: React.FunctionComponent<BatchSpecActionsProps> = ({ batc
                                     <LoadingSpinner inline={true} /> Canceling
                                 </>
                             )}
-                        </button>
+                        </Button>
                     )}
                     {!location.pathname.endsWith('preview') &&
                         batchSpec.applyURL &&
                         batchSpec.state === BatchSpecState.COMPLETED && (
-                            <Link to="preview" className="btn btn-primary">
+                            <Button to="preview" variant="primary" as={Link}>
                                 Preview
-                            </Link>
+                            </Button>
                         )}
                     {batchSpec.viewerCanRetry && batchSpec.state !== BatchSpecState.COMPLETED && (
                         // TODO: Add a second button to allow retrying an entire batch spec,
                         // including completed jobs.
-                        <button
-                            type="button"
-                            className="btn btn-outline-secondary"
+                        <Button
+                            className="btn-outline-secondary"
                             onClick={retryExecution}
                             disabled={isRetrying === true}
                             data-tooltip={isRetrying !== true ? 'Retry all failed workspaces' : undefined}
@@ -289,19 +287,20 @@ const BatchSpecActions: React.FunctionComponent<BatchSpecActionsProps> = ({ batc
                                     <LoadingSpinner className="icon-inline" /> Retrying
                                 </>
                             )}
-                        </button>
+                        </Button>
                     )}
                     {!location.pathname.endsWith('preview') &&
                         batchSpec.applyURL &&
                         batchSpec.state === BatchSpecState.FAILED && (
-                            <Link
-                                className="btn btn-outline-warning"
+                            <Button
+                                className="btn-outline-warning"
                                 to="preview"
                                 data-tooltip="Execution didn't finish successfully in all workspaces. The batch spec might have less changeset specs than expected."
+                                as={Link}
                             >
                                 <AlertCircleIcon className="icon-inline mb-0 mr-2 text-warning" />
                                 Preview
-                            </Link>
+                            </Button>
                         )}
                 </div>
                 {isErrorLike(isCanceling) && <ErrorAlert error={isCanceling} />}

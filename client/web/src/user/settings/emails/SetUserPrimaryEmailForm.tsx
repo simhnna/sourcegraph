@@ -4,6 +4,7 @@ import React, { useState, FunctionComponent, useCallback } from 'react'
 import { Form } from '@sourcegraph/branded/src/components/Form'
 import { gql, dataOrThrowErrors } from '@sourcegraph/shared/src/graphql/graphql'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { requestGraphQL } from '../../../backend/graphql'
 import { ErrorAlert } from '../../../components/alerts'
@@ -88,12 +89,13 @@ export const SetUserPrimaryEmailForm: FunctionComponent<Props> = ({ user, emails
                         </option>
                     ))}
                 </select>
-                <LoaderButton
+                <Button
                     loading={statusOrError === 'loading'}
                     label="Save"
                     type="submit"
                     disabled={options.length === 1 || statusOrError === 'loading'}
-                    className="btn btn-primary"
+                    variant="primary"
+                    as={LoaderButton}
                 />
             </Form>
             {isErrorLike(statusOrError) && <ErrorAlert className="mt-2" error={statusOrError} />}

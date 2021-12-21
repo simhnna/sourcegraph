@@ -5,6 +5,8 @@ import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { Button } from '@sourcegraph/wildcard'
+
 import { Insight, InsightDashboard, isSearchBasedInsight } from '../../../../core/types'
 
 import styles from './InsightContextMenu.module.scss'
@@ -33,16 +35,18 @@ export const InsightContextMenu: React.FunctionComponent<InsightCardMenuProps> =
         <Menu>
             {({ isOpen }) => (
                 <>
-                    <MenuButton
+                    <Button
                         data-testid="InsightContextMenuButton"
-                        className={classNames(menuButtonClassName, 'btn btn-outline p-1', styles.button)}
+                        className={classNames(menuButtonClassName, 'p-1', styles.button)}
                         aria-label="Insight options"
+                        outline={true}
+                        as={MenuButton}
                     >
                         <DotsVerticalIcon
                             className={classNames(styles.buttonIcon, { [styles.buttonIconActive]: isOpen })}
                             size={16}
                         />
-                    </MenuButton>
+                    </Button>
                     <MenuPopover portal={false}>
                         <MenuItems
                             data-testid={`context-menu.${insightID}`}

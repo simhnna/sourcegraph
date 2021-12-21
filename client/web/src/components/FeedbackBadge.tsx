@@ -1,8 +1,7 @@
 import classNames from 'classnames'
 import React from 'react'
 
-import { ProductStatusBadge } from '@sourcegraph/wildcard'
-import type { BaseProductStatusBadgeProps } from '@sourcegraph/wildcard/src/components/Badge'
+import { ProductStatusBadge, BaseProductStatusBadgeProps } from '@sourcegraph/wildcard'
 
 interface FeedbackBadgeProps extends BaseProductStatusBadgeProps {
     /** Render a mailto href to share feedback */

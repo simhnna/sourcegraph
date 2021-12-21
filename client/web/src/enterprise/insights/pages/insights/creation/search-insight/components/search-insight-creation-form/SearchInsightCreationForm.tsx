@@ -204,14 +204,16 @@ export const SearchInsightCreationForm: React.FunctionComponent<CreationSearchIn
             <div className="d-flex flex-wrap align-items-center">
                 {submitErrors?.[FORM_ERROR] && <ErrorAlert className="w-100" error={submitErrors[FORM_ERROR]} />}
 
-                <LoaderButton
+                <Button
                     alwaysShowLabel={true}
                     loading={submitting}
                     label={submitting ? 'Submitting' : isEditMode ? 'Save insight' : 'Create code insight'}
                     type="submit"
                     disabled={submitting}
                     data-testid="insight-save-button"
-                    className="btn btn-primary mr-2 mb-2"
+                    className="mr-2 mb-2"
+                    variant="primary"
+                    as={LoaderButton}
                 />
 
                 <Button type="button" variant="secondary" outline={true} className="mb-2 mr-auto" onClick={onCancel}>

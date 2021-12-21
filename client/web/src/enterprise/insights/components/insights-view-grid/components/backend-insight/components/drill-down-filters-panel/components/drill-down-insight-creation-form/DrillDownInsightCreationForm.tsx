@@ -71,14 +71,15 @@ export const DrillDownInsightCreationForm: React.FunctionComponent<DrillDownInsi
                     Cancel
                 </Button>
 
-                <LoaderButton
+                <Button
                     type="submit"
                     alwaysShowLabel={true}
                     loading={formAPI.submitting}
                     label={formAPI.submitting ? 'Saving' : 'Save'}
                     disabled={formAPI.submitting}
                     data-testid="insight-save-button"
-                    className="btn btn-primary"
+                    variant="primary"
+                    as={LoaderButton}
                 />
             </footer>
         </form>

@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import React from 'react'
 
+import { Button } from '@sourcegraph/wildcard'
+
 import styles from './SearchNotebookAddBlockButtons.module.scss'
 
 import { BlockInput } from '.'
@@ -24,25 +26,24 @@ export const SearchNotebookAddBlockButtons: React.FunctionComponent<SearchNotebo
     >
         <hr className="mx-3" />
         <div className={styles.addBlockButtons}>
-            <button
-                type="button"
-                className={classNames('btn btn-outline-secondary btn-sm', styles.addBlockButton)}
+            <Button
+                className={classNames('btn-outline-secondary', styles.addBlockButton)}
                 onClick={() => onAddBlock(index, { type: 'query', input: '// Enter search query' })}
                 data-testid="add-query-button"
+                size="sm"
             >
                 + Query
-            </button>
-            <button
-                type="button"
-                className={classNames('btn btn-outline-secondary btn-sm ml-2', styles.addBlockButton)}
+            </Button>
+            <Button
+                className={classNames('btn-outline-secondary ml-2', styles.addBlockButton)}
                 onClick={() => onAddBlock(index, { type: 'md', input: '*Enter markdown*' })}
                 data-testid="add-md-button"
+                size="sm"
             >
                 + Markdown
-            </button>
-            <button
-                type="button"
-                className={classNames('btn btn-outline-secondary btn-sm ml-2', styles.addBlockButton)}
+            </Button>
+            <Button
+                className={classNames('btn-outline-secondary ml-2', styles.addBlockButton)}
                 onClick={() =>
                     onAddBlock(index, {
                         type: 'file',
@@ -50,9 +51,10 @@ export const SearchNotebookAddBlockButtons: React.FunctionComponent<SearchNotebo
                     })
                 }
                 data-testid="add-file-button"
+                size="sm"
             >
                 + Code
-            </button>
+            </Button>
         </div>
     </div>
 )

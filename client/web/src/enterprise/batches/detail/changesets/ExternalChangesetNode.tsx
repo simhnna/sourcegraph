@@ -14,6 +14,7 @@ import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { asError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { RepoSpec, RevisionSpec, FileSpec, ResolvedRevisionSpec } from '@sourcegraph/shared/src/util/url'
 import { InputTooltip } from '@sourcegraph/web/src/components/InputTooltip'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ErrorAlert, ErrorMessage } from '../../../../components/alerts'
 import { DiffStatStack } from '../../../../components/diff/DiffStat'
@@ -80,18 +81,18 @@ export const ExternalChangesetNode: React.FunctionComponent<ExternalChangesetNod
 
     return (
         <>
-            <button
-                type="button"
-                className="btn btn-icon test-batches-expand-changeset d-none d-sm-block"
+            <Button
+                className="test-batches-expand-changeset d-none d-sm-block"
                 aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                 onClick={toggleIsExpanded}
+                variant="icon"
             >
                 {isExpanded ? (
                     <ChevronDownIcon className="icon-inline" aria-label="Close section" />
                 ) : (
                     <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                 )}
-            </button>
+            </Button>
             {selectable ? (
                 <div className="p-2">
                     <InputTooltip
@@ -162,13 +163,12 @@ export const ExternalChangesetNode: React.FunctionComponent<ExternalChangesetNod
                 {node.diffStat && <DiffStatStack {...node.diffStat} />}
             </div>
             {/* The button for expanding the information used on xs devices. */}
-            <button
-                type="button"
+            <Button
                 aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                 onClick={toggleIsExpanded}
                 className={classNames(
                     styles.externalChangesetNodeShowDetails,
-                    'btn btn-outline-secondary d-block d-sm-none test-batches-expand-changeset'
+                    'btn-outline-secondary d-block d-sm-none test-batches-expand-changeset'
                 )}
             >
                 {isExpanded ? (
@@ -177,7 +177,7 @@ export const ExternalChangesetNode: React.FunctionComponent<ExternalChangesetNod
                     <ChevronRightIcon className="icon-inline" aria-label="Expand section" />
                 )}{' '}
                 {isExpanded ? 'Hide' : 'Show'} details
-            </button>
+            </Button>
             {isExpanded && (
                 <>
                     <div className={classNames(styles.externalChangesetNodeBgExpanded, 'align-self-stretch')} />
@@ -268,7 +268,7 @@ const RetryChangesetButton: React.FunctionComponent<{
     return (
         <>
             {isErrorLike(isLoading) && <ErrorAlert error={isLoading} prefix="Error re-enqueueing changeset" />}
-            <button className="btn btn-link mb-1" type="button" onClick={onRetry} disabled={isLoading === true}>
+            <Button className="mb-1" onClick={onRetry} disabled={isLoading === true} variant="link">
                 <SyncIcon
                     className={classNames(
                         'icon-inline',
@@ -276,7 +276,7 @@ const RetryChangesetButton: React.FunctionComponent<{
                     )}
                 />{' '}
                 Retry
-            </button>
+            </Button>
         </>
     )
 }

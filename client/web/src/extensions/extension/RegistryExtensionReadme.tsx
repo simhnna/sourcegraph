@@ -6,6 +6,7 @@ import { Markdown } from '@sourcegraph/shared/src/components/Markdown'
 import { ConfiguredRegistryExtension } from '@sourcegraph/shared/src/extensions/extension'
 import { isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { renderMarkdown } from '@sourcegraph/shared/src/util/markdown'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ExtensionNoManifestAlert } from './RegistryExtensionManifestPage'
 
@@ -20,9 +21,14 @@ const PublishNewManifestAlert: React.FunctionComponent<{
         {extension.registryExtension?.viewerCanAdminister && (
             <>
                 <br />
-                <Link className="mt-3 btn btn-primary" to={`${extension.registryExtension.url}/-/releases/new`}>
+                <Button
+                    className="mt-3"
+                    to={`${extension.registryExtension.url}/-/releases/new`}
+                    variant="primary"
+                    as={Link}
+                >
                     {buttonLabel}
-                </Link>
+                </Button>
             </>
         )}
     </div>

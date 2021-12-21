@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react'
 import { Form } from '@sourcegraph/branded/src/components/Form'
 import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
 import { asError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ErrorAlert } from '../../../../components/alerts'
 import { Scalars } from '../../../../graphql-operations'
@@ -72,22 +73,13 @@ export const CreateCommentModal: React.FunctionComponent<CreateCommentModalProps
                     />
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button
-                        type="button"
-                        disabled={isLoading === true}
-                        className="btn btn-outline-secondary mr-2"
-                        onClick={onCancel}
-                    >
+                    <Button disabled={isLoading === true} className="btn-outline-secondary mr-2" onClick={onCancel}>
                         Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        disabled={isLoading === true || commentBody.length === 0}
-                        className="btn btn-primary"
-                    >
+                    </Button>
+                    <Button type="submit" disabled={isLoading === true || commentBody.length === 0} variant="primary">
                         {isLoading === true && <LoadingSpinner className="icon-inline" />}
                         Post comments
-                    </button>
+                    </Button>
                 </div>
             </Form>
         </Dialog>

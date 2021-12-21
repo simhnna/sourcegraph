@@ -1,7 +1,9 @@
-import { Menu, MenuButton, MenuItem, MenuItems, MenuPopover } from '@reach/menu-button'
+import { Menu, MenuButton, MenuItem, MenuItemProps, MenuItems, MenuPopover } from '@reach/menu-button'
 import classNames from 'classnames'
 import DotsVerticalIcon from 'mdi-react/DotsVerticalIcon'
 import React from 'react'
+
+import { Button } from '@sourcegraph/wildcard'
 
 import { positionBottomRight } from '../../../../../components/context-menu/utils'
 import { InsightDashboard } from '../../../../../core/types'
@@ -25,6 +27,8 @@ export interface DashboardMenuProps {
     tooltipText?: string
 }
 
+const ButtonMenuItem: React.FunctionComponent<MenuItemProps> = props => <MenuItem as="button" {...props} />
+
 export const DashboardMenu: React.FunctionComponent<DashboardMenuProps> = props => {
     const { innerRef, dashboard, subjects, onSelect = () => {}, tooltipText } = props
 
@@ -33,60 +37,66 @@ export const DashboardMenu: React.FunctionComponent<DashboardMenuProps> = props 
 
     return (
         <Menu>
-            <MenuButton
+            <Button
                 ref={innerRef}
                 data-tooltip={tooltipText}
                 data-placement="right"
-                className={classNames(styles.triggerButton, 'btn btn-icon')}
+                className={styles.triggerButton}
+                variant="icon"
+                as={MenuButton}
             >
                 <DotsVerticalIcon size={16} />
-            </MenuButton>
+            </Button>
 
             <MenuPopover portal={true} position={positionBottomRight}>
                 <MenuItems className={classNames(styles.menuList, 'dropdown-menu')}>
-                    <MenuItem
-                        as="button"
+                    <Button
                         disabled={!permissions.isConfigurable}
                         data-tooltip={getTooltipMessage(dashboard, permissions)}
                         data-placement="right"
-                        className={classNames(styles.menuItem, 'btn btn-outline')}
+                        className={styles.menuItem}
                         onSelect={() => onSelect(DashboardMenuAction.AddRemoveInsights)}
+                        outline={true}
+                        as={ButtonMenuItem}
                     >
                         Add or remove insights
-                    </MenuItem>
+                    </Button>
 
-                    <MenuItem
-                        as="button"
+                    <Button
                         disabled={!permissions.isConfigurable}
                         data-tooltip={getTooltipMessage(dashboard, permissions)}
                         data-placement="right"
-                        className={classNames(styles.menuItem, 'btn btn-outline')}
+                        className={styles.menuItem}
                         onSelect={() => onSelect(DashboardMenuAction.Configure)}
+                        outline={true}
+                        as={ButtonMenuItem}
                     >
                         Configure dashboard
-                    </MenuItem>
+                    </Button>
 
-                    <MenuItem
-                        as="button"
+                    <Button
                         disabled={!hasDashboard}
-                        className={classNames(styles.menuItem, 'btn btn-outline')}
+                        className={styles.menuItem}
                         onSelect={() => onSelect(DashboardMenuAction.CopyLink)}
+                        outline={true}
+                        as={ButtonMenuItem}
                     >
                         Copy link
-                    </MenuItem>
+                    </Button>
 
                     <hr />
 
-                    <MenuItem
-                        as="button"
+                    <Button
                         disabled={!permissions.isConfigurable}
                         data-tooltip={getTooltipMessage(dashboard, permissions)}
                         data-placement="right"
-                        className={classNames(styles.menuItem, 'btn btn-outline', styles.menuItemDanger)}
+                        className={classNames(styles.menuItem, styles.menuItemDanger)}
                         onSelect={() => onSelect(DashboardMenuAction.Delete)}
+                        outline={true}
+                        as={ButtonMenuItem}
                     >
                         Delete
-                    </MenuItem>
+                    </Button>
                 </MenuItems>
             </MenuPopover>
         </Menu>

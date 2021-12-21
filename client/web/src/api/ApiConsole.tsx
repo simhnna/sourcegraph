@@ -7,6 +7,7 @@ import { catchError, debounceTime } from 'rxjs/operators'
 
 import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ErrorAlert } from '../components/alerts'
 import { PageTitle } from '../components/PageTitle'
@@ -174,9 +175,9 @@ export class ApiConsole extends React.PureComponent<Props, State> {
                                 label="Prettify"
                             />
                             <GraphiQL.Button onClick={this.handleToggleHistory} title="Show History" label="History" />
-                            <Link className="btn btn-link" to="/help/api/graphql">
+                            <Button to="/help/api/graphql" variant="link" as={Link}>
                                 Docs
-                            </Link>
+                            </Button>
                             <div className="alert alert-warning py-1 mb-0 ml-2 text-nowrap">
                                 <small>
                                     The API console uses <strong>real production data.</strong>

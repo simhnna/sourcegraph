@@ -2,6 +2,8 @@ import classNames from 'classnames'
 import FilterOutlineIcon from 'mdi-react/FilterOutlineIcon'
 import React, { useRef } from 'react'
 
+import { Button } from '@sourcegraph/wildcard'
+
 import { SearchBasedBackendFilters } from '../../../../../../core/types/insight/search-insight'
 import { flipRightPosition } from '../../../../../context-menu/utils'
 import { SubmissionResult } from '../../../../../form/hooks/useForm'
@@ -40,20 +42,18 @@ export const DrillDownFiltersAction: React.FunctionComponent<DrillDownFiltersPro
 
     return (
         <>
-            <button
+            <Button
                 ref={targetButtonReference}
-                type="button"
-                className={classNames('btn btn-icon p-1', styles.filterButton, {
+                className={classNames('p-1', styles.filterButton, {
                     [styles.filterButtonWithOpenPanel]: isOpen,
                     [styles.filterButtonActive]: isFiltered,
                 })}
                 aria-label={isFiltered ? 'Active filters' : 'Filters'}
-                // To prevent grid layout position change animation. Attempts to drag
-                // the filter panel should not trigger react-grid-layout events.
                 onMouseDown={event => event.stopPropagation()}
+                variant="icon"
             >
                 <FilterOutlineIcon className={styles.filterIcon} size="1rem" />
-            </button>
+            </Button>
 
             <Popover
                 isOpen={isOpen}
@@ -62,8 +62,6 @@ export const DrillDownFiltersAction: React.FunctionComponent<DrillDownFiltersPro
                 position={flipRightPosition}
                 aria-label="Drill-down filters panel"
                 onVisibilityChange={onVisibilityChange}
-                // To prevent grid layout position change animation. Attempts to drag
-                // the filter panel should not trigger react-grid-layout events.
                 onMouseDown={event => event.stopPropagation()}
             >
                 <DrillDownFiltersPanel

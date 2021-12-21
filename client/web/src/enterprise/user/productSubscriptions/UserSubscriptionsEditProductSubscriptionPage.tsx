@@ -12,6 +12,7 @@ import * as GQL from '@sourcegraph/shared/src/graphql/schema'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { asError, createAggregateError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { useEventObservable, useObservable } from '@sourcegraph/shared/src/util/useObservable'
+import { Button } from '@sourcegraph/wildcard'
 
 import { mutateGraphQL, queryGraphQL } from '../../../backend/graphql'
 import { ErrorAlert } from '../../../components/alerts'
@@ -105,9 +106,9 @@ export const UserSubscriptionsEditProductSubscriptionPage: React.FunctionCompone
                 <ErrorAlert className="my-2" error={productSubscription} />
             ) : (
                 <>
-                    <Link to={productSubscription.url} className="btn btn-link btn-sm mb-3">
+                    <Button to={productSubscription.url} className="mb-3" variant="link" size="sm" as={Link}>
                         <ArrowLeftIcon className="icon-inline" /> Subscription
-                    </Link>
+                    </Button>
                     <h2>Upgrade or change subscription {productSubscription.name}</h2>
                     <ProductSubscriptionForm
                         accountID={user.id}

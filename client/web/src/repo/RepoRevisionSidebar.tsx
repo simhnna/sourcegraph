@@ -14,6 +14,7 @@ import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { AbsoluteRepoFile } from '@sourcegraph/shared/src/util/url'
 import { useLocalStorage } from '@sourcegraph/shared/src/util/useLocalStorage'
 import { useMatchMedia } from '@sourcegraph/shared/src/util/useMatchMedia'
+import { Button } from '@sourcegraph/wildcard'
 
 import settingsSchemaJSON from '../../../../schema/settings.schema.json'
 import { Tree } from '../tree/Tree'
@@ -64,17 +65,14 @@ export const RepoRevisionSidebar: React.FunctionComponent<Props> = props => {
 
     if (!isVisible) {
         return (
-            <button
-                type="button"
-                className={classNames(
-                    'position-absolute btn btn-icon border-top border-bottom border-right mt-4',
-                    styles.toggle
-                )}
+            <Button
+                className={classNames('position-absolute border-top border-bottom border-right mt-4', styles.toggle)}
                 onClick={() => handleSidebarToggle(true)}
                 data-tooltip="Show sidebar"
+                variant="icon"
             >
                 <ChevronDoubleRightIcon className="icon-inline" />
-            </button>
+            </Button>
         )
     }
 

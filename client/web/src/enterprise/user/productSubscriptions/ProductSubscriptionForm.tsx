@@ -13,6 +13,7 @@ import * as GQL from '@sourcegraph/shared/src/graphql/schema'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { useEventObservable } from '@sourcegraph/shared/src/util/useObservable'
+import { Button } from '@sourcegraph/wildcard'
 
 import { ErrorAlert } from '../../../components/alerts'
 import { StripeWrapper } from '../../dotcom/billing/StripeWrapper'
@@ -221,16 +222,19 @@ const _ProductSubscriptionForm: React.FunctionComponent<Props & ReactStripeEleme
                         />
                         {!accountID && (
                             <div className="form-group mt-3">
-                                <Link
+                                <Button
                                     to={`/sign-up?returnTo=${encodeURIComponent(
                                         `/subscriptions/new${productSubscriptionInputForLocationHash(
                                             productSubscriptionInput
                                         )}`
                                     )}`}
-                                    className="btn btn-lg btn-primary w-100 center"
+                                    className="w-100 center"
+                                    variant="primary"
+                                    size="lg"
+                                    as={Link}
                                 >
                                     Create account or sign in to continue
-                                </Link>
+                                </Button>
                                 <small className="form-text text-muted">
                                     A user account on Sourcegraph.com is required to create a subscription so you can
                                     view the license key and invoice.
@@ -248,14 +252,14 @@ const _ProductSubscriptionForm: React.FunctionComponent<Props & ReactStripeEleme
                             isLightTheme={isLightTheme}
                         />
                         <div className="form-group mt-3">
-                            <button
+                            <Button
                                 type="submit"
                                 disabled={disableForm || !accountID}
                                 className={classNames(
-                                    'btn btn-lg',
                                     disableForm || !accountID ? 'btn-secondary' : 'btn-success',
                                     'w-100 d-flex align-items-center justify-content-center'
                                 )}
+                                size="lg"
                             >
                                 {paymentToken === LOADING || submissionState === LOADING ? (
                                     <>
@@ -266,7 +270,7 @@ const _ProductSubscriptionForm: React.FunctionComponent<Props & ReactStripeEleme
                                 ) : (
                                     primaryButtonTextNoPaymentRequired
                                 )}
-                            </button>
+                            </Button>
                             {afterPrimaryButton}
                         </div>
                     </div>

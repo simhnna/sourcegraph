@@ -13,6 +13,7 @@ import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { ErrorLike, asError, isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { numberWithCommas, pluralize } from '@sourcegraph/shared/src/util/strings'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
+import { Button } from '@sourcegraph/wildcard'
 
 import { queryGraphQL } from '../../backend/graphql'
 import { ErrorAlert } from '../../components/alerts'
@@ -262,13 +263,14 @@ export const SiteAdminOverviewPage: React.FunctionComponent<Props> = ({
                                                 <div className="site-admin-overview-page__detail-header">
                                                     <h2>Weekly unique users</h2>
                                                     <h3>
-                                                        <Link
+                                                        <Button
                                                             to="/site-admin/usage-statistics"
-                                                            className="btn btn-secondary"
+                                                            variant="secondary"
+                                                            as={Link}
                                                         >
                                                             View all usage statistics{' '}
                                                             <OpenInNewIcon className="icon-inline" />
-                                                        </Link>
+                                                        </Button>
                                                     </h3>
                                                 </div>
                                             }

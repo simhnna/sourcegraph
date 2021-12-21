@@ -11,6 +11,7 @@ import { ExtensionCategory, ExtensionManifest } from '@sourcegraph/shared/src/sc
 import { isErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { isEncodedImage } from '@sourcegraph/shared/src/util/icon'
 import { isDefined } from '@sourcegraph/shared/src/util/types'
+import { Button } from '@sourcegraph/wildcard'
 
 import { PageTitle } from '../../components/PageTitle'
 import { Timestamp } from '../../components/time/Timestamp'
@@ -182,12 +183,14 @@ export const RegistryExtensionOverviewPage: React.FunctionComponent<Props> = ({
                         <ul className="list-inline" data-testid="test-registry-extension-categories">
                             {categories.map(category => (
                                 <li key={category} className="list-inline-item mb-2">
-                                    <Link
+                                    <Button
                                         to={urlToExtensionsQuery({ category })}
-                                        className="btn btn-outline-secondary btn-sm"
+                                        className="btn-outline-secondary"
+                                        size="sm"
+                                        as={Link}
                                     >
                                         {category}
-                                    </Link>
+                                    </Button>
                                 </li>
                             ))}
                         </ul>
@@ -203,12 +206,14 @@ export const RegistryExtensionOverviewPage: React.FunctionComponent<Props> = ({
                             <ul className="list-inline">
                                 {extension.manifest.tags.map(tag => (
                                     <li key={tag} className="list-inline-item mb-2">
-                                        <Link
+                                        <Button
                                             to={urlToExtensionsQuery({ query: extensionsQuery({ tag }) })}
-                                            className={classNames('btn btn-outline-secondary btn-sm', styles.tag)}
+                                            className={classNames('btn-outline-secondary', styles.tag)}
+                                            size="sm"
+                                            as={Link}
                                         >
                                             {tag}
-                                        </Link>
+                                        </Button>
                                     </li>
                                 ))}
                             </ul>

@@ -4,6 +4,7 @@ import CheckCircleIcon from 'mdi-react/CheckCircleIcon'
 import React, { useState, useCallback } from 'react'
 
 import { ErrorLike } from '@sourcegraph/shared/src/util/errors'
+import { Button } from '@sourcegraph/wildcard'
 
 import { CircleDashedIcon } from '../../../components/CircleDashedIcon'
 import { LoaderButton } from '../../../components/LoaderButton'
@@ -129,52 +130,51 @@ export const CodeHostItem: React.FunctionComponent<CodeHostItemProps> = ({
                 {/* Show one of: update, updating, connect, connecting buttons */}
                 {!service?.id ? (
                     oauthInFlight ? (
-                        <LoaderButton
-                            type="button"
-                            className="btn btn-primary"
+                        <Button
                             loading={true}
                             disabled={true}
                             label="Connecting..."
                             alwaysShowLabel={true}
+                            variant="primary"
+                            as={LoaderButton}
                         />
                     ) : (
-                        <button type="button" className="btn btn-primary" onClick={connectAction}>
+                        <Button onClick={connectAction} variant="primary">
                             Connect
-                        </button>
+                        </Button>
                     )
                 ) : (
                     (isTokenUpdateRequired || !isUserOwner) &&
                     (oauthInFlight ? (
-                        <LoaderButton
-                            type="button"
-                            className="btn btn-merged"
+                        <Button
                             loading={true}
                             disabled={true}
                             label="Updating..."
                             alwaysShowLabel={true}
+                            variant="merged"
+                            as={LoaderButton}
                         />
                     ) : (
-                        <button
-                            type="button"
+                        <Button
                             className={`btn ${
                                 !isUserOwner ? 'btn-link p-0 shadow-none font-weight-normal' : 'btn-merged'
                             }`}
                             onClick={updateAction}
                         >
                             Update
-                        </button>
+                        </Button>
                     ))
                 )}
 
                 {/* always show remove button when the service exists */}
                 {service?.id && (
-                    <button
-                        type="button"
-                        className="btn btn-link text-danger font-weight-normal shadow-none px-0 ml-3"
+                    <Button
+                        className="text-danger font-weight-normal shadow-none px-0 ml-3"
                         onClick={toggleRemoveConnectionModal}
+                        variant="link"
                     >
                         Remove
-                    </button>
+                    </Button>
                 )}
             </div>
         </div>

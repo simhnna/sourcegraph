@@ -5,6 +5,7 @@ import { LoaderInput } from '@sourcegraph/branded/src/components/LoaderInput'
 import { gql, dataOrThrowErrors } from '@sourcegraph/shared/src/graphql/graphql'
 import { asError, isErrorLike, ErrorLike } from '@sourcegraph/shared/src/util/errors'
 import { useInputValidation, deriveInputClassName } from '@sourcegraph/shared/src/util/useInputValidation'
+import { Button } from '@sourcegraph/wildcard'
 
 import { requestGraphQL } from '../../../backend/graphql'
 import { ErrorAlert } from '../../../components/alerts'
@@ -103,12 +104,13 @@ export const AddUserEmailForm: FunctionComponent<Props> = ({ user, className, on
                         readOnly={false}
                     />
                 </LoaderInput>
-                <LoaderButton
+                <Button
                     loading={statusOrError === 'loading'}
                     label="Add"
                     type="submit"
                     disabled={statusOrError === 'loading' || emailState.kind !== 'VALID'}
-                    className="btn btn-primary"
+                    variant="primary"
+                    as={LoaderButton}
                 />
                 {emailState.kind === 'INVALID' && (
                     <small className="invalid-feedback" role="alert">

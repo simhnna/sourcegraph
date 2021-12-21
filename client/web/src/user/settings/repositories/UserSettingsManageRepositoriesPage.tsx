@@ -8,7 +8,7 @@ import { Form } from '@sourcegraph/branded/src/components/Form'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/shared/src/util/errors'
-import { ProductStatusBadge, Container, PageSelector } from '@sourcegraph/wildcard'
+import { ProductStatusBadge, Container, PageSelector, Button } from '@sourcegraph/wildcard'
 
 import { ALLOW_NAVIGATION, AwayPrompt } from '../../../components/AwayPrompt'
 import {
@@ -887,21 +887,25 @@ export const UserSettingsManageRepositoriesPage: React.FunctionComponent<Props> 
                 when={didRepoSelectionChange}
             />
             <Form className="mt-4 d-flex" onSubmit={submit}>
-                <LoaderButton
+                <Button
                     loading={fetchingRepos === 'loading'}
-                    className="btn btn-primary test-goto-add-external-service-page mr-2"
+                    className="test-goto-add-external-service-page mr-2"
                     alwaysShowLabel={true}
                     type="submit"
                     label={fetchingRepos ? 'Saving...' : 'Save'}
                     disabled={fetchingRepos === 'loading' || !didRepoSelectionChange()}
+                    variant="primary"
+                    as={LoaderButton}
                 />
 
-                <Link
-                    className="btn btn-secondary test-goto-add-external-service-page"
+                <Button
+                    className="test-goto-add-external-service-page"
                     to={`${routingPrefix}/repositories`}
+                    variant="secondary"
+                    as={Link}
                 >
                     Cancel
-                </Link>
+                </Button>
             </Form>
         </UserSettingReposContainer>
     )
