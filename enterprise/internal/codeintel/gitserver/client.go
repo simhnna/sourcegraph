@@ -10,6 +10,7 @@ import (
 	"github.com/opentracing/opentracing-go/log"
 
 	"github.com/sourcegraph/sourcegraph/internal/api"
+	"github.com/sourcegraph/sourcegraph/internal/authz"
 	"github.com/sourcegraph/sourcegraph/internal/gitserver"
 	"github.com/sourcegraph/sourcegraph/internal/gitserver/gitdomain"
 	"github.com/sourcegraph/sourcegraph/internal/gitserver/protocol"
@@ -315,7 +316,7 @@ func (c *Client) FileExists(ctx context.Context, repositoryID int, commit, file 
 		return false, errors.Wrap(err, "git.ResolveRevision")
 	}
 
-	if _, err := git.Stat(ctx, repo, api.CommitID(commit), file); err != nil {
+	if _, err := git.Stat(ctx, authz.DefaultSubRepoPermsChecker, repo, api.CommitID(commit), file); err != nil {
 		if os.IsNotExist(err) {
 			return false, nil
 		}

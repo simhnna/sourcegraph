@@ -10,6 +10,7 @@ import (
 	"github.com/cockroachdb/errors"
 
 	"github.com/sourcegraph/sourcegraph/internal/api"
+	"github.com/sourcegraph/sourcegraph/internal/authz"
 	"github.com/sourcegraph/sourcegraph/internal/gitserver"
 	"github.com/sourcegraph/sourcegraph/internal/trace/ot"
 	"github.com/sourcegraph/sourcegraph/internal/vcs/util"
@@ -133,7 +134,7 @@ func (br *blobReader) convertError(err error) error {
 	}
 	if strings.Contains(err.Error(), "fatal: bad object ") {
 		// Could be a git submodule.
-		fi, err := Stat(br.ctx, br.repo, br.commit, br.name)
+		fi, err := Stat(br.ctx, authz.DefaultSubRepoPermsChecker, br.repo, br.commit, br.name)
 		if err != nil {
 			return err
 		}
