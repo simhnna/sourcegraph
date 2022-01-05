@@ -1,8 +1,9 @@
+import { MenuItems } from '@reach/menu-button'
 import classNames from 'classnames'
-import React, { useCallback, useState, useMemo } from 'react'
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import React, { useMemo } from 'react'
 
 import { Namespace } from '@sourcegraph/shared/src/graphql/schema'
+import { Menu, MenuButton } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../auth'
 
@@ -48,45 +49,42 @@ export const SearchContextOwnerDropdown: React.FunctionComponent<SearchContextOw
     selectedNamespace,
     setSelectedNamespace,
 }) => {
-    const [isOpen, setIsOpen] = useState(false)
-    const toggleIsOpen = useCallback(() => setIsOpen(open => !open), [])
+    // const [isOpen, setIsOpen] = useState(false)
+    // const toggleIsOpen = useCallback(() => setIsOpen(open => !open), [])
 
     const selectedUserNamespace = useMemo(() => getSelectedNamespaceFromUser(authenticatedUser), [authenticatedUser])
     return (
-        <Dropdown isOpen={isOpen} toggle={toggleIsOpen}>
-            <DropdownToggle
+        <Menu>
+            <MenuButton
                 className={classNames('form-control', styles.searchContextOwnerDropdownToggle)}
-                caret={true}
                 color="outline-secondary"
                 disabled={isDisabled}
                 data-tooltip={isDisabled ? "Owner can't be changed." : ''}
             >
                 <div>{selectedNamespace.type === 'global-owner' ? 'Global' : `@${selectedNamespace.name}`}</div>
-            </DropdownToggle>
-            <DropdownMenu>
-                <DropdownItem onClick={() => setSelectedNamespace(selectedUserNamespace)}>
+            </MenuButton>
+            <Menu>
+                <MenuItems onClick={() => setSelectedNamespace(selectedUserNamespace)}>
                     @{authenticatedUser.username} <span className="text-muted">(you)</span>
-                </DropdownItem>
+                </MenuItems>
                 {authenticatedUser.organizations.nodes.map(org => (
-                    <DropdownItem
+                    <MenuItems
                         key={org.name}
                         onClick={() => setSelectedNamespace({ id: org.id, type: 'org', name: org.name })}
                     >
                         @{org.name}
-                    </DropdownItem>
+                    </MenuItems>
                 ))}
                 {authenticatedUser.siteAdmin && (
                     <>
                         <hr />
-                        <DropdownItem
-                            onClick={() => setSelectedNamespace({ id: null, type: 'global-owner', name: '' })}
-                        >
+                        <MenuItems onClick={() => setSelectedNamespace({ id: null, type: 'global-owner', name: '' })}>
                             <div>Global owner</div>
                             <div className="text-muted">Available to everyone.</div>
-                        </DropdownItem>
+                        </MenuItems>
                     </>
                 )}
-            </DropdownMenu>
-        </Dropdown>
+            </Menu>
+        </Menu>
     )
 }
