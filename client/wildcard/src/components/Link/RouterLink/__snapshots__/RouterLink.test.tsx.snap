@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RouterLink renders router link correctly 1`] = `
+<DocumentFragment>
+  <a
+    class="anchorLink"
+    href="/docs"
+  >
+    Link to docs
+  </a>
+</DocumentFragment>
+`;
+
+exports[`RouterLink should render correctly with absolute uri 1`] = `
+<DocumentFragment>
+  <a
+    class="anchorLink"
+    href="https://sourcegraph.com/docs"
+  >
+    Link to docs
+  </a>
+</DocumentFragment>
+`;
+
+exports[`RouterLink should render correctly without using Router 1`] = `
+<DocumentFragment>
+  <a
+    class="anchorLink"
+    href="/docs"
+  >
+    Link to docs
+  </a>
+</DocumentFragment>
+`;
