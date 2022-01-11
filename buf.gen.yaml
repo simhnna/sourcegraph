@@ -8,3 +8,5 @@ plugins:
   - name: ts
     out: .
     path: ./node_modules/.bin/protoc-gen-ts
+  - name: rust
+    out: ./docker-images/syntax-highlighter/src
