@@ -781,7 +781,8 @@ export namespace lib.codeintel.lsif_typed {
         export enum Unique {
             UNIQUE_UNSPECIFIED = 0,
             UNIQUE_DOCUMENT = 1,
-            UNIQUE_GLOBAL = 2
+            UNIQUE_GLOBAL = 2,
+            UNIQUE_GLOBAL3 = 3
         }
     }
     export class Occurrence extends pb_1.Message {
