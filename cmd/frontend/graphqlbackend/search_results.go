@@ -1673,6 +1673,8 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 		_, _, _, _ = agg.Get()
 	}()
 
+	args.RepoOptions = r.toRepoOptions(args.Query)
+
 	{
 		wg := waitGroup(true)
 		wg.Add(1)
@@ -1680,7 +1682,7 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 			defer wg.Done()
 
 			repositoryResolver := searchrepos.Resolver{DB: r.db}
-			excluded, err := repositoryResolver.Excluded(ctx, repoOptions)
+			excluded, err := repositoryResolver.Excluded(ctx, args.RepoOptions)
 			if err != nil {
 				agg.Error(err)
 				return
@@ -1698,7 +1700,7 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 	}
 
 	repos := &searchrepos.Resolver{
-		Opts: repoOptions,
+		Opts: args.RepoOptions,
 		DB:   r.db,
 	}
 
