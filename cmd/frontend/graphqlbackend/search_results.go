@@ -1347,6 +1347,7 @@ func searchResultsToFileNodes(matches []result.Match) ([]query.Node, error) {
 // query with a longer timeout.
 func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, args *search.TextParameters, jobs []run.Job) (*SearchResults, error) {
 	start := time.Now()
+	args.RepoOptions = r.toRepoOptions(args.Query)
 	rr, err := r.doResults(ctx, args, jobs)
 
 	// We have an alert for context timeouts and we have a progress
@@ -1532,6 +1533,7 @@ func (r *searchResolver) Stats(ctx context.Context) (stats *searchResultsStats, 
 		if err != nil {
 			return nil, err
 		}
+		args.RepoOptions = r.toRepoOptions(args.Query)
 		results, err := r.doResults(ctx, args, jobs)
 		if err != nil {
 			return nil, err // do not cache errors.
@@ -1675,8 +1677,6 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 		optionalWg.Wait()
 		_, _, _, _ = agg.Get()
 	}()
-
-	args.RepoOptions = r.toRepoOptions(args.Query)
 
 	{
 		wg := waitGroup(true)
