@@ -5,11 +5,9 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.." # cd to repo root dir
 
 echo "--- cargo install rust-protobuf"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
-rustup install stable
-rustup default stable
-source "$HOME/.cargo/env"
-cargo install protobuf-codegen
+which cargo || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y)
+which cargo || source "$HOME/.cargo/env"
+which protoc-gen-rust || cargo install protobuf-codegen
 
 echo "--- yarn in root"
 # mutex is necessary since CI runs various yarn installs in parallel
