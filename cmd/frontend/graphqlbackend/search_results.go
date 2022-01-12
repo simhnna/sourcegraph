@@ -1348,6 +1348,7 @@ func searchResultsToFileNodes(matches []result.Match) ([]query.Node, error) {
 func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, args *search.TextParameters, jobs []run.Job) (*SearchResults, error) {
 	start := time.Now()
 	repoOptions := r.toRepoOptions(args.Query)
+	args.RepoOptions = r.toRepoOptions(args.Query)
 	rr, err := r.doResults(ctx, repoOptions, args, jobs)
 
 	// We have an alert for context timeouts and we have a progress
@@ -1534,6 +1535,7 @@ func (r *searchResolver) Stats(ctx context.Context) (stats *searchResultsStats, 
 			return nil, err
 		}
 		repoOptions := r.toRepoOptions(args.Query)
+		args.RepoOptions = r.toRepoOptions(args.Query)
 		results, err := r.doResults(ctx, repoOptions, args, jobs)
 		if err != nil {
 			return nil, err // do not cache errors.
@@ -1685,7 +1687,8 @@ func (r *searchResolver) doResults(ctx context.Context, repoOptions search.RepoO
 			defer wg.Done()
 
 			repositoryResolver := searchrepos.Resolver{DB: r.db}
-			excluded, err := repositoryResolver.Excluded(ctx, repoOptions)
+			// excluded, err := repositoryResolver.Excluded(ctx, repoOptions)
+			excluded, err := repositoryResolver.Excluded(ctx, args.RepoOptions)
 			if err != nil {
 				agg.Error(err)
 				return
@@ -1703,7 +1706,8 @@ func (r *searchResolver) doResults(ctx context.Context, repoOptions search.RepoO
 	}
 
 	repos := &searchrepos.Resolver{
-		Opts: repoOptions,
+		//	Opts: repoOptions,
+		Opts: args.RepoOptions,
 		DB:   r.db,
 	}
 
