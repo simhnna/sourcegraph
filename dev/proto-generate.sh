@@ -5,8 +5,6 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.." # cd to repo root dir
 
 echo "--- cargo install rust-protobuf"
-which cargo || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y)
-which cargo || source "$HOME/.cargo/env"
 which protoc-gen-rust || cargo install protobuf-codegen
 
 echo "--- yarn in root"
