@@ -585,10 +585,10 @@ func toFeatures(flags featureflag.FlagSet) search.Features {
 // where each job contains its separate state for that kind of search and
 // backend. To complete the migration to jobs in phases, `args` is kept
 // backwards compatibility and represents a generic search.
-func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOptions, time.Duration, error) {
+func (r *searchResolver) toSearchInputs(q query.Q) (*search.TextParameters, []run.Job, search.RepoOptions, time.Duration, error) {
 	b, err := query.ToBasicQuery(q)
 	if err != nil {
-		return nil, search.RepoOptions{}, 0, err
+		return nil, nil, search.RepoOptions{}, 0, err
 	}
 	p := search.ToTextPatternInfo(b, r.protocol(), query.Identity)
 
@@ -651,7 +651,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 		if globalSearch {
 			defaultScope, err := zoektutil.DefaultGlobalQueryScope(repoOptions)
 			if err != nil {
-				return nil, search.RepoOptions{}, 0, err
+				return nil, nil, search.RepoOptions{}, 0, err
 			}
 			includePrivate := repoOptions.Visibility == query.Private || repoOptions.Visibility == query.Any
 
@@ -659,7 +659,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 				typ := search.TextRequest
 				zoektQuery, err := search.QueryToZoektQuery(args.PatternInfo, &args.Features, typ)
 				if err != nil {
-					return nil, search.RepoOptions{}, 0, err
+					return nil, nil, search.RepoOptions{}, 0, err
 				}
 
 				globalZoektQuery := zoektutil.NewGlobalZoektQuery(zoektQuery, defaultScope, includePrivate)
@@ -691,7 +691,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 				typ := search.SymbolRequest
 				zoektQuery, err := search.QueryToZoektQuery(args.PatternInfo, &args.Features, typ)
 				if err != nil {
-					return nil, search.RepoOptions{}, 0, err
+					return nil, nil, search.RepoOptions{}, 0, err
 				}
 				globalZoektQuery := zoektutil.NewGlobalZoektQuery(zoektQuery, defaultScope, includePrivate)
 
@@ -723,7 +723,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 				// a zoekt search at all.
 				zoektQuery, err := search.QueryToZoektQuery(args.PatternInfo, &args.Features, typ)
 				if err != nil {
-					return nil, search.RepoOptions{}, 0, err
+					return nil, nil, search.RepoOptions{}, 0, err
 				}
 				zoektArgs := &search.ZoektParameters{
 					Query:          zoektQuery,
@@ -756,7 +756,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 				typ := search.SymbolRequest
 				zoektQuery, err := search.QueryToZoektQuery(args.PatternInfo, &args.Features, typ)
 				if err != nil {
-					return nil, search.RepoOptions{}, 0, err
+					return nil, nil, search.RepoOptions{}, 0, err
 				}
 				zoektArgs := &search.ZoektParameters{
 					Query:          zoektQuery,
@@ -794,7 +794,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 			typ := search.TextRequest
 			zoektQuery, err := search.QueryToZoektQuery(args.PatternInfo, &args.Features, typ)
 			if err != nil {
-				return nil, search.RepoOptions{}, 0, err
+				return nil, nil, search.RepoOptions{}, 0, err
 			}
 			zoektArgs := &search.ZoektParameters{
 				Query:          zoektQuery,
@@ -864,19 +864,19 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 			panic(fmt.Sprintf("unknown job type: %q", j))
 		}
 	}
-	return jobs, repoOptions, args.Timeout, nil
+	return &args, jobs, repoOptions, args.Timeout, nil
 }
 
 // evaluateLeaf performs a single search operation and corresponds to the
 // evaluation of leaf expression in a query.
-func (r *searchResolver) evaluateLeaf(ctx context.Context, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (_ *SearchResults, err error) {
+func (r *searchResolver) evaluateLeaf(ctx context.Context, args *search.TextParameters, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (_ *SearchResults, err error) {
 	tr, ctx := trace.New(ctx, "evaluateLeaf", "")
 	defer func() {
 		tr.SetError(err)
 		tr.Finish()
 	}()
 
-	return r.resultsWithTimeoutSuggestion(ctx, jobs, repoOptions, timeout)
+	return r.resultsWithTimeoutSuggestion(ctx, args, jobs, repoOptions, timeout)
 }
 
 // union returns the union of two sets of search results and merges common search data.
@@ -1060,18 +1060,18 @@ func (r *searchResolver) evaluatePatternExpression(ctx context.Context, q query.
 		case query.Or:
 			return r.evaluateOr(ctx, q)
 		case query.Concat:
-			jobs, repoOptions, timeout, err := r.toSearchInputs(q.ToParseTree())
+			args, jobs, repoOptions, timeout, err := r.toSearchInputs(q.ToParseTree())
 			if err != nil {
 				return &SearchResults{}, err
 			}
-			return r.evaluateLeaf(ctx, jobs, repoOptions, timeout)
+			return r.evaluateLeaf(ctx, args, jobs, repoOptions, timeout)
 		}
 	case query.Pattern:
-		jobs, repoOptions, timeout, err := r.toSearchInputs(q.ToParseTree())
+		args, jobs, repoOptions, timeout, err := r.toSearchInputs(q.ToParseTree())
 		if err != nil {
 			return &SearchResults{}, err
 		}
-		return r.evaluateLeaf(ctx, jobs, repoOptions, timeout)
+		return r.evaluateLeaf(ctx, args, jobs, repoOptions, timeout)
 	case query.Parameter:
 		// evaluatePatternExpression does not process Parameter nodes.
 		return &SearchResults{}, nil
@@ -1083,11 +1083,11 @@ func (r *searchResolver) evaluatePatternExpression(ctx context.Context, q query.
 // evaluate evaluates all expressions of a search query.
 func (r *searchResolver) evaluate(ctx context.Context, q query.Basic) (*SearchResults, error) {
 	if q.Pattern == nil {
-		jobs, repoOptions, timeout, err := r.toSearchInputs(query.ToNodes(q.Parameters))
+		args, jobs, repoOptions, timeout, err := r.toSearchInputs(query.ToNodes(q.Parameters))
 		if err != nil {
 			return &SearchResults{}, err
 		}
-		return r.evaluateLeaf(ctx, jobs, repoOptions, timeout)
+		return r.evaluateLeaf(ctx, args, jobs, repoOptions, timeout)
 	}
 	return r.evaluatePatternExpression(ctx, q)
 }
@@ -1343,9 +1343,9 @@ func searchResultsToFileNodes(matches []result.Match) ([]query.Node, error) {
 // resultsWithTimeoutSuggestion calls doResults, and in case of deadline
 // exceeded returns a search alert with a did-you-mean link for the same
 // query with a longer timeout.
-func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (*SearchResults, error) {
+func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, args *search.TextParameters, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (*SearchResults, error) {
 	start := time.Now()
-	rr, err := r.doResults(ctx, jobs, repoOptions, timeout)
+	rr, err := r.doResults(ctx, args, jobs, repoOptions, timeout)
 
 	// We have an alert for context timeouts and we have a progress
 	// notification for timeouts. We don't want to show both, so we only show
@@ -1526,11 +1526,11 @@ func (r *searchResolver) Stats(ctx context.Context) (stats *searchResultsStats, 
 	for {
 		// Query search results.
 		var err error
-		jobs, repoOptions, timeout, err := r.toSearchInputs(r.Query)
+		args, jobs, repoOptions, timeout, err := r.toSearchInputs(r.Query)
 		if err != nil {
 			return nil, err
 		}
-		results, err := r.doResults(ctx, jobs, repoOptions, timeout)
+		results, err := r.doResults(ctx, args, jobs, repoOptions, timeout)
 		if err != nil {
 			return nil, err // do not cache errors.
 		}
@@ -1621,7 +1621,7 @@ func withResultTypes(args search.TextParameters, forceTypes result.Types) search
 // regardless of what `type:` is specified in the query string.
 //
 // Partial results AND an error may be returned.
-func (r *searchResolver) doResults(ctx context.Context, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (res *SearchResults, err error) {
+func (r *searchResolver) doResults(ctx context.Context, args *search.TextParameters, jobs []run.Job, repoOptions search.RepoOptions, timeout time.Duration) (res *SearchResults, err error) {
 	tr, ctx := trace.New(ctx, "doResults", r.rawQuery())
 	defer func() {
 		tr.SetError(err)

@@ -14,7 +14,6 @@ import (
 	mockrequire "github.com/derision-test/go-mockgen/testutil/require"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/zoekt"
-	"github.com/hexops/autogold"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/atomic"
 
@@ -886,6 +885,7 @@ func TestSearchContext(t *testing.T) {
 	}
 }
 
+/*
 func TestIsGlobalSearch(t *testing.T) {
 	orig := envvar.SourcegraphDotComMode()
 	envvar.MockSourcegraphDotComMode(true)
@@ -914,6 +914,7 @@ func TestIsGlobalSearch(t *testing.T) {
 	autogold.Want("nonglobal repo", "RepoSubsetText,Repo").Equal(t, test(`foo repo:sourcegraph/sourcegraph`))
 	autogold.Want("nonglobal repo contains", "RepoSubsetText,Repo").Equal(t, test(`foo repo:contains(bar)`))
 }
+*/
 
 func TestZeroElapsedMilliseconds(t *testing.T) {
 	r := &SearchResultsResolver{}
