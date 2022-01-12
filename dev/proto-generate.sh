@@ -6,7 +6,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." # cd to repo root dir
 
 echo "--- cargo install rust-protobuf"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
-export PATH="$PATH:$HOME/.cargo/bin"
+rustup install stable
+rustup default stable
+source "$HOME/.cargo/env"
 cargo install protobuf-codegen
 
 echo "--- yarn in root"
