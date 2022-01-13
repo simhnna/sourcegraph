@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import React, { useCallback } from 'react'
 
+import { Select } from '@sourcegraph/wildcard'
+
 import { RadioButtons } from '../RadioButtons'
 
 import styles from './FilterControl.module.scss'
@@ -87,7 +89,9 @@ export const FilterControl: React.FunctionComponent<FilterControlProps> = ({
                         >
                             <div className="d-inline-flex flex-row mr-3 align-items-baseline">
                                 <p className="text-xl-center text-nowrap mr-2">{filter.label}:</p>
-                                <select
+                                <Select
+                                    label={filter.label}
+                                    id=""
                                     className="form-control"
                                     name={filter.id}
                                     onChange={event => onChange(filter, event.currentTarget.value)}
@@ -95,7 +99,7 @@ export const FilterControl: React.FunctionComponent<FilterControlProps> = ({
                                     {filter.values.map(value => (
                                         <option key={value.value} value={value.value} label={value.label} />
                                     ))}
-                                </select>
+                                </Select>
                             </div>
                         </div>
                     )

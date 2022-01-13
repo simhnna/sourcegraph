@@ -9,7 +9,7 @@ import { Form } from '@sourcegraph/branded/src/components/Form'
 import { Toggle } from '@sourcegraph/branded/src/components/Toggle'
 import { asError, isErrorLike } from '@sourcegraph/common'
 import { useEventObservable } from '@sourcegraph/shared/src/util/useObservable'
-import { Container, Button } from '@sourcegraph/wildcard'
+import { Container, Button, Select } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../../auth'
 import { CodeMonitorFields } from '../../../graphql-operations'
@@ -180,8 +180,8 @@ export const CodeMonitorForm: React.FunctionComponent<CodeMonitorFormProps> = ({
                         </small>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="code-monitor-form-owner">Owner</label>
-                        <select
+                        <Select
+                            label="Owner"
                             id="code-monitor-form-owner"
                             className={classNames('form-control mb-2 w-auto', styles.ownerDropdown)}
                             disabled={true}
@@ -189,7 +189,7 @@ export const CodeMonitorForm: React.FunctionComponent<CodeMonitorFormProps> = ({
                             <option value={authenticatedUser.displayName || authenticatedUser.username}>
                                 {authenticatedUser.username}
                             </option>
-                        </select>
+                        </Select>
                         <small className="text-muted">
                             Event history and configuration will not be shared. Code monitoring currently only supports
                             individual owners.

@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import React, { useCallback } from 'react'
 
 import { SettingsOrgSubject, SettingsUserSubject } from '@sourcegraph/shared/src/settings/settings'
+import { Select } from '@sourcegraph/wildcard'
 
 import styles from './NamespaceSelector.module.scss'
 
@@ -40,10 +41,8 @@ export const NamespaceSelector: React.FunctionComponent<NamespaceSelectorProps> 
 
     return (
         <div className="form-group">
-            <label className="text-nowrap mb-2" htmlFor={NAMESPACE_SELECTOR_ID}>
-                <strong>Namespace:</strong>
-            </label>
-            <select
+            <Select
+                label="Namespace:"
                 className={classNames(styles.namespaceSelector, 'form-control')}
                 id={NAMESPACE_SELECTOR_ID}
                 value={selectedNamespace}
@@ -54,7 +53,7 @@ export const NamespaceSelector: React.FunctionComponent<NamespaceSelectorProps> 
                         {getNamespaceDisplayName(namespace)}
                     </option>
                 ))}
-            </select>
+            </Select>
         </div>
     )
 }

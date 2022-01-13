@@ -11,6 +11,7 @@ import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Tooltip } f
 import { KeyboardShortcut } from '@sourcegraph/shared/src/keyboardShortcuts'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { useTimeoutManager } from '@sourcegraph/shared/src/util/useTimeoutManager'
+import { Select } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../auth'
 import { KEYBOARD_SHORTCUT_SHOW_HELP } from '../keyboardShortcuts/keyboardShortcuts'
@@ -179,7 +180,9 @@ export const UserNavItem: React.FunctionComponent<UserNavItemProps> = props => {
                 <div className="px-2 py-1">
                     <div className="d-flex align-items-center">
                         <div className="mr-2">Theme</div>
-                        <select
+                        <Select
+                            id=""
+                            label="Theme"
                             className="custom-select custom-select-sm test-theme-toggle"
                             onChange={onThemeChange}
                             value={props.themePreference}
@@ -187,7 +190,7 @@ export const UserNavItem: React.FunctionComponent<UserNavItemProps> = props => {
                             <option value={ThemePreference.Light}>Light</option>
                             <option value={ThemePreference.Dark}>Dark</option>
                             <option value={ThemePreference.System}>System</option>
-                        </select>
+                        </Select>
                     </div>
                     {props.themePreference === ThemePreference.System && !supportsSystemTheme && (
                         <div className="text-wrap">

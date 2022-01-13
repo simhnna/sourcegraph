@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import React, { FunctionComponent, useState } from 'react'
 
+import { Select } from '@sourcegraph/wildcard'
+
 import { defaultDurationValues } from '../shared'
 
 export interface DurationSelectProps {
@@ -30,7 +32,8 @@ export const DurationSelect: FunctionComponent<DurationSelectProps> = ({
 
     return (
         <div className="input-group">
-            <select
+            <Select
+                label=""
                 id={id}
                 className={classNames('form-control', className)}
                 value={isCustom ? 'custom' : value || undefined}
@@ -51,7 +54,7 @@ export const DurationSelect: FunctionComponent<DurationSelectProps> = ({
                 ))}
 
                 <option value="custom">Custom</option>
-            </select>
+            </Select>
 
             {isCustom && (
                 <>

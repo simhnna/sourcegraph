@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
+import { Select } from '@sourcegraph/wildcard'
+
 import { GitObjectType } from '../../../../graphql-operations'
 
 export interface GitTypeSelectorProps {
@@ -10,9 +12,9 @@ export interface GitTypeSelectorProps {
 
 export const GitTypeSelector: FunctionComponent<GitTypeSelectorProps> = ({ type, setType, disabled }) => (
     <div className="form-group">
-        <label htmlFor="type">Type</label>
-        <select
+        <Select
             id="type"
+            label="Type"
             className="form-control"
             value={type}
             onChange={({ target: { value } }) => setType(value as GitObjectType)}
@@ -22,7 +24,7 @@ export const GitTypeSelector: FunctionComponent<GitTypeSelectorProps> = ({ type,
             <option value={GitObjectType.GIT_COMMIT}>HEAD</option>
             <option value={GitObjectType.GIT_TAG}>Tag</option>
             <option value={GitObjectType.GIT_TREE}>Branch</option>
-        </select>
+        </Select>
         <small className="form-text text-muted">Required.</small>
     </div>
 )

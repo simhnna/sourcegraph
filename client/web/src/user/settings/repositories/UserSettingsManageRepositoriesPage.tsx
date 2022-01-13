@@ -8,7 +8,15 @@ import { Form } from '@sourcegraph/branded/src/components/Form'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/common'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
-import { ProductStatusBadge, Container, PageSelector, RadioButton, TextArea, Button } from '@sourcegraph/wildcard'
+import {
+    ProductStatusBadge,
+    Container,
+    PageSelector,
+    RadioButton,
+    TextArea,
+    Select,
+    Button,
+} from '@sourcegraph/wildcard'
 
 import { ALLOW_NAVIGATION, AwayPrompt } from '../../../components/AwayPrompt'
 import {
@@ -618,7 +626,7 @@ export const UserSettingsManageRepositoriesPage: React.FunctionComponent<Props> 
         <Form onSubmit={preventSubmit} className="w-100 d-inline-flex justify-content-between flex-row mt-3">
             <div className="d-inline-flex flex-row mr-3 align-items-baseline">
                 <p className="text-xl-center text-nowrap mr-2">Code Host:</p>
-                <select
+                <Select
                     className="form-control"
                     name="code-host"
                     aria-label="select code host type"
@@ -628,7 +636,7 @@ export const UserSettingsManageRepositoriesPage: React.FunctionComponent<Props> 
                     {codeHosts.hosts.map(value => (
                         <option key={value.id} value={value.id} label={value.displayName} />
                     ))}
-                </select>
+                </Select>
             </div>
             <FilterInput
                 className="form-control"

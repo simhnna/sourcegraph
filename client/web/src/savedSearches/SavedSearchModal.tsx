@@ -4,7 +4,7 @@ import * as H from 'history'
 import * as React from 'react'
 
 import { Form } from '@sourcegraph/branded/src/components/Form'
-import { Button } from '@sourcegraph/wildcard'
+import { Button, Select } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../auth'
 import { SearchPatternTypeProps } from '../search'
@@ -61,7 +61,9 @@ export class SavedSearchModal extends React.Component<Props, State> {
                     <Form onSubmit={this.onSubmit} className="test-saved-search-modal">
                         <h3 id={MODAL_LABEL_ID}>Save search query to: </h3>
                         <div className="form-group">
-                            <select
+                            <Select
+                                id=""
+                                label="Organization"
                                 onChange={this.onLocationChange}
                                 className={classNames(styles.select, 'form-control')}
                             >
@@ -70,11 +72,13 @@ export class SavedSearchModal extends React.Component<Props, State> {
                                     this.props.authenticatedUser.organizations.nodes.length > 0 && (
                                         <option value={UserOrOrg.Org}>Organization</option>
                                     )}
-                            </select>
+                            </Select>
                             {this.props.authenticatedUser.organizations &&
                                 this.props.authenticatedUser.organizations.nodes.length > 0 &&
                                 this.state.saveLocation === UserOrOrg.Org && (
-                                    <select
+                                    <Select
+                                        id=""
+                                        label="Select an organization"
                                         onChange={this.onOrganizationChange}
                                         placeholder="Select an organization"
                                         className={classNames(styles.select, 'form-control')}
@@ -87,7 +91,7 @@ export class SavedSearchModal extends React.Component<Props, State> {
                                                 {org.displayName ? org.displayName : org.name}
                                             </option>
                                         ))}
-                                    </select>
+                                    </Select>
                                 )}
                         </div>
                         <Button

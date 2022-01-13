@@ -4,6 +4,7 @@ import React, { useState, FunctionComponent, useCallback } from 'react'
 import { Form } from '@sourcegraph/branded/src/components/Form'
 import { asError, ErrorLike, isErrorLike } from '@sourcegraph/common'
 import { gql, dataOrThrowErrors } from '@sourcegraph/shared/src/graphql/graphql'
+import { Select } from '@sourcegraph/wildcard'
 
 import { requestGraphQL } from '../../../backend/graphql'
 import { ErrorAlert } from '../../../components/alerts'
@@ -72,9 +73,9 @@ export const SetUserPrimaryEmailForm: FunctionComponent<Props> = ({ user, emails
 
     return (
         <div className={classNames('add-user-email-form', className)}>
-            <label htmlFor="setUserPrimaryEmailForm-email">Primary email address</label>
             <Form className="form-inline" onSubmit={onSubmit}>
-                <select
+                <Select
+                    label="Primary email address"
                     id="setUserPrimaryEmailForm-email"
                     className="custom-select form-control-lg mr-sm-2"
                     value={primaryEmail}
@@ -87,7 +88,7 @@ export const SetUserPrimaryEmailForm: FunctionComponent<Props> = ({ user, emails
                             {email}
                         </option>
                     ))}
-                </select>
+                </Select>
                 <LoaderButton
                     loading={statusOrError === 'loading'}
                     label="Save"

@@ -3,6 +3,7 @@ import * as React from 'react'
 
 import { ErrorLike, isErrorLike } from '@sourcegraph/common'
 import { Scalars } from '@sourcegraph/shared/src/graphql-operations'
+import { Select } from '@sourcegraph/wildcard'
 
 import { ErrorAlert } from '../../../components/alerts'
 import {
@@ -25,11 +26,11 @@ export const RegistryPublisherFormGroup: React.FunctionComponent<{
     onChange?: React.FormEventHandler<HTMLSelectElement>
 }> = ({ className = '', value, publishersOrError, disabled, onChange }) => (
     <div className={classNames('form-group', className)}>
-        <label htmlFor="extension-registry-create-extension-page__publisher">Publisher</label>
         {isErrorLike(publishersOrError) ? (
             <ErrorAlert error={publishersOrError} />
         ) : (
-            <select
+            <Select
+                label="Publisher"
                 id="extension-registry-create-extension-page__publisher"
                 className="form-control"
                 onChange={onChange}
@@ -46,7 +47,7 @@ export const RegistryPublisherFormGroup: React.FunctionComponent<{
                         </option>
                     ))
                 )}
-            </select>
+            </Select>
         )}
         <small className="form-help text-muted">
             The owner of this extension. This can't be changed after creation.
