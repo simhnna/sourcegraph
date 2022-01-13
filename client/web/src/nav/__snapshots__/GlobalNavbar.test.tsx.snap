@@ -27,7 +27,7 @@ exports[`GlobalNavbar default 1`] = `
     >
       <button
         aria-label="Sections Navigation"
-        class="btn menuButton"
+        class="btn btnInline menuButton"
         type="button"
       >
         <svg
@@ -223,13 +223,13 @@ exports[`GlobalNavbar default 1`] = `
       >
         <div>
           <a
-            class="btn btn-outline-secondary btn-sm mr-1"
+            class="btn btnOutlineSecondary btnSm btnInline mr-1"
             to="/sign-in"
           >
             Log in
           </a>
           <a
-            class="btn btn-sm signUp"
+            class="btn btnSm btnInline signUp"
             to="/sign-up"
           >
             Sign up
@@ -290,7 +290,7 @@ exports[`GlobalNavbar low-profile 1`] = `
     >
       <button
         aria-label="Sections Navigation"
-        class="btn menuButton"
+        class="btn btnInline menuButton"
         type="button"
       >
         <svg
@@ -486,13 +486,13 @@ exports[`GlobalNavbar low-profile 1`] = `
       >
         <div>
           <a
-            class="btn btn-outline-secondary btn-sm mr-1"
+            class="btn btnOutlineSecondary btnSm btnInline mr-1"
             to="/sign-in"
           >
             Log in
           </a>
           <a
-            class="btn btn-sm signUp"
+            class="btn btnSm btnInline signUp"
             to="/sign-up"
           >
             Sign up

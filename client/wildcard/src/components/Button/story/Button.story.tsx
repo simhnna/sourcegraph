@@ -72,5 +72,12 @@ export const AllButtons: Story = () => (
         </Button>
         <p>Buttons can be made to look like links.</p>
         <ButtonVariants variants={['link']} />
+        <h2>Button Display</h2>
+        <Button className="mb-3" size="sm" variant="secondary" display="inline">
+            Inline
+        </Button>
+        <Button size="sm" variant="secondary" display="block">
+            Block
+        </Button>
     </>
 )

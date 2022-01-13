@@ -12,56 +12,56 @@ exports[`ExtensionsQueryInputToolbar renders 1`] = `
         Categories
       </h3>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="All"
         type="button"
       >
         All
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="External services"
         type="button"
       >
         External services
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="Reports and stats"
         type="button"
       >
         Reports and stats
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="Linters"
         type="button"
       >
         Linters
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="Code editors"
         type="button"
       >
         Code editors
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100 btn-primary"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100 btn-primary"
         data-test-extension-category="Code analysis"
         type="button"
       >
         Code analysis
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="Programming languages"
         type="button"
       >
         Programming languages
       </button>
       <button
-        class="btn text-left sidebar__link--inactive d-flex w-100"
+        class="btn btnInline text-left sidebar__link--inactive d-flex w-100"
         data-test-extension-category="Other"
         type="button"
       >
