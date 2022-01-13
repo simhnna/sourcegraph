@@ -144,14 +144,19 @@ func newGithubSource(svc *types.ExternalService, c *schema.GitHubConnection, cf 
 	)
 
 	useGitHubApp := false
-	appConfig := conf.SiteConfig().Dotcom.GithubAppCloud
-	if envvar.SourcegraphDotComMode() && appConfig.AppID != "" && c.GithubAppInstallationID != "" {
-		privateKey, err := base64.StdEncoding.DecodeString(appConfig.PrivateKey)
+	dotcomConfig := conf.SiteConfig().Dotcom
+	if envvar.SourcegraphDotComMode() &&
+		c.GithubAppInstallationID != "" &&
+		dotcomConfig != nil &&
+		dotcomConfig.GithubAppCloud != nil &&
+		dotcomConfig.GithubAppCloud.AppID == "" &&
+		dotcomConfig.GithubAppCloud.PrivateKey != "" {
+		privateKey, err := base64.StdEncoding.DecodeString(dotcomConfig.GithubAppCloud.PrivateKey)
 		if err != nil {
 			return nil, errors.Wrap(err, "decode private key")
 		}
 
-		auther, err := auth.NewOAuthBearerTokenWithGitHubApp(appConfig.AppID, privateKey)
+		auther, err := auth.NewOAuthBearerTokenWithGitHubApp(dotcomConfig.GithubAppCloud.AppID, privateKey)
 		if err != nil {
 			return nil, errors.Wrap(err, "new authenticator with GitHub App")
 		}
@@ -166,6 +171,7 @@ func newGithubSource(svc *types.ExternalService, c *schema.GitHubConnection, cf 
 		if err != nil {
 			return nil, errors.Wrap(err, "parse installation ID")
 		}
+
 		token, err := client.CreateAppInstallationAccessToken(context.Background(), installationID)
 		if err != nil {
 			return nil, errors.Wrap(err, "create app installation access token")
@@ -173,6 +179,7 @@ func newGithubSource(svc *types.ExternalService, c *schema.GitHubConnection, cf 
 		if token.Token == nil {
 			return nil, errors.New("empty token returned")
 		}
+
 		auther = &auth.OAuthBearerToken{Token: *token.Token}
 		v3Client = github.NewV3Client(apiURL, auther, cli)
 		v4Client = github.NewV4Client(apiURL, auther, cli)
