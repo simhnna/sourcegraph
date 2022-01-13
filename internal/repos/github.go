@@ -3,9 +3,11 @@ package repos
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -14,6 +16,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
+	"github.com/sourcegraph/sourcegraph/cmd/frontend/envvar"
+	"github.com/sourcegraph/sourcegraph/internal/conf"
 	"github.com/sourcegraph/sourcegraph/internal/conf/reposource"
 	"github.com/sourcegraph/sourcegraph/internal/extsvc"
 	"github.com/sourcegraph/sourcegraph/internal/extsvc/auth"
@@ -45,6 +49,10 @@ type GithubSource struct {
 	// originalHostname is the hostname of config.Url (differs from client APIURL, whose host is api.github.com
 	// for an originalHostname of github.com).
 	originalHostname string
+
+	// useGitHubApp indicate whether clients are authenticated through GitHub App,
+	// which may need to hit different API endpoints from regular RESTful API.
+	useGitHubApp bool
 }
 
 var (
@@ -135,6 +143,44 @@ func newGithubSource(svc *types.ExternalService, c *schema.GitHubConnection, cf 
 		searchClient = github.NewV3SearchClient(apiURL, token, cli)
 	)
 
+	useGitHubApp := false
+	appConfig := conf.SiteConfig().Dotcom.GithubAppCloud
+	if envvar.SourcegraphDotComMode() && appConfig.AppID != "" && c.GithubAppInstallationID != "" {
+		privateKey, err := base64.StdEncoding.DecodeString(appConfig.PrivateKey)
+		if err != nil {
+			return nil, errors.Wrap(err, "decode private key")
+		}
+
+		auther, err := auth.NewOAuthBearerTokenWithGitHubApp(appConfig.AppID, privateKey)
+		if err != nil {
+			return nil, errors.Wrap(err, "new authenticator with GitHub App")
+		}
+
+		apiURL, err := url.Parse("https://github.com")
+		if err != nil {
+			return nil, errors.Wrap(err, "parse github.com")
+		}
+		client := github.NewV3Client(apiURL, auther, nil)
+
+		installationID, err := strconv.ParseInt(c.GithubAppInstallationID, 10, 64)
+		if err != nil {
+			return nil, errors.Wrap(err, "parse installation ID")
+		}
+		token, err := client.CreateAppInstallationAccessToken(context.Background(), installationID)
+		if err != nil {
+			return nil, errors.Wrap(err, "create app installation access token")
+		}
+		if token.Token == nil {
+			return nil, errors.New("empty token returned")
+		}
+		auther = &auth.OAuthBearerToken{Token: *token.Token}
+		v3Client = github.NewV3Client(apiURL, auther, cli)
+		v4Client = github.NewV4Client(apiURL, auther, cli)
+		fmt.Println("newGithubSource token", *token.Token) // called too often while visiting https://sourcegraph.test:3443/organizations/test-org1/settings/repositories
+
+		useGitHubApp = true
+	}
+
 	if svc.IsSiteOwned() {
 		for resource, monitor := range map[string]*ratelimit.Monitor{
 			"rest":    v3Client.RateLimitMonitor(),
@@ -167,6 +213,7 @@ func newGithubSource(svc *types.ExternalService, c *schema.GitHubConnection, cf 
 		v4Client:         v4Client,
 		searchClient:     searchClient,
 		originalHostname: originalHostname,
+		useGitHubApp:     useGitHubApp,
 	}, nil
 }
 
@@ -554,6 +601,9 @@ func (s *GithubSource) listAffiliated(ctx context.Context, results chan *githubR
 				"retryAfter", retry,
 			)
 		}()
+		if s.useGitHubApp {
+			return s.v3Client.ListInstallationRepositories(ctx, page)
+		}
 		return s.v3Client.ListAffiliatedRepositories(ctx, github.VisibilityAll, page)
 	})
 }
@@ -862,10 +912,17 @@ func (s *GithubSource) AffiliatedRepositories(ctx context.Context) ([]types.Code
 			return nil, errors.Errorf("context canceled")
 		default:
 		}
-		repos, hasNextPage, _, err = s.v3Client.ListAffiliatedRepositories(ctx, github.VisibilityAll, page)
+
+		var repos []*github.Repository
+		if s.useGitHubApp {
+			repos, hasNextPage, _, err = s.v3Client.ListInstallationRepositories(ctx, page)
+		} else {
+			repos, hasNextPage, _, err = s.v3Client.ListAffiliatedRepositories(ctx, github.VisibilityAll, page)
+		}
 		if err != nil {
 			return nil, err
 		}
+
 		for _, repo := range repos {
 			out = append(out, types.CodeHostRepository{
 				Name:       repo.NameWithOwner,
