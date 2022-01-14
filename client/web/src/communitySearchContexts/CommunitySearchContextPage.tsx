@@ -8,6 +8,7 @@ import React, { useEffect, useMemo } from 'react'
 import { catchError, startWith } from 'rxjs/operators'
 
 import { asError, isErrorLike } from '@sourcegraph/common'
+import { SyntaxHighlightedSearchQuery } from '@sourcegraph/search-ui'
 import { ActivationProps } from '@sourcegraph/shared/src/components/activation/Activation'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { displayRepoName } from '@sourcegraph/shared/src/components/RepoFileLink'
@@ -18,7 +19,6 @@ import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryServi
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 import { PageTitle } from '@sourcegraph/web/src/components/PageTitle'
-import { SyntaxHighlightedSearchQuery } from '@sourcegraph/web/src/components/SyntaxHighlightedSearchQuery'
 import { Button } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../auth'
