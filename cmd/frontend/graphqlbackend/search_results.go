@@ -622,9 +622,6 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 	args = withResultTypes(args, forceResultTypes)
 	args = withMode(args, r.PatternType)
 	repoOptions := r.toRepoOptions(args.Query)
-	// explicitly populate RepoOptions field in args, because the repo search job
-	// still relies on all of args. In time it should depend only on the bits it truly needs.
-	args.RepoOptions = repoOptions
 
 	var jobs []run.Job
 	{
@@ -827,6 +824,9 @@ func (r *searchResolver) toSearchInputs(q query.Q) ([]run.Job, search.RepoOption
 		}
 
 		if args.ResultTypes.Has(result.TypeRepo) {
+			// explicitly populate RepoOptions field in args, because the repo search job
+			// still relies on all of args. In time it should depend only on the bits it truly needs.
+			args.RepoOptions = repoOptions
 			jobs = append(jobs, &run.RepoSearch{
 				Args:  &args,
 				Limit: r.MaxResults(),
