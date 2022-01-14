@@ -13,7 +13,6 @@ import (
 	"github.com/sourcegraph/sourcegraph/internal/database"
 	"github.com/sourcegraph/sourcegraph/internal/goroutine"
 	"github.com/sourcegraph/sourcegraph/internal/inventory"
-	"github.com/sourcegraph/sourcegraph/internal/search"
 	"github.com/sourcegraph/sourcegraph/internal/search/result"
 	"github.com/sourcegraph/sourcegraph/internal/types"
 	"github.com/sourcegraph/sourcegraph/internal/vcs/git"
@@ -44,7 +43,9 @@ func (srs *searchResultsStats) getResults(ctx context.Context) (*SearchResultsRe
 			srs.srsErr = err
 			return
 		}
-		results, err := srs.sr.doResults(ctx, search.RepoOptions{}, args, jobs)
+		repoOptions := srs.sr.toRepoOptions(args.Query)
+		timeout := args.Timeout
+		results, err := srs.sr.doResults(ctx, timeout, repoOptions, args, jobs)
 		if err != nil {
 			srs.srsErr = err
 			return

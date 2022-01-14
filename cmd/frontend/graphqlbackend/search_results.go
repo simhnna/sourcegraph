@@ -1464,8 +1464,9 @@ func searchResultsToFileNodes(matches []result.Match) ([]query.Node, error) {
 func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, args *search.TextParameters, jobs []run.Job) (*SearchResults, error) {
 	start := time.Now()
 	repoOptions := r.toRepoOptions(args.Query)
-	// args.RepoOptions = r.toRepoOptions(args.Query)
-	rr, err := r.doResults(ctx, repoOptions, args, jobs)
+	args.RepoOptions = r.toRepoOptions(args.Query)
+	timeout := args.Timeout
+	rr, err := r.doResults(ctx, timeout, repoOptions, args, jobs)
 
 	// We have an alert for context timeouts and we have a progress
 	// notification for timeouts. We don't want to show both, so we only show
@@ -1652,7 +1653,8 @@ func (r *searchResolver) Stats(ctx context.Context) (stats *searchResultsStats, 
 		}
 		repoOptions := r.toRepoOptions(args.Query)
 		args.RepoOptions = r.toRepoOptions(args.Query)
-		results, err := r.doResults(ctx, repoOptions, args, jobs)
+		timeout := args.Timeout
+		results, err := r.doResults(ctx, timeout, repoOptions, args, jobs)
 		if err != nil {
 			return nil, err // do not cache errors.
 		}
@@ -1743,7 +1745,7 @@ func withResultTypes(args search.TextParameters, forceTypes result.Types) search
 // regardless of what `type:` is specified in the query string.
 //
 // Partial results AND an error may be returned.
-func (r *searchResolver) doResults(ctx context.Context, repoOptions search.RepoOptions, args *search.TextParameters, jobs []run.Job) (res *SearchResults, err error) {
+func (r *searchResolver) doResults(ctx context.Context, timeout time.Duration, repoOptions search.RepoOptions, args *search.TextParameters, jobs []run.Job) (res *SearchResults, err error) {
 	tr, ctx := trace.New(ctx, "doResults", r.rawQuery())
 	defer func() {
 		tr.SetError(err)
@@ -1755,11 +1757,10 @@ func (r *searchResolver) doResults(ctx context.Context, repoOptions search.RepoO
 
 	start := time.Now()
 
-	ctx, cancel := context.WithTimeout(ctx, args.Timeout)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
 	limit := r.MaxResults()
-	tr.LazyPrintf("resultTypes: %s", args.ResultTypes)
 	var (
 		requiredWg sync.WaitGroup
 		optionalWg sync.WaitGroup
