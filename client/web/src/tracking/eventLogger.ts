@@ -263,9 +263,15 @@ function pageViewQueryParameters(url: string): EventQueryParameters {
         eventLogger.log('CodeMonitorEmailLinkClicked')
     }
 
-    return {
+    const parameters = {
         utm_campaign: parsedUrl.searchParams.get('utm_campaign') || undefined,
         utm_source: parsedUrl.searchParams.get('utm_source') || undefined,
         utm_medium: parsedUrl.searchParams.get('utm_medium') || undefined,
     }
+
+    if (typeof utmSource === 'string' && utmSource !== '') {
+        eventLogger.log('UTMCampaignClicked', null, parameters)
+    }
+
+    return parameters
 }
