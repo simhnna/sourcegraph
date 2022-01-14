@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/cockroachdb/errors"
+	"github.com/google/go-cmp/cmp"
 	"github.com/inconshreveable/log15"
 	"github.com/neelance/parallel"
 	"github.com/opentracing/opentracing-go"
@@ -1462,7 +1463,9 @@ func searchResultsToFileNodes(matches []result.Match) ([]query.Node, error) {
 // query with a longer timeout.
 func (r *searchResolver) resultsWithTimeoutSuggestion(ctx context.Context, args *search.TextParameters, jobs []run.Job) (*SearchResults, error) {
 	start := time.Now()
-	rr, err := r.doResults(ctx, args, jobs)
+	repoOptions := r.toRepoOptions(args.Query)
+	args.RepoOptions = r.toRepoOptions(args.Query)
+	rr, err := r.doResults(ctx, repoOptions, args, jobs)
 
 	// We have an alert for context timeouts and we have a progress
 	// notification for timeouts. We don't want to show both, so we only show
@@ -1647,7 +1650,9 @@ func (r *searchResolver) Stats(ctx context.Context) (stats *searchResultsStats, 
 		if err != nil {
 			return nil, err
 		}
-		results, err := r.doResults(ctx, args, jobs)
+		repoOptions := r.toRepoOptions(args.Query)
+		args.RepoOptions = r.toRepoOptions(args.Query)
+		results, err := r.doResults(ctx, repoOptions, args, jobs)
 		if err != nil {
 			return nil, err // do not cache errors.
 		}
@@ -1738,7 +1743,7 @@ func withResultTypes(args search.TextParameters, forceTypes result.Types) search
 // regardless of what `type:` is specified in the query string.
 //
 // Partial results AND an error may be returned.
-func (r *searchResolver) doResults(ctx context.Context, args *search.TextParameters, jobs []run.Job) (res *SearchResults, err error) {
+func (r *searchResolver) doResults(ctx context.Context, repoOptions search.RepoOptions, args *search.TextParameters, jobs []run.Job) (res *SearchResults, err error) {
 	tr, ctx := trace.New(ctx, "doResults", r.rawQuery())
 	defer func() {
 		tr.SetError(err)
@@ -1793,8 +1798,7 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 		_, _, _, _ = agg.Get()
 	}()
 
-	args.RepoOptions = r.toRepoOptions(args.Query)
-
+	repoOptionsCopy := repoOptions
 	{
 		wg := waitGroup(true)
 		wg.Add(1)
@@ -1802,7 +1806,11 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 			defer wg.Done()
 
 			repositoryResolver := searchrepos.Resolver{DB: r.db}
-			excluded, err := repositoryResolver.Excluded(ctx, args.RepoOptions)
+			// excluded, err := repositoryResolver.Excluded(ctx, repoOptions)
+			diff := cmp.Diff(args.RepoOptions, repoOptions)
+			log15.Info("routine", "diff", diff)
+			// excluded, err := repositoryResolver.Excluded(ctx, args.RepoOptions)
+			excluded, err := repositoryResolver.Excluded(ctx, repoOptionsCopy)
 			if err != nil {
 				agg.Error(err)
 				return
@@ -1819,9 +1827,12 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 		})
 	}
 
+	diff := cmp.Diff(args.RepoOptions, repoOptions)
+	log15.Info("main", "diff", diff)
 	repos := &searchrepos.Resolver{
-		Opts: args.RepoOptions,
-		DB:   r.db,
+		Opts: repoOptions,
+		// Opts: args.RepoOptions,
+		DB: r.db,
 	}
 
 	// Start all specific search jobs, if any.
