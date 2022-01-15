@@ -6,12 +6,14 @@ import { Observable, of, throwError } from 'rxjs'
 import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators'
 
 import { asError, createAggregateError, isErrorLike } from '@sourcegraph/common'
+import { SearchContextProps } from '@sourcegraph/search'
 import {
     Scalars,
     SearchContextInput,
     SearchContextRepositoryRevisionsInput,
     SearchPatternType,
 } from '@sourcegraph/shared/src/graphql-operations'
+import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { ISearchContext, ISearchContextRepositoryRevisionsInput } from '@sourcegraph/shared/src/schema'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
@@ -20,7 +22,6 @@ import { ALLOW_NAVIGATION, AwayPrompt } from '@sourcegraph/web/src/components/Aw
 import { Container, Button, RadioButton, TextArea } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../auth'
-import { SearchContextProps } from '../../search'
 import { LazyMonacoQueryInput } from '../../search/input/LazyMonacoQueryInput'
 import { getExperimentalFeatures } from '../../stores'
 
@@ -94,7 +95,8 @@ export interface SearchContextFormProps
     extends RouteComponentProps,
         ThemeProps,
         TelemetryProps,
-        Pick<SearchContextProps, 'deleteSearchContext'> {
+        Pick<SearchContextProps, 'deleteSearchContext'>,
+        PlatformContextProps<'requestGraphQL'> {
     searchContext?: ISearchContext
     query?: string
     authenticatedUser: AuthenticatedUser
@@ -121,7 +123,14 @@ type RepositoriesParseResult =
       }
 
 export const SearchContextForm: React.FunctionComponent<SearchContextFormProps> = props => {
-    const { authenticatedUser, onSubmit, searchContext, deleteSearchContext, isSourcegraphDotCom } = props
+    const {
+        authenticatedUser,
+        onSubmit,
+        searchContext,
+        deleteSearchContext,
+        isSourcegraphDotCom,
+        platformContext,
+    } = props
     const history = useHistory()
     const experimentalFeatures = getExperimentalFeatures()
 
@@ -445,6 +454,7 @@ export const SearchContextForm: React.FunctionComponent<SearchContextFormProps> 
                             deleteSearchContext={deleteSearchContext}
                             searchContext={searchContext}
                             toggleDeleteModal={toggleDeleteModal}
+                            platformContext={platformContext}
                         />
                     </>
                 )}

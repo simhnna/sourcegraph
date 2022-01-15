@@ -7,6 +7,7 @@ import ExternalLinkIcon from 'mdi-react/ExternalLinkIcon'
 import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 import { Collapse } from 'reactstrap'
 
+import { QueryChangeSource } from '@sourcegraph/search'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { Markdown } from '@sourcegraph/shared/src/components/Markdown'
 import { SearchPatternType } from '@sourcegraph/shared/src/graphql-operations'
@@ -18,7 +19,6 @@ import { useLocalStorage } from '@sourcegraph/shared/src/util/useLocalStorage'
 import { Button } from '@sourcegraph/wildcard'
 
 import { NavbarQueryState } from '../../../stores/navbarSearchQueryState'
-import { QueryChangeSource } from '../../helpers'
 import { createQueryExampleFromString, updateQueryWithFilterAndExample, QueryExample } from '../../helpers/queryExample'
 
 import styles from './SearchReference.module.scss'
