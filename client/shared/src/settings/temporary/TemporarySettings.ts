@@ -1,7 +1,10 @@
 import { Optional } from 'utility-types'
 
-import { SectionID as NoResultsSectionID } from '../../search/results/NoResultsPage'
-import { SectionID } from '../../search/results/sidebar/SearchSidebar'
+import { SectionID, NoResultsSectionID } from './searchSidebar'
+
+// Temporary settings must be defined here to prevent circular dependency (search-ui <-> shared)
+// (create a `searchSidebar.ts` file in the temporary settings directory.)
+// FIRST try to make `useTemporarySettings` generic so it can be extended in with search-ui types in components.
 
 /**
  * Schema for temporary settings.
