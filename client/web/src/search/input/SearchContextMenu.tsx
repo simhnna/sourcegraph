@@ -15,32 +15,43 @@ import { catchError, debounce, switchMap, tap } from 'rxjs/operators'
 
 import { asError, isErrorLike } from '@sourcegraph/common'
 import { SearchContextInputProps, SearchContextFields } from '@sourcegraph/search'
+import { AuthenticatedUser } from '@sourcegraph/shared/src/auth'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { ISearchContext } from '@sourcegraph/shared/src/schema'
+import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 import { Badge, Button } from '@sourcegraph/wildcard'
-
-import { AuthenticatedUser } from '../../auth'
-import { eventLogger } from '../../tracking/eventLogger'
 
 import { HighlightedSearchContextSpec } from './HighlightedSearchContextSpec'
 import styles from './SearchContextMenu.module.scss'
 
-export const SearchContextMenuItem: React.FunctionComponent<{
-    spec: string
-    description: string
-    query: string
-    selected: boolean
-    isDefault: boolean
-    selectSearchContextSpec: (spec: string) => void
-    searchFilter: string
-    onKeyDown: (key: string) => void
-}> = ({ spec, description, query, selected, isDefault, selectSearchContextSpec, searchFilter, onKeyDown }) => {
+export const SearchContextMenuItem: React.FunctionComponent<
+    {
+        spec: string
+        description: string
+        query: string
+        selected: boolean
+        isDefault: boolean
+        selectSearchContextSpec: (spec: string) => void
+        searchFilter: string
+        onKeyDown: (key: string) => void
+    } & TelemetryProps
+> = ({
+    spec,
+    description,
+    query,
+    selected,
+    isDefault,
+    selectSearchContextSpec,
+    searchFilter,
+    onKeyDown,
+    telemetryService,
+}) => {
     const setContext = useCallback(() => {
-        eventLogger.log('SearchContextSelected')
+        telemetryService.log('SearchContextSelected')
         selectSearchContextSpec(spec)
-    }, [selectSearchContextSpec, spec])
+    }, [selectSearchContextSpec, spec, telemetryService])
 
     const descriptionOrQuery = description.length > 0 ? description : query
 
@@ -77,7 +88,8 @@ export interface SearchContextMenuProps
             SearchContextInputProps,
             'setSelectedSearchContextSpec' | 'hasUserAddedRepositories' | 'hasUserAddedExternalServices'
         >,
-        PlatformContextProps<'requestGraphQL'> {
+        PlatformContextProps<'requestGraphQL'>,
+        TelemetryProps {
     showSearchContextManagement: boolean
     authenticatedUser: AuthenticatedUser | null
     closeMenu: (isEscapeKey?: boolean) => void
@@ -112,6 +124,7 @@ export const SearchContextMenu: React.FunctionComponent<SearchContextMenuProps> 
     closeMenu,
     showSearchContextManagement,
     platformContext,
+    telemetryService,
 }) => {
     const inputElement = useRef<HTMLInputElement | null>(null)
 
@@ -305,6 +318,7 @@ export const SearchContextMenu: React.FunctionComponent<SearchContextMenuProps> 
                             selectSearchContextSpec={selectSearchContextSpec}
                             searchFilter={searchFilter}
                             onKeyDown={key => index === 0 && key === 'ArrowUp' && focusInputElement()}
+                            telemetryService={telemetryService}
                         />
                     ))}
                 {(loadingState === 'LOADING' || loadingState === 'LOADING_NEXT_PAGE') && (
