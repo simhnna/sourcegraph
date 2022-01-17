@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/sourcegraph/sourcegraph/cmd/frontend/auth/providers/httpauth"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/enterprise"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/shared"
 	"github.com/sourcegraph/sourcegraph/internal/authz"
@@ -17,7 +18,8 @@ func main() {
 	// See https://github.com/sourcegraph/sourcegraph/issues/3847 for details.
 	authz.SetProviders(true, []authz.Provider{})
 
-	shared.Main(func(_ database.DB, _ codeintel.Services, _ conftypes.UnifiedWatchable) enterprise.Services {
+	shared.Main(func(db database.DB, _ codeintel.Services, _ conftypes.UnifiedWatchable) enterprise.Services {
+		httpauth.Init(db)
 		return enterprise.DefaultServices()
 	})
 }
