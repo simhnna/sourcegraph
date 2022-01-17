@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { Observable, throwError } from 'rxjs'
 import { catchError, map, mapTo, startWith, switchMap, tap } from 'rxjs/operators'
 
+import { ErrorAlert } from '@sourcegraph/branded/src/components/alerts'
 import { asError, createAggregateError, isErrorLike } from '@sourcegraph/common'
 import { gql } from '@sourcegraph/http-client'
 import * as GQL from '@sourcegraph/shared/src/schema'
@@ -14,7 +15,6 @@ import { useEventObservable, useObservable } from '@sourcegraph/shared/src/util/
 import { LoadingSpinner, Button } from '@sourcegraph/wildcard'
 
 import { mutateGraphQL, queryGraphQL } from '../../../backend/graphql'
-import { ErrorAlert } from '../../../components/alerts'
 import { PageTitle } from '../../../components/PageTitle'
 import { eventLogger } from '../../../tracking/eventLogger'
 

@@ -20,6 +20,7 @@ import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 import { LoadingSpinner } from '@sourcegraph/wildcard'
 
 import { AuthenticatedUser } from '../../auth'
+import { useExperimentalFeatures } from '../../stores'
 import { StreamingSearchResultsList } from '../results/StreamingSearchResultsList'
 
 import blockStyles from './SearchNotebookBlock.module.scss'
@@ -62,6 +63,8 @@ export const SearchNotebookQueryBlock: React.FunctionComponent<SearchNotebookQue
     onSelectBlock,
     ...props
 }) => {
+    const showSearchContext = useExperimentalFeatures(features => features.showSearchContext ?? false)
+
     const [editor, setEditor] = useState<Monaco.editor.IStandaloneCodeEditor>()
     const blockElement = useRef<HTMLDivElement>(null)
     const searchResults = useObservable(output ?? of(undefined))
@@ -185,6 +188,8 @@ export const SearchNotebookQueryBlock: React.FunctionComponent<SearchNotebookQue
                             telemetryService={telemetryService}
                             settingsCascade={settingsCascade}
                             authenticatedUser={props.authenticatedUser}
+                            showSearchContext={showSearchContext}
+                            assetsRoot={window.context?.assetsRoot || ''}
                         />
                     </div>
                 )}
