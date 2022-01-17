@@ -9,11 +9,12 @@ import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 
+import styles from '../../../web/src/search/input/SearchBox.module.scss'
+
 import { LazyMonacoQueryInput } from './LazyMonacoQueryInput'
-import styles from './SearchBox.module.scss'
 import { SearchButton } from './SearchButton'
 import { SearchContextDropdown } from './SearchContextDropdown'
-import { Toggles, TogglesProps } from './toggles/Toggles'
+import { Toggles, TogglesProps } from './toggles'
 
 export interface SearchBoxProps
     extends Omit<TogglesProps, 'navbarSearchQuery' | 'submitSearch'>,
