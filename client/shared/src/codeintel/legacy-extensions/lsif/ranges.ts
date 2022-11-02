@@ -260,76 +260,11 @@ const rangesQuery = (hasImplementationsField: boolean): string => {
     }
 
     return gql`
-    query LegacyRanges($repository: String!, $commit: String!, $path: String!, $startLine: Int!, $endLine: Int!) {
+    query LegacyRanges($repository: String!, $commit: String!, $path: String!) {
         repository(name: $repository) {
             commit(rev: $commit) {
                 blob(path: $path) {
-                    lsif {
-                        ranges(startLine: $startLine, endLine: $endLine) {
-                            nodes {
-                                range {
-                                    start {
-                                        line
-                                        character
-                                    }
-                                    end {
-                                        line
-                                        character
-                                    }
-                                }
-                                definitions {
-                                    nodes {
-                                        resource {
-                                            path
-                                        }
-                                        range {
-                                            start {
-                                                line
-                                                character
-                                            }
-                                            end {
-                                                line
-                                                character
-                                            }
-                                        }
-                                    }
-                                }
-                                references {
-                                    nodes {
-                                        resource {
-                                            path
-                                        }
-                                        range {
-                                            start {
-                                                line
-                                                character
-                                            }
-                                            end {
-                                                line
-                                                character
-                                            }
-                                        }
-                                    }
-                                }
-                                ${implementationsFragment}
-                                hover {
-                                    markdown {
-                                        text
-                                    }
-                                    range {
-                                        start {
-                                            line
-                                            character
-                                        }
-                                        end {
-                                            line
-                                            character
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    name
                 }
             }
         }
