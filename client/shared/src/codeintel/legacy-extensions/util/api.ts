@@ -140,10 +140,10 @@ export class API {
         `
 
         interface IntrospectionResponse {
-            __type: { fields: { name: string }[] }
+            __type?: { fields: { name: string }[] }
         }
 
-        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type.fields.some(
+        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type?.fields.some(
             field => field.name === 'isFork'
         )
     }
@@ -166,10 +166,10 @@ export class API {
         `
 
         interface IntrospectionResponse {
-            __type: { fields: { name: string }[] }
+            __type?: { fields: { name: string }[] }
         }
 
-        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type.fields.some(
+        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type?.fields.some(
             field => field.name === 'localCodeIntel'
         )
     })
@@ -191,10 +191,10 @@ export class API {
         `
 
         interface IntrospectionResponse {
-            __type: { fields: { name: string }[] }
+            __type?: { fields: { name: string }[] }
         }
 
-        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type.fields.some(
+        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type?.fields.some(
             field => field.name === 'symbolInfo'
         )
     })
@@ -216,10 +216,10 @@ export class API {
         `
 
         interface IntrospectionResponse {
-            __type: { fields: { name: string }[] }
+            __type?: { fields: { name: string }[] }
         }
 
-        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type.fields.some(
+        return (await queryGraphQL<IntrospectionResponse>(introspectionQuery)).__type?.fields.some(
             field => field.name === 'range'
         )
     })
@@ -370,7 +370,7 @@ export class API {
         `
 
         interface IntrospectionResponse {
-            __type: { fields: { name: string }[] }
+            __type?: { fields: { name: string }[] }
         }
 
         return Boolean(
@@ -546,10 +546,10 @@ const symbolInfoFlexibleToCanonical = (flexible: SymbolInfoFlexible): SymbolInfo
         range:
             'line' in flexible.definition
                 ? {
-                      line: flexible.definition.line,
-                      character: flexible.definition.character,
-                      length: flexible.definition.length,
-                  }
+                    line: flexible.definition.line,
+                    character: flexible.definition.character,
+                    length: flexible.definition.length,
+                }
                 : flexible.definition.range,
     },
     hover: flexible.hover,
