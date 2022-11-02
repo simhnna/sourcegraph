@@ -60,11 +60,7 @@ const definitionsQuery = `
 		repository(name: $repository) {
 			commit(rev: $commit) {
 				blob(path: $path) {
-					lsif {
-						definitions(line: $line, character: $character) {
-							` + locationsFragment + `
-						}
-					}
+					name
 				}
 			}
 		}
@@ -132,11 +128,7 @@ const referencesQuery = `
 		repository(name: $repository) {
 			commit(rev: $commit) {
 				blob(path: $path) {
-					lsif {
-						references(line: $line, character: $character, after: $after) {
-							` + locationsFragment + `
-						}
-					}
+					name
 				}
 			}
 		}

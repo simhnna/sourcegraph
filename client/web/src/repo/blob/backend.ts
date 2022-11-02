@@ -144,11 +144,7 @@ export const fetchStencil = memoizeObservable((options: FetchStencilOptions): Ob
                 repository(name: $repoName) {
                     commit(rev: $revision) {
                         blob(path: $filePath) {
-                            lsif {
-                                stencil {
-                                    ...BlobStencilFields
-                                }
-                            }
+                            name
                         }
                     }
                 }

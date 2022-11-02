@@ -24,18 +24,7 @@ const stencilQuery = gql`
         repository(name: $repository) {
             commit(rev: $commit) {
                 blob(path: $path) {
-                    lsif {
-                        stencil {
-                            start {
-                                line
-                                character
-                            }
-                            end {
-                                line
-                                character
-                            }
-                        }
-                    }
+                    name
                 }
             }
         }

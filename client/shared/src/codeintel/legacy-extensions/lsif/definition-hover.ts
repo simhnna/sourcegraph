@@ -29,52 +29,11 @@ const definitionAndHoverQuery = gql`
         $repository: String!
         $commit: String!
         $path: String!
-        $line: Int!
-        $character: Int!
     ) {
         repository(name: $repository) {
             commit(rev: $commit) {
                 blob(path: $path) {
-                    lsif {
-                        definitions(line: $line, character: $character) {
-                            nodes {
-                                resource {
-                                    path
-                                    repository {
-                                        name
-                                    }
-                                    commit {
-                                        oid
-                                    }
-                                }
-                                range {
-                                    start {
-                                        line
-                                        character
-                                    }
-                                    end {
-                                        line
-                                        character
-                                    }
-                                }
-                            }
-                        }
-                        hover(line: $line, character: $character) {
-                            markdown {
-                                text
-                            }
-                            range {
-                                start {
-                                    line
-                                    character
-                                }
-                                end {
-                                    line
-                                    character
-                                }
-                            }
-                        }
-                    }
+                    name
                 }
             }
         }
