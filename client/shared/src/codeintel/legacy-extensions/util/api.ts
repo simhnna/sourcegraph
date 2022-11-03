@@ -701,7 +701,7 @@ const localCodeIntelQuery = gql`
         repository(name: $repository) {
             commit(rev: $commit) {
                 blob(path: $path) {
-                    localCodeIntel
+                    name
                 }
             }
         }
@@ -734,10 +734,10 @@ const symbolInfoFlexibleToCanonical = (flexible: SymbolInfoFlexible): SymbolInfo
         range:
             'line' in flexible.definition
                 ? {
-                      line: flexible.definition.line,
-                      character: flexible.definition.character,
-                      length: flexible.definition.length,
-                  }
+                    line: flexible.definition.line,
+                    character: flexible.definition.character,
+                    length: flexible.definition.length,
+                }
                 : flexible.definition.range,
     },
     hover: flexible.hover,
