@@ -308,7 +308,7 @@ export const StreamingSearchResults: FC<StreamingSearchResultsProps> = props => 
                 submittedURLQuery={submittedURLQuery}
                 patternType={patternType}
                 filters={results?.filters}
-                showAggregationPanel={showAggregationPanel}
+                showAggregationPanel={false}
                 selectedSearchContextSpec={props.selectedSearchContextSpec}
                 aggregationUIMode={aggregationUIMode}
                 settingsCascade={props.settingsCascade}
