@@ -513,7 +513,7 @@ const localCodeIntelQuery = gql`
             id
             commit(rev: $commit) {
                 blob(path: $path) {
-                    localCodeIntel
+                    name
                 }
             }
         }

@@ -187,7 +187,7 @@ export const LOCAL_CODE_INTEL_QUERY = gql`
             id
             commit(rev: $commit) {
                 blob(path: $path) {
-                    localCodeIntel
+                    name
                 }
             }
         }
