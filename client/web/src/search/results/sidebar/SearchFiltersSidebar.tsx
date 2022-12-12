@@ -127,6 +127,10 @@ export const SearchFiltersSidebar: FC<PropsWithChildren<SearchFiltersSidebarProp
                 </SearchSidebarSection>
             )}
 
+            <SearchSidebarSection sectionId={SectionID.SEARCH_SNIPPETS} header="Search snippets">
+                {getSearchSnippetLinks(settingsCascade, onSnippetClicked)}
+            </SearchSidebarSection>
+
             <SearchSidebarSection sectionId={SectionID.SEARCH_TYPES} header="Search Types">
                 {getSearchTypeLinks({
                     query: liveQuery,
@@ -183,9 +187,7 @@ export const SearchFiltersSidebar: FC<PropsWithChildren<SearchFiltersSidebarProp
                 {getSearchReferenceFactory({ telemetryService, setQueryState: onNavbarQueryChange })}
             </SearchSidebarSection>
 
-            <SearchSidebarSection sectionId={SectionID.SEARCH_SNIPPETS} header="Search snippets">
-                {getSearchSnippetLinks(settingsCascade, onSnippetClicked)}
-            </SearchSidebarSection>
+
         </SearchSidebar>
     )
 })
