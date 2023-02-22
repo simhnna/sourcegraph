@@ -74,34 +74,7 @@ export function useQueryExamples(
     const [cachedQueryExamplesContent, setCachedQueryExamplesContent, cachedQueryExamplesContentLoadStatus] =
         useTemporarySetting('search.homepage.queryExamplesContent')
 
-    const loadQueryExamples = useCallback(
-        (selectedSearchContextSpec: string) =>
-            // We are using `,|` as the separator so we can "safely" split the compute output.
-            streamComputeQuery(
-                `context:${selectedSearchContextSpec} type:diff count:1 content:output((.|\n)* -> $repo,|$author,|$path)`
-            ).subscribe(
-                results => {
-                    const firstComputeOutput = results
-                        .flatMap(result => JSON.parse(result) as ComputeResult)
-                        .find(result => result.kind === 'output')
-
-                    const queryExamplesContent = firstComputeOutput
-                        ? getQueryExamplesContentFromComputeOutput(firstComputeOutput.value)
-                        : defaultQueryExamplesContent
-
-                    setQueryExamplesContent(queryExamplesContent)
-                    setCachedQueryExamplesContent({
-                        ...queryExamplesContent,
-                        lastCachedTimestamp: formatISO(Date.now()),
-                    })
-                },
-                () => {
-                    // In case of an error set default content.
-                    setQueryExamplesContent(defaultQueryExamplesContent)
-                }
-            ),
-        [setQueryExamplesContent, setCachedQueryExamplesContent]
-    )
+    const loadQueryExamples = useCallback(() => {setQueryExamplesContent(defaultQueryExamplesContent); return {unsubscribe: () => {}}}, [])
 
     useEffect(() => {
         if (queryExamplesContent || cachedQueryExamplesContentLoadStatus === 'initial' || isSourcegraphDotCom) {
